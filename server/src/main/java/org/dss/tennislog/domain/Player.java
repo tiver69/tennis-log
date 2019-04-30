@@ -17,9 +17,9 @@ public class Player {
     @Column(name = "last_name")
     private String lastName;
     @Column
-    private int age;
+    private Integer age;
     @Column
-    private int experience;
+    private Integer experience;
     @Column(name = "leading_hand")
     private String leadingHand;
 }
