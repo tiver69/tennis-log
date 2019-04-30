@@ -5,9 +5,6 @@ import org.dss.tennislog.exceptions.MatchIdException;
 import org.dss.tennislog.repositories.MatchRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 public class MatchService {
@@ -30,7 +27,7 @@ public class MatchService {
     public void deleteById(Long matchId){
         Match match = matchRepository.getById(matchId);
         if (match == null) {
-            throw new MatchIdException("Cannot delete with ID '"+ matchId + "'. This project does not exist.");
+            throw new MatchIdException("Cannot delete with ID '"+ matchId + "'. This match does not exist.");
         }
         matchRepository.delete(match);
     }

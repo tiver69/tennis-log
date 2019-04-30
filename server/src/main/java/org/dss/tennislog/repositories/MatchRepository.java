@@ -8,9 +8,7 @@ import java.util.List;
 
 //@Repository
 public interface MatchRepository extends CrudRepository<Match, Long> {
-
     Match getById(Long id);
-
     @Override
     Iterable<Match> findAll();
 }

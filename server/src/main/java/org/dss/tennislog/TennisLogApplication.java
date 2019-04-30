@@ -2,6 +2,7 @@ package org.dss.tennislog;
 
 import org.dss.tennislog.domain.Match;
 import org.dss.tennislog.repositories.MatchRepository;
+import org.dss.tennislog.repositories.TournamentRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -19,7 +20,7 @@ public class TennisLogApplication {
 	}
 
 	@Bean
-	public CommandLineRunner demo(MatchRepository repository) {
+	public CommandLineRunner demo(TournamentRepository repository) {
 		return (args) -> {
 			// save a couple of customers
 //            repository.save(new Player("Jack", "Bauer"));
@@ -37,9 +38,9 @@ public class TennisLogApplication {
 //			log.info("");
 
 //            // fetch an individual customer by ID
-//			log.info("Match found with findById(1L):");
-//			log.info("--------------------------------");
-//			log.info(repository.findById(1L).toString());
+			log.info("Match found with findById(1L):");
+			log.info("--------------------------------");
+			log.info(repository.findById(1L).toString());
 //					.forEach(customer -> {
 //
 //						log.info(customer.toString());

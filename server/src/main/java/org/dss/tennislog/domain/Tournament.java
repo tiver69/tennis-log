@@ -15,6 +15,8 @@ public class Tournament {
     private Long id;
     @Column
     private String name;
+    @Column
+    private String information;
     @Column(name = "start_date")
     private Date startDate;
     @Column(name = "end_date")
