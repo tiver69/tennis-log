@@ -1,17 +1,20 @@
 import React, { Component } from 'react';
 
-class MatchItem extends Component {
+class TournamentItem extends Component {
 	render(){
+
+		const {tournament} = this.props;
+
 		return (
 		<div className="container">
             <div className="card card-body bg-light mb-3">
                 <div className="row">
                     <div className="col-2">
-                        <span className="mx-auto">17.03.2019</span>
+                        <span className="mx-auto">{tournament.startDate} - {tournament.endDate}</span>
                     </div>
                     <div className="col-lg-6 col-md-4 col-8">
-                        <h3>Tournament Name</h3>
-                        <p>Some info about tournament</p>
+                        <h3>{tournament.name}</h3>
+                        <p>{tournament.information}</p>
                     </div>
                     <div className="col-md-4 d-none d-lg-block">
                         <ul className="list-group">
@@ -39,4 +42,4 @@ class MatchItem extends Component {
 	}
 }
 
-export default MatchItem;
+export default TournamentItem;

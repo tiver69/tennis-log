@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { GET_ERRORS } from './types';
+import { GET_ERRORS, GET_TOURNAMENTS } from './types';
 
 export const createTournament = (tournament, history) => async dispatch => {
 	try {
@@ -11,4 +11,12 @@ export const createTournament = (tournament, history) => async dispatch => {
 			payload:err.response.data
 		});
 	}
-}
+};
+
+export const getTournaments = () => async dispatch => {
+	const res = await axios.get("http://localhost:8080/api/tournament/all");
+	dispatch({
+		type: GET_TOURNAMENTS,
+		payload: res.data
+	});
+};
