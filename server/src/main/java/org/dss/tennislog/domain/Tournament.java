@@ -3,6 +3,7 @@ package org.dss.tennislog.domain;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
 @Entity
@@ -14,6 +15,7 @@ public class Tournament {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column
+    @NotBlank(message = "Tournament name must be specified!")
     private String name;
     @Column
     private String information;

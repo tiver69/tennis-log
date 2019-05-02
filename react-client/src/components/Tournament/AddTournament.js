@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createTournament } from '../../actions/tournamentActions';
+import classnames from 'classnames';
 
 class AddTournament extends Component {
 
@@ -12,11 +13,18 @@ class AddTournament extends Component {
 			name: "",
 			information: "",
 			startDate: "",
-			endDate: ""
+			endDate: "",
+			errors: {}
 		}
 
 		this.onChange = this.onChange.bind(this);
 		this.onSubmit = this.onSubmit.bind(this);
+	}
+
+	componentWillReceiveProps(nextProps){
+		if (nextProps.errors){
+			this.setState({errors:nextProps.errors});
+		}
 	}
 
 	onChange(e) {
@@ -36,6 +44,9 @@ class AddTournament extends Component {
 
 
 	render(){
+
+		const { errors } = this.state;
+
 		return (
 			<div className="tournament">
 			        <div className="container">
@@ -45,7 +56,8 @@ class AddTournament extends Component {
 			                    <hr />
 			                    <form onSubmit={this.onSubmit}>
 			                        <div className="form-group">
-			                            <input type="text" className="form-control form-control-lg " placeholder="Tournament Name" name="name" value={this.state.name} onChange={this.onChange}/>
+			                            <input type="text" className={classnames("form-control form-control-lg", {"is-invalid":errors.name})} placeholder="Tournament Name" name="name" value={this.state.name} onChange={this.onChange}/>
+			                        	{errors.name && (<div className="invalid-feedback">{errors.name}</div>)}
 			                        </div>
 			                        <div className="form-group">
 			                            <textarea className="form-control form-control-lg" placeholder="Tournament Information" name="information" value={this.state.information} onChange={this.onChange}></textarea>
@@ -70,11 +82,12 @@ class AddTournament extends Component {
 }
 
 AddTournament.propTypes = {
-	createTournament : PropTypes.func.isRequired
+	createTournament : PropTypes.func.isRequired,
+	errors: PropTypes.object.isRequired
 };
 
-// const mapStateToProps = state => ({
-//     errors: state.errors
-// });
+const mapStateToProps = state => ({
+    errors: state.errors
+});
 
-export default connect(null, {createTournament}) (AddTournament);
+export default connect(mapStateToProps, {createTournament}) (AddTournament);
