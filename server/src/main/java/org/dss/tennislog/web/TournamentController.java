@@ -1,6 +1,5 @@
 package org.dss.tennislog.web;
 
-import org.dss.tennislog.domain.Match;
 import org.dss.tennislog.domain.Tournament;
 import org.dss.tennislog.exceptions.MatchIdException;
 import org.dss.tennislog.services.MapValidationErrorService;
@@ -14,7 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/apl/tournament")
+@RequestMapping("/api/tournament")
+@CrossOrigin
 public class TournamentController {
 
     @Autowired
@@ -33,7 +33,7 @@ public class TournamentController {
                 HttpStatus.CREATED);
     }
 
-    @GetMapping("/{tournamentId")
+    @GetMapping("/{tournamentId}")
     public ResponseEntity<?> getTournamentById(@PathVariable Long tournamentId){
 
         Tournament tournament = tournamentService.getById(tournamentId);

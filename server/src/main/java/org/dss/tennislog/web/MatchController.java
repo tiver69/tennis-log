@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/apl/match")
+@RequestMapping("/api/match")
 public class MatchController {
 
     @Autowired

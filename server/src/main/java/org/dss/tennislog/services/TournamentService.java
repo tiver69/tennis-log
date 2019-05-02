@@ -12,12 +12,12 @@ public class TournamentService {
     @Autowired
     private TournamentRepository tournamentRepository;
 
-    public Tournament saveOrUpdate(Tournament match){
-        return tournamentRepository.save(match);
+    public Tournament saveOrUpdate(Tournament tournament){
+        return tournamentRepository.save(tournament);
     }
 
-    public Tournament getById(Long matchId){
-        return tournamentRepository.getById(matchId);
+    public Tournament getById(Long tournamentId){
+        return tournamentRepository.getById(tournamentId);
     }
 
     public Iterable<Tournament> findAll() {
