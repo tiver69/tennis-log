@@ -1,4 +1,4 @@
-import { GET_TOURNAMENTS } from "../actions/types";
+import { GET_TOURNAMENTS, GET_TOURNAMENT } from "../actions/types";
 
 const initialState = {
 	tournaments: [],
@@ -11,6 +11,11 @@ export default function(state = initialState, action){
 			return {
 				...state,
 				tournaments: action.payload
+			};
+		case GET_TOURNAMENT:
+			return {
+				...state,
+				tournament: action.payload
 			};
 		
 		default:

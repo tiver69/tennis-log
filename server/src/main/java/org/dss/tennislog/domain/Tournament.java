@@ -1,5 +1,6 @@
 package org.dss.tennislog.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -20,7 +21,9 @@ public class Tournament {
     @Column
     private String information;
     @Column(name = "start_date")
+    @JsonFormat(pattern = "yyyy-mm-dd")
     private Date startDate;
     @Column(name = "end_date")
+    @JsonFormat(pattern = "yyyy-mm-dd")
     private Date endDate;
 }

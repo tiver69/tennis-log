@@ -33,7 +33,7 @@ public class TournamentController {
                 HttpStatus.CREATED);
     }
 
-    @GetMapping("/{tournamentId")
+    @GetMapping("/{tournamentId}")
     public ResponseEntity<?> getTournamentById(@PathVariable Long tournamentId){
 
         Tournament tournament = tournamentService.getById(tournamentId);

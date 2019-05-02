@@ -1,2 +1,3 @@
 export const GET_ERRORS = "GET_ERRORS";
 export const GET_TOURNAMENTS = "GET_TOURNAMENTS";
+export const GET_TOURNAMENT = "GET_TOURNAMENT";
