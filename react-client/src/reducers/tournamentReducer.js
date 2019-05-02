@@ -1,4 +1,4 @@
-import { GET_TOURNAMENTS, GET_TOURNAMENT } from "../actions/types";
+import { GET_TOURNAMENTS, GET_TOURNAMENT, DELETE_TOURNAMENT } from "../actions/types";
 
 const initialState = {
 	tournaments: [],
@@ -17,7 +17,12 @@ export default function(state = initialState, action){
 				...state,
 				tournament: action.payload
 			};
-		
+		case DELETE_TOURNAMENT:
+			return{
+				...state,
+				tournaments: state.tournaments.filter(tournament => tournament.id !== action.payload)
+			};
+
 		default:
 			return state;
 	}

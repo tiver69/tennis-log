@@ -1,7 +1,16 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { deleteTournament } from '../../actions/tournamentActions';
+
 
 class TournamentItem extends Component {
+
+	onDeleteClick = tournamentId =>{
+		this.props.deleteTournament(tournamentId);
+	}
+
 	render(){
 
 		const {tournament} = this.props;
@@ -29,11 +38,9 @@ class TournamentItem extends Component {
 	                                <i className="fa fa-edit pr-1"> Update Tournament Info</i>
 	                            </li>
 	                        </Link>
-	                        <a href="">
-	                            <li className="list-group-item delete">
-	                                <i className="fa fa-minus-circle pr-1"> Delete Tournament</i>
-	                            </li>
-	                        </a>
+	                        <li className="list-group-item delete" onClick={this.onDeleteClick.bind(this, tournament.id)}>
+	                            <i className="fa fa-minus-circle pr-1"> Delete Tournament</i>
+	                        </li>
                         </ul>
                     </div>
                 </div>
@@ -43,4 +50,8 @@ class TournamentItem extends Component {
 	}
 }
 
-export default TournamentItem;
+TournamentItem.propTypes={
+	deleteTournament: PropTypes.func.isRequired
+};
+
+export default connect (null, { deleteTournament }) (TournamentItem);
