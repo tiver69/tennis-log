@@ -1,7 +1,7 @@
 package org.dss.tennislog.web;
 
 import org.dss.tennislog.domain.Match;
-import org.dss.tennislog.exceptions.MatchIdException;
+import org.dss.tennislog.exceptions.DataNotFoundException;
 import org.dss.tennislog.services.MapValidationErrorService;
 import org.dss.tennislog.services.MatchService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +14,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/match")
+@CrossOrigin
 public class MatchController {
 
     @Autowired
@@ -22,22 +23,23 @@ public class MatchController {
     @Autowired
     private MapValidationErrorService mapValidationErrorService;
 
-    @PostMapping("")
-    public ResponseEntity<?> createNewMatch(@Valid @RequestBody Match match, BindingResult result){
-
+    @PostMapping("/{playerOneId}-{playerTwoId}/{tournamentId}")
+    public ResponseEntity<?> createNewMatch(@Valid @RequestBody Match match, BindingResult result,
+                                            @PathVariable Long playerOneId, @PathVariable Long playerTwoId,
+                                            @PathVariable Long tournamentId){
         ResponseEntity<?> errorMap = mapValidationErrorService.mapValidationService(result);
-        if (errorMap != null) return  errorMap;
-        //        Match match1 = matchService.saveOrUpdate(match);
-        return new ResponseEntity<Match>(matchService.saveOrUpdate(match),
+        Match newMatch = matchService.saveOrUpdate(playerOneId, playerTwoId, tournamentId, match);
+        if (errorMap != null || newMatch == null) return  errorMap;
+        return new ResponseEntity<Match>(newMatch,
                 HttpStatus.CREATED);
     }
 
-    @GetMapping("/{matchId")
+    @GetMapping("/{matchId}")
     public ResponseEntity<?> getMatchById(@PathVariable Long matchId){
 
         Match match = matchService.getById(matchId);
         if (match == null) {
-            throw new MatchIdException("Match ID '" + matchId + "' doesn't exist");
+            throw new DataNotFoundException("Match with ID '" + matchId + "' doesn't exist");
         }
         return new ResponseEntity<Match>(match, HttpStatus.OK);
     }
@@ -50,7 +52,7 @@ public class MatchController {
     @DeleteMapping("/{matchId}")
     public ResponseEntity<?> deleteMatch(@PathVariable Long matchId){
         matchService.deleteById(matchId);
-        return new ResponseEntity<String>("Project with ID '" + matchId+"' was deleted.", HttpStatus.OK);
+        return new ResponseEntity<String>("Match with ID '" + matchId+"' was deleted.", HttpStatus.OK);
     }
 
 }

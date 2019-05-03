@@ -1,7 +1,8 @@
 package org.dss.tennislog.web;
 
+import org.dss.tennislog.domain.Match;
 import org.dss.tennislog.domain.Tournament;
-import org.dss.tennislog.exceptions.MatchIdException;
+import org.dss.tennislog.exceptions.DataNotFoundException;
 import org.dss.tennislog.services.MapValidationErrorService;
 import org.dss.tennislog.services.TournamentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,7 @@ public class TournamentController {
 
         Tournament tournament = tournamentService.getById(tournamentId);
         if (tournament == null) {
-            throw new MatchIdException("Tournament with ID '" + tournamentId + "' doesn't exist");
+            throw new DataNotFoundException("Tournament with ID '" + tournamentId + "' doesn't exist");
         }
         return new ResponseEntity<Tournament>(tournament, HttpStatus.OK);
     }
@@ -51,7 +52,12 @@ public class TournamentController {
     @DeleteMapping("/{tournamentId}")
     public ResponseEntity<?> deleteTournament(@PathVariable Long tournamentId){
         tournamentService.deleteById(tournamentId);
-        return new ResponseEntity<String>("Project with ID '" + tournamentId+"' was deleted.", HttpStatus.OK);
+        return new ResponseEntity<String>("Tournament with ID '" + tournamentId+"' and all its matches were deleted.", HttpStatus.OK);
+    }
+
+    @GetMapping("/{tournamentId}/matches")
+    public Iterable<Match> findAllMatches(@PathVariable Long tournamentId){
+        return tournamentService.findAllTournamentMatches(tournamentId);
     }
 
 }

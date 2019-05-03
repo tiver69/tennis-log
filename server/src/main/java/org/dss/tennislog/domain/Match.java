@@ -1,10 +1,13 @@
 package org.dss.tennislog.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Entity
@@ -22,23 +25,24 @@ public class Match {
 
     @ManyToOne
     @JoinColumn(name = "player_one", referencedColumnName = "id", nullable = false)
-    @NotBlank(message = "Player one must be specified")
-    private Player playerOne = new Player();
+    private Player playerOne;
 
     @ManyToOne
     @JoinColumn(name = "player_two", referencedColumnName = "id", nullable = false)
-    @NotBlank(message = "Player two must be specified")
-    private Player playerTwo = new Player();
+    private Player playerTwo;
 
+    @Column(name = "status")
+    private Boolean playedStatus;
     @Column
     private String score;
     @Column
     private Boolean winner;
 
     @ManyToOne
-    @JoinColumn(name = "tournament_id", referencedColumnName = "id", nullable = false)
-    @NotBlank(message = "Tournament must be specified")
-    private Tournament tournament = new Tournament();
+    @JoinColumn(name = "tournament_id", referencedColumnName = "id", nullable = false, updatable = false)
+    @JsonIgnore
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Tournament tournament;
 
 
 //    @PrePersist

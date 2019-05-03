@@ -11,4 +11,8 @@ public interface MatchRepository extends CrudRepository<Match, Long> {
     Match getById(Long id);
     @Override
     Iterable<Match> findAll();
+
+    Iterable<Match> findByPlayerOneIdOrPlayerTwoId(Long id1, Long id2);
+
+    Iterable<Match> findByTournamentId(Long id);
 }

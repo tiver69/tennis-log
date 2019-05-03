@@ -4,9 +4,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.BAD_REQUEST)
-public class MatchIdException extends RuntimeException {
+public class DataNotFoundException extends RuntimeException {
 
-    public MatchIdException(String message) {
+    public DataNotFoundException(String message) {
         super(message);
     }
+
 }
