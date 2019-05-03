@@ -3,7 +3,7 @@ import { GET_ERRORS, GET_TOURNAMENTS, GET_TOURNAMENT, DELETE_TOURNAMENT } from '
 
 export const createTournament = (tournament, history) => async dispatch => {
 	try {
-		const res = await axios.post("/api/tournament", tournament);
+		await axios.post("/api/tournament", tournament);
 		history.push("/dashboard");
 		dispatch({
 			type:GET_ERRORS,
