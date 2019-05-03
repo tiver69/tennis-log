@@ -19,13 +19,19 @@ class AddMatch extends Component {
 			playedStatus: "",
 			score: "",
 			winner: "",
-			status: "",
+			playedStatus: "",
 			tournamentId: tournamentId,
 			errors: {}
 		}
 
 		this.onChange = this.onChange.bind(this);
 		this.onSubmit = this.onSubmit.bind(this);
+	}
+
+	componentWillReceiveProps(nextProps){
+		if(nextProps.errors){
+			this.setState({errors:nextProps.errors});
+		}
 	}
 
     componentDidMount (){
@@ -45,7 +51,7 @@ class AddMatch extends Component {
 			playedStatus: this.state.playedStatus,
 			score: this.state.score,
 			winner: this.state.winner,
-			status: this.state.status,
+			playedStatus: this.state.playedStatus,
 		};
 		// console.log(newMatch);
 		this.props.createMatch(this.state.playerOneId, this.state.playerTwoId, this.state.tournamentId, newMatch, this.props.history);
@@ -55,6 +61,7 @@ class AddMatch extends Component {
 
 		const { players } = this.props.player;
 		const {tournamentId} = this.props.match.params;
+		const {errors} = this.state;
 
 		return (
 	    <div className="add-match">
@@ -69,7 +76,7 @@ class AddMatch extends Component {
 	                    <form onSubmit={this.onSubmit}>
 
 	                        <div className="form-group">
-	                            <select className="form-control form-control-lg" name="playerOneId" value={this.state.playerOneId} onChange={this.onChange}>
+	                            <select className={classnames("form-control form-control-lg",{"is-invalid":errors.playerOne})} name="playerOneId" value={this.state.playerOneId} onChange={this.onChange}>
 	                                <option value="">Select PlayerOne</option>
 									{
 										players.filter(player => !(player.id === parseInt(this.state.playerTwoId,10))).map(player => (
@@ -77,10 +84,18 @@ class AddMatch extends Component {
 				                        ))
 				                    }
 	                            </select>
+	                        {
+	                        	errors.playerOne && (
+	                        		<div className="invalid-feedback">{errors.playerOne}</div>)
+	                        }
+	                        {
+	                        	errors.players && (
+	                        		<div className="invalid-feedback">{errors.players}</div>)	                        	
+	                        }
 	                        </div>
 
 	                        <div className="form-group">
-	                            <select className="form-control form-control-lg" name="playerTwoId" value={this.state.playerTwoId} onChange={this.onChange}>
+	                            <select className={classnames("form-control form-control-lg",{"is-invalid":errors.playerTwo})} name="playerTwoId" value={this.state.playerTwoId} onChange={this.onChange}>
 	                                <option value="">Select PlayerTwo</option>
 									{
 										players.filter(player => !(player.id === parseInt(this.state.playerOneId))).map(player => (
@@ -88,25 +103,40 @@ class AddMatch extends Component {
 				                        ))
 				                    }
 	                            </select>
+	                        {
+	                        	errors.playerTwo && (
+	                        		<div className="invalid-feedback">{errors.playerTwo}</div>)
+	                        }
+	                        {
+	                        	errors.players && (
+	                        		<div className="invalid-feedback">{errors.players}</div>)	                        	
+	                        }	                            
 	                        </div>
 
 	                        <div className="form-group">
-	                            <input type="text" className="form-control form-control-lg" name="score" placeholder="score" value={this.state.score} onChange={this.onChange}/>
+	                            <input type="text" className={classnames("form-control form-control-lg",{"is-invalid":errors.score})} name="score" placeholder="score" value={this.state.score} onChange={this.onChange}/>
+	                        {
+	                        	errors.score && (
+	                        		<div className="invalid-feedback">{errors.score}</div>)
+	                        }
 	                        </div>
 	                        <h6> Date</h6>
 	                        <div className="form-group">
 	                            <input type="date" className="form-control form-control-lg" name="date" value={this.state.date} onChange={this.onChange}/>
 	                        </div>
 	                        <div className="form-group">
-	                            <select className="form-control form-control-lg" name="winner" value={this.state.winner} onChange={this.onChange}>
+	                            <select className={classnames("form-control form-control-lg",{"is-invalid":errors.winner})} name="winner" value={this.state.winner} onChange={this.onChange}>
 	                                <option value="">Select Winner</option>
 	                                <option value="true">Player One</option>
 	                                <option value="false">Player Two</option>
 	                            </select>
+	                        {
+	                        	errors.winner && (
+	                        		<div className="invalid-feedback">{errors.winner}</div>)
+	                        }
 	                        </div>
-
 	                        <div className="form-group">
-	                            <select className="form-control form-control-lg" name="status" value={this.state.status} onChange={this.onChange}>
+	                            <select className="form-control form-control-lg" name="playedStatus" value={this.state.playedStatus} onChange={this.onChange}>
 	                                <option value="">Select Status</option>
 	                                <option value="false">SHEADULED</option>
 	                                <option value="true">FINNISHED</option>
@@ -124,13 +154,14 @@ class AddMatch extends Component {
 }
 
 const mapStateToProps = state => ({
-    player:state.player
-
+    player:state.player,
+    errors: state.errors
 });
 
 AddMatch.propTypes = {
 	createMatch: PropTypes.func.isRequired,
-	getPlayers: PropTypes.func.isRequired
+	getPlayers: PropTypes.func.isRequired,	
+	errors: PropTypes.object.isRequired
 };
 
 export default connect (mapStateToProps, { createMatch, getPlayers }) (AddMatch);

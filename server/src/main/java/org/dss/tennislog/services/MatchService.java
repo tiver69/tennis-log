@@ -39,8 +39,8 @@ public class MatchService {
             match.setPlayedStatus(false);
             match.setScore("0:0");
         }
-        else {
-            if (match.getScore() == null || match.getScore().equals("0:0"))
+        if (match.getPlayedStatus()) {
+            if (match.getScore() == null || match.getScore().equals("") || match.getScore().equals("0:0"))
                 ex.addException("score", "Score must be specified for a played match.");
             if (match.getWinner() == null)
                 ex.addException("winner", "Winner must be specified for a played match.");
