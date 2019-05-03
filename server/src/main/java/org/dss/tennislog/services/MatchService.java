@@ -35,7 +35,7 @@ public class MatchService {
         Tournament tournament = tournamentRepository.getById(tournamentId);
         if (tournament == null)
             ex.addException("tournament", "Tournament with ID '"+ tournamentId + "' does not exist.");
-        if (match.getPlayedStatus() == null) {
+        if (match.getPlayedStatus() == null || match.getPlayedStatus().equals("")) {
             match.setPlayedStatus(false);
             match.setScore("0:0");
         }

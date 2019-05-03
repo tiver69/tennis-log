@@ -12,3 +12,6 @@ export const GET_TOURNAMENT_MATCHES = "GET_TOURNAMENT_MATCHES";
 export const GET_MATCH = "GET_MATCH";
 export const DELETE_MATCH = "DELETE_MATCH";
 
+//Types for PLAYERS
+
+export const GET_PLAYERS = "GET_PLAYERS";
