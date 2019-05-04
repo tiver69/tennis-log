@@ -1,7 +1,15 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { deleteMatch } from '../../../actions/matchActions';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 
 class MatchItem extends Component {
+
+    onDeleteClick = matchId =>{
+        this.props.deleteMatch(matchId);
+    }
+
 	render(){
 
         const {tennisMatch} = this.props;
@@ -21,7 +29,7 @@ class MatchItem extends Component {
                     <Link to={`/updateMatch/t-${tournamentId}/m-${tennisMatch.id}`} className="btn btn-primary">
                         View / Update
                     </Link>
-                    <button className="btn btn-danger ml-4">
+                    <button className="btn btn-danger ml-4" onClick={this.onDeleteClick.bind(this, tennisMatch.id)}>
                         Delete
                     </button>
                 </div>
@@ -30,15 +38,9 @@ class MatchItem extends Component {
 	}
 }
 
-export default MatchItem;
+MatchItem.propTypes = {
+    deleteMatch: PropTypes.func.isRequired,
+}
 
-
-
-
-
-
-
-
-
-
+export default connect (null, { deleteMatch })(MatchItem);
 		                   

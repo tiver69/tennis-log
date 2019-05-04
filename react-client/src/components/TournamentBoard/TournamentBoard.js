@@ -85,7 +85,7 @@ class TournamentBoard extends Component {
 			                <div className="col-md-6">
 			                    <div className="card text-center mb-2">
 			                        <div className="card-header bg-secondary text-white">
-			                            <h3>SCHEDULED</h3>
+			                            <h3>SCHEDULED ({sheduled.length})</h3>
 			                        </div>
 			                    </div>
 
@@ -96,7 +96,7 @@ class TournamentBoard extends Component {
 			                <div className="col-md-6">
 			                    <div className="card text-center mb-2">
 			                        <div className="card-header bg-success text-white">
-			                            <h3>FINNISHED</h3>
+			                            <h3>FINNISHED ({finished.length})</h3>
 			                        </div>
 			                    </div>
 			                {

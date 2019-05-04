@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { GET_ERRORS, GET_TOURNAMENT_MATCHES, GET_MATCH } from './types';
+import { GET_ERRORS, GET_TOURNAMENT_MATCHES, GET_MATCH, DELETE_MATCH } from './types';
 
 
 export const createMatch = (playerOneId, playerTwoId, tournamentId, match, history) => async dispatch => {
@@ -49,4 +49,16 @@ export const getMatch = (matchId, tournamentId, history) => async dispatch => {
 		// 	payload: err.response.data
 		// });		
 	}
-}
+};
+
+export const deleteMatch = matchId => async dispatch => {
+
+	if ( window.confirm("Are you sure? This will delete the match.") )
+	{	
+		await axios.delete(`/api/match/${matchId}`);
+		dispatch ({
+			type: DELETE_MATCH,
+			payload: matchId
+		});
+	}
+};

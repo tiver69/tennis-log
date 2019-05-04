@@ -21,8 +21,8 @@ export default function (state = initialState, action){
 
 		case DELETE_MATCH:
 			return{
-				...state
-				// is coming
+				...state,
+				matches: state.matches.filter(tennisMatch => tennisMatch.id !== action.payload)
 			}
 
 		default:
