@@ -19,7 +19,7 @@ export const createMatch = (playerOneId, playerTwoId, tournamentId, match, histo
 	}
 };
 
-export const getTournamentMatches = (tournamentId, history) => async dispatch => {
+export const getTournamentMatches = (tournamentId) => async dispatch => {
 	try {
 		const res = await axios.get(`/api/tournament/${tournamentId}/matches`);
 		dispatch({
@@ -28,6 +28,9 @@ export const getTournamentMatches = (tournamentId, history) => async dispatch =>
 		});
 	}
 	catch (err) {
-		// history.push("/tournamentBoard/${tournamentId}");
+		dispatch({
+			type: GET_ERRORS,
+			payload: err.response.data
+		});
 	}
 };

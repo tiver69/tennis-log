@@ -7,28 +7,59 @@ import { getTournamentMatches } from '../../actions/matchActions';
 
 class TournamentBoard extends Component {
 
+	constructor(){
+		super();
+		this.state = {
+			errors: {}
+		};
+	}
+
 	componentDidMount (){
     	const { tournamentId } = this.props.match.params;
-		this.props.getTournamentMatches(tournamentId, this.props.history);
+		this.props.getTournamentMatches(tournamentId);
     };
+
+    componentWillReceiveProps(nextProps) {
+    	if (nextProps.errors) {
+    		this.setState({errors:nextProps.errors});
+    	}
+    }
 
 	render(){
 
 		const { tournamentId } = this.props.match.params;
 		const { matches } = this.props.tennisMatch;
+		const { errors } = this.state;
 
 		let BoardContent;
 		let sheduled = []
         let finished = []
 
-        const filterMatches = matches => {
+        const filterMatches = (errors, matches) => {
             if (matches.length < 1){
+            	if (errors.idNotFound) {
+            		return (
+            				<div className="alert alert-danger text" role="alert">
+            					{errors.idNotFound}
+            				</div>
+            			)
+            	}
+            	else {
                 return (
+                	<React.Fragment>
+                	<Link to={`/addMatch/${tournamentId}`} className="btn btn-primary mb-3">
+			     		<i className="fas fa-plus-circle"> Create Match </i>
+					</Link>
+					<br />
+					<hr />
                     <div className="alert alert-info text-center" role="alert">
                     No matches here. 
                     </div>
+                    </React.Fragment>
                     )
-            } else {
+            	}
+       		}
+            else {
                 const tennisMatches = matches.map(tennisMatch => (
                     <MatchItem key={tennisMatch.id} tennisMatch={tennisMatch} />
                 ));
@@ -44,6 +75,11 @@ class TournamentBoard extends Component {
 
 			return (
 				<React.Fragment>
+					<Link to={`/addMatch/${tournamentId}`} className="btn btn-primary mb-3">
+					     <i className="fas fa-plus-circle"> Create Match </i>
+					</Link>
+					<br />
+					<hr />
 			        <div className="container">
 			            <div className="row">
 			                <div className="col-md-6">
@@ -75,15 +111,10 @@ class TournamentBoard extends Component {
 			}
 		};
 
-        BoardContent = filterMatches(matches);
+        BoardContent = filterMatches(errors, matches);
 
         return (
 		<div className="container">
-			<Link to={`/addMatch/${tournamentId}`} className="btn btn-primary mb-3">
-			     <i className="fas fa-plus-circle"> Create Match </i>
-			</Link>
-		<br />
-		<hr />
         {BoardContent}
         {
         	// matches.map(tennisMatch => (
@@ -103,6 +134,7 @@ const mapStateToProps = state => ({
 TournamentBoard.propTypes = {
 	getTournamentMatches: PropTypes.func.isRequired,
 	match: PropTypes.object.isRequired,
+	errors: PropTypes.object.isRequired
 };
 
 export default connect (mapStateToProps, { getTournamentMatches }) (TournamentBoard);
