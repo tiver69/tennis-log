@@ -2,8 +2,8 @@ import { GET_TOURNAMENT_MATCHES, DELETE_MATCH, GET_MATCH } from '../actions/type
 
 const initialState ={
 	matches: [],
-	match: {}
-}
+	tennisMatch: {}
+};
 
 export default function (state = initialState, action){
 	switch (action.type) {
@@ -16,7 +16,7 @@ export default function (state = initialState, action){
 		case GET_MATCH:
 			return{
 				...state,
-				match: action.payload
+				tennisMatch: action.payload
 			}
 
 		case DELETE_MATCH:

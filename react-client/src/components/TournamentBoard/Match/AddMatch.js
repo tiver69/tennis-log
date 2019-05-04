@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import classnames from 'classnames';
 import { createMatch } from '../../../actions/matchActions';
 import { getPlayers } from '../../../actions/playerActions';
+import { getTournament } from '../../../actions/tournamentActions';
 import PropTypes from 'prop-types';
 
 class AddMatch extends Component {
@@ -32,10 +33,18 @@ class AddMatch extends Component {
 		if(nextProps.errors){
 			this.setState({errors:nextProps.errors});
 		}
+		const {
+			name,
+		} = nextProps.tournament;
+
+		this.setState({
+			name,
+		});
 	}
 
     componentDidMount (){
-        this.props.getPlayers();
+        this.props.getPlayers();        
+		this.props.getTournament(this.state.tournamentId, this.props.history);
     }
 
 	onChange(e) {
@@ -60,8 +69,8 @@ class AddMatch extends Component {
 	render(){
 
 		const { players } = this.props.player;
-		const {tournamentId} = this.props.match.params;
-		const {errors} = this.state;
+		const { tournamentId } = this.props.match.params;
+		const { errors } = this.state;
 
 		return (
 	    <div className="add-match">
@@ -72,7 +81,7 @@ class AddMatch extends Component {
 	                        Back to Tournament Board
 	                    </Link>
 	                    <h4 className="display-4 text-center"> Add Match</h4>
-	                    <p className="lead text-center">for {tournamentId}</p>
+	                    <p className="lead text-center">for {this.state.name}</p>
 	                    <form onSubmit={this.onSubmit}>
 
 	                        <div className="form-group">
@@ -154,6 +163,7 @@ class AddMatch extends Component {
 }
 
 const mapStateToProps = state => ({
+	tournament: state.tournament.tournament,
     player:state.player,
     errors: state.errors
 });
@@ -161,7 +171,9 @@ const mapStateToProps = state => ({
 AddMatch.propTypes = {
 	createMatch: PropTypes.func.isRequired,
 	getPlayers: PropTypes.func.isRequired,	
-	errors: PropTypes.object.isRequired
+	errors: PropTypes.object.isRequired,
+	getTournament: PropTypes.func.isRequired,
+	tournament: PropTypes.object.isRequired,
 };
 
-export default connect (mapStateToProps, { createMatch, getPlayers }) (AddMatch);
+export default connect (mapStateToProps, { createMatch, getPlayers, getTournament }) (AddMatch);

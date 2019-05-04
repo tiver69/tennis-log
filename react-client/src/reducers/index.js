@@ -7,6 +7,6 @@ import playerReducer from './playerReducer';
 export default combineReducers({
 	errors: errorReducer,
 	tournament: tournamentReducer,
-	match: matchReducer,
+	tennisMatch: matchReducer,
 	player: playerReducer
 });
