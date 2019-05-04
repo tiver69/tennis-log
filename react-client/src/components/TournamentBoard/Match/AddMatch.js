@@ -20,7 +20,6 @@ class AddMatch extends Component {
 			playedStatus: "",
 			score: "",
 			winner: "",
-			playedStatus: "",
 			tournamentId: tournamentId,
 			errors: {}
 		}
@@ -33,6 +32,7 @@ class AddMatch extends Component {
 		if(nextProps.errors){
 			this.setState({errors:nextProps.errors});
 		}
+		
 		const {
 			name,
 		} = nextProps.tournament;
@@ -60,7 +60,6 @@ class AddMatch extends Component {
 			playedStatus: this.state.playedStatus,
 			score: this.state.score,
 			winner: this.state.winner,
-			playedStatus: this.state.playedStatus,
 		};
 		// console.log(newMatch);
 		this.props.createMatch(this.state.playerOneId, this.state.playerTwoId, this.state.tournamentId, newMatch, this.props.history);

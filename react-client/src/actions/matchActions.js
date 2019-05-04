@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { GET_ERRORS, GET_TOURNAMENT_MATCHES } from './types';
+import { GET_ERRORS, GET_TOURNAMENT_MATCHES, GET_MATCH } from './types';
 
 
 export const createMatch = (playerOneId, playerTwoId, tournamentId, match, history) => async dispatch => {
@@ -34,3 +34,19 @@ export const getTournamentMatches = (tournamentId) => async dispatch => {
 		});
 	}
 };
+
+export const getMatch = (matchId, tournamentId, history) => async dispatch => {
+	try {
+		const res = await axios.get(`/api/match/${matchId}`);
+		dispatch({
+			type: GET_MATCH,
+			payload: res.data
+		});
+	} catch (err) {
+		history.push(`/tournamentBoard/${tournamentId}`);
+		// dispatch({
+		// 	type: GET_ERRORS,
+		// 	payload: err.response.data
+		// });		
+	}
+}

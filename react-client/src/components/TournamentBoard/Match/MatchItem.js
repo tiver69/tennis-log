@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 class MatchItem extends Component {
 	render(){
 
         const {tennisMatch} = this.props;
+        const {tournamentId} =this.props;
 
 		return (
             <div className="card mb-1 bg-light">
@@ -16,9 +18,9 @@ class MatchItem extends Component {
                         {tennisMatch.date}
                         {((tennisMatch.playedStatus).toString()==="false").toString()}
                     </p>
-                    <a href="#" className="btn btn-primary">
+                    <Link to={`/updateMatch/t-${tournamentId}/m-${tennisMatch.id}`} className="btn btn-primary">
                         View / Update
-                    </a>
+                    </Link>
                     <button className="btn btn-danger ml-4">
                         Delete
                     </button>

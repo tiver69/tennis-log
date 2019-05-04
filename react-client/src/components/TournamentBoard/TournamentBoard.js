@@ -61,7 +61,7 @@ class TournamentBoard extends Component {
        		}
             else {
                 const tennisMatches = matches.map(tennisMatch => (
-                    <MatchItem key={tennisMatch.id} tennisMatch={tennisMatch} />
+                    <MatchItem key={tennisMatch.id} tennisMatch={tennisMatch} tournamentId={tournamentId} />
                 ));
 
                 for(let i=0; i<tennisMatches.length; i++){
