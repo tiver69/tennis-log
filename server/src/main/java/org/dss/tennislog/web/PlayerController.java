@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+import java.security.Principal;
+
 import static org.dss.tennislog.security.SecurityConstants.TOKEN_PREFIX;
 
 @RestController
@@ -42,9 +44,9 @@ public class PlayerController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    @GetMapping("/{playerId}/matches")
-    public Iterable<Match> findAllMatches(@PathVariable Long playerId){
-        return playerService.findAllPlayerMatches(playerId);
+    @GetMapping("/matches")
+    public Iterable<Match> findAllPlayerMatches(Principal principal){
+        return playerService.findAllPlayerMatches(principal.getName());
     }
 
     @GetMapping("/all")
@@ -60,7 +62,7 @@ public class PlayerController {
         ResponseEntity<?> errorMap = mapValidationErrorService.mapValidationService(result);
         if (errorMap != null) return errorMap;
 
-        Player newPlayer = playerService.savePlayer(player);
+        Player newPlayer = playerService.saveOrUpdate(player);
         return new ResponseEntity<Player>(newPlayer, HttpStatus.CREATED);
     }
 

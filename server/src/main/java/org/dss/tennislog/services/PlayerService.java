@@ -31,11 +31,12 @@ public class PlayerService {
         return playerRepository.findAll();
     }
 
-    public Iterable<Match> findAllPlayerMatches(Long id) {
+    public Iterable<Match> findAllPlayerMatches(String username) {
+        Long id = playerRepository.findByUsername(username).getId();
         return matchRepository.findByPlayerOneIdOrPlayerTwoId(id, id);
     }
 
-    public Player savePlayer(Player newPlayer){
+    public Player saveOrUpdate(Player newPlayer){
         try {
             newPlayer.setPassword(bCryptPasswordEncoder.encode(newPlayer.getPassword()));
             //setup username if blank
