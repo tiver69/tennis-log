@@ -1,4 +1,16 @@
+//Types for TOURNAMENT
+
 export const GET_ERRORS = "GET_ERRORS";
 export const GET_TOURNAMENTS = "GET_TOURNAMENTS";
 export const GET_TOURNAMENT = "GET_TOURNAMENT";
 export const DELETE_TOURNAMENT = "DELETE_TOURNAMENT";
+
+//Types for MATCHES
+
+export const GET_TOURNAMENT_MATCHES = "GET_TOURNAMENT_MATCHES";
+export const GET_MATCH = "GET_MATCH";
+export const DELETE_MATCH = "DELETE_MATCH";
+
+//Types for PLAYERS
+
+export const GET_PLAYERS = "GET_PLAYERS";

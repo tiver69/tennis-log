@@ -1,6 +1,7 @@
 package org.dss.tennislog.web;
 
 import org.dss.tennislog.domain.Match;
+import org.dss.tennislog.domain.Player;
 import org.dss.tennislog.services.MapValidationErrorService;
 import org.dss.tennislog.services.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,11 @@ public class PlayerController {
     @GetMapping("/{playerId}/matches")
     public Iterable<Match> findAllMatches(@PathVariable Long playerId){
         return playerService.findAllPlayerMatches(playerId);
+    }
+
+    @GetMapping("/all")
+    public Iterable<Player> findAll() {
+        return playerService.findAll();
     }
 
 }
