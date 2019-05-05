@@ -1,51 +1,58 @@
 package org.dss.tennislog;
 
-import org.dss.tennislog.domain.Match;
-import org.dss.tennislog.repositories.MatchRepository;
-import org.dss.tennislog.repositories.TournamentRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.dss.tennislog.services.TournamentService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @SpringBootApplication
 public class TennisLogApplication {
 
-	private static final Logger log = LoggerFactory.getLogger(TennisLogApplication.class);
+	@Bean
+	BCryptPasswordEncoder cryptPasswordEncoder(){
+		return new BCryptPasswordEncoder();
+	}
+
 
 	public static void main(String[] args) {
 		SpringApplication.run(TennisLogApplication.class, args);
 	}
 
 	@Bean
-	public CommandLineRunner demo(TournamentRepository repository) {
+	public CommandLineRunner demo(TournamentService repository) {
+//		Logger log = LoggerFactory.getLogger(TennisLogApplication.class);
 		return (args) -> {
-			// save a couple of customers
-//            repository.save(new Player("Jack", "Bauer"));
-//            repository.save(new Player("Chloe", "O'Brian"));
-//            repository.save(new Player("Kim", "Bauer"));
-//            repository.save(new Player("David", "Palmer"));
-//            repository.save(new Player("Michelle", "Dessler"));
-
+//
+//			 //save a couple of tournaments
+//			Tournament tournament = new Tournament();
+//			tournament.setName("name");
+//			tournament.setInformation("namename");
+//			repository.deleteById(7L);
 			// fetch all customers
 //			log.info("Match found with findAll():");
 //			log.info("-------------------------------");
-//			for (Match match : repository.findAll()) {
+//			for (Tournament match : repository.findAll()) {
 //				log.info(match.toString());
 //			}
 //			log.info("");
 
-//            // fetch an individual customer by ID
-			log.info("Match found with findById(1L):");
-			log.info("--------------------------------");
-			log.info(repository.findById(1L).toString());
-//					.forEach(customer -> {
+//            // fetch an individual match by ID
+//			log.info("Match found with findById(1L):");
+//			log.info("--------------------------------");
+//			log.info(repository.getById(1L).toString());
+//					.forEach(match -> {
 //
-//						log.info(customer.toString());
+//						log.info(match.toString());
 //						log.info("");
 //					});
+//			log.info("Tournament found with findById('1'):");
+//			log.info("--------------------------------------------");
+//			repository.findAllTournamentMatches(1L).forEach(bauer -> {
+//				log.info(bauer.toString());
+//			});
+
 		};
 	}
 

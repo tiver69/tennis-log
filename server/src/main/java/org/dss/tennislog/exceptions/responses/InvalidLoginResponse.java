@@ -1,4 +1,4 @@
-package org.dss.tennislog.exceptions;
+package org.dss.tennislog.exceptions.responses;
 
 import lombok.Getter;
 import lombok.Setter;

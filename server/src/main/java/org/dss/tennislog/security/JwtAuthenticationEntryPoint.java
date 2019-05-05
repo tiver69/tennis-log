@@ -1,7 +1,9 @@
 package org.dss.tennislog.security;
 
+//interface that provides the impl for method called commands
+//this is called whenever en exception is thrown, cause user is trying to access res that required authentication
 import com.google.gson.Gson;
-import org.dss.tennislog.exceptions.InvalidLoginResponse;
+import org.dss.tennislog.exceptions.responses.InvalidLoginResponse;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
