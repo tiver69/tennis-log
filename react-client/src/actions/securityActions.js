@@ -1,5 +1,7 @@
 import axios from 'axios';
-import { GET_ERRORS } from './types';
+import { GET_ERRORS, SET_CURRENT_USER } from './types';
+import setJWTToken from '../securityUtils/securityJWTToken';
+import jwt_decode from 'jwt-decode';
 
 export const createPlayer = (player, history) => async dispatch => {
 	try {
@@ -15,5 +17,29 @@ export const createPlayer = (player, history) => async dispatch => {
 			type: GET_ERRORS,
 			payload: err.response.data
 		});
+	}
+};
+
+
+export const login = loginRequest => async dispatch => {
+	try {
+		const res = await axios.post("/api/player/login", loginRequest);
+		const { token } = res.data;
+		localStorage.setItem("jwtToken", token);
+		setJWTToken(token);
+		const decoded = jwt_decode(token);
+		dispatch({
+			type: SET_CURRENT_USER,
+			payload: decoded
+		});
+		// console.log("done");
+
+	}
+	catch (err) {
+		console.log("error");
+		// dispatch({
+		// 	type: GET_ERRORS,
+		// 	payload: err.response.data
+		// });
 	}
 };
