@@ -8,6 +8,9 @@ import UpdateTournament from './components/Tournament/UpdateTournament';
 import TournamentBoard from './components/TournamentBoard/TournamentBoard';
 import AddMatch from './components/TournamentBoard/Match/AddMatch';
 import UpdateMatch from './components/TournamentBoard/Match/UpdateMatch';
+import Landing from './components/Layout/Landing';
+import Register from './components/PlayerManagment/Register';
+import Login from './components/PlayerManagment/Login';
 import Footer from './components/Layout/Footer';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { Provider } from 'react-redux';
@@ -21,6 +24,15 @@ return (
 	<Router>
 	<div className="App">
 		<Header />
+		{
+			//Public routes
+		}
+		<Route exact path="/" component={ Landing }/>
+		<Route exact path="/register" component={ Register }/>
+		<Route exact path="/login" component={ Login }/>
+		{
+			//Private routes
+		}
 		<Route exact path="/dashboard" component={ Dashboard }/>
 		<Route exact path="/addTournament" component={ AddTournament }/>
 		<Route exact path="/updateTournament/:tournamentId" component={ UpdateTournament }/>
