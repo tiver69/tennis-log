@@ -16,6 +16,8 @@ class UpdateMatch extends Component {
 			date: "",
 			playerOneId: "",
 			playerTwoId: "",
+			// playerOne: {},
+			// playerTwo: {},
 			playedStatus: "",
 			score: "",
 			winner: "",
@@ -35,6 +37,8 @@ class UpdateMatch extends Component {
 		const {
 			id,
 			date,
+			// playerOne,
+			// playerTwo,
 			playedStatus,
 			score,
 			winner,
@@ -43,12 +47,19 @@ class UpdateMatch extends Component {
 		this.setState({
 			id,
 			date,
-			playerOneId : nextProps.tennisMatch.playerOne.id,
-			playerTwoId: nextProps.tennisMatch.playerTwo.id,
+			// playerOne,
+			// playerTwo,
 			playedStatus,
 			score,
 			winner,
 		});
+
+		if(nextProps.tennisMatch.playerOne && nextProps.tennisMatch.playerTwo){
+			this.setState({
+				playerOneId: nextProps.tennisMatch.playerOne.id,
+				playerTwoId: nextProps.tennisMatch.playerTwo.id
+			})
+		}
 	}
 
 	componentDidMount (){
@@ -83,7 +94,7 @@ class UpdateMatch extends Component {
 	render(){
 
 		const { players } = this.props.player;	
-		const { errors } = this.state;			
+		const { errors } = this.state;		
 		const { tournamentId } = this.props.match.params;
 
 		return (
@@ -137,7 +148,7 @@ class UpdateMatch extends Component {
 	                        </div>
 
 	                        <div className="form-group">
-	                            <input type="text" className={classnames("form-control form-control-lg",{"is-invalid":errors.score})} name="score" placeholder="score" value={this.state.score} onChange={this.onChange}/>
+	                            <input type="text" className={classnames("form-control form-control-lg",{"is-invalid":errors.score})} name="score" placeholder="score" value={this.state.score|| ''} onChange={this.onChange}/>
 	                        {
 	                        	errors.score && (
 	                        		<div className="invalid-feedback">{errors.score}</div>)
@@ -159,7 +170,7 @@ class UpdateMatch extends Component {
 		                        }
 	                        </div>
 	                        <div className="form-group">
-	                            <select className="form-control form-control-lg" name="playedStatus" value={this.state.playedStatus} onChange={this.onChange}>
+	                            <select className="form-control form-control-lg" name="playedStatus" value={this.state.playedStatus|| ''} onChange={this.onChange}>
 	                                <option value="">Select Status</option>
 	                                <option value="false">SHEADULED</option>
 	                                <option value="true">FINNISHED</option>
