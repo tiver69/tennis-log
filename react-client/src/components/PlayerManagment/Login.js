@@ -11,7 +11,8 @@ class Login extends Component {
 
 		this.state = {
 			"username":"",
-			"password":""
+			"password":"",
+			"errors":{}
 		};
 
 		this.onChange = this.onChange.bind(this);
@@ -32,7 +33,19 @@ class Login extends Component {
 		this.props.login( loginRequest );
 	}
 
+	componentWillReceiveProps(nextProps){
+		if(nextProps.errors){
+			this.setState({errors:nextProps.errors});
+		}
+		if (nextProps.security.isTokenValid){
+			this.props.history.push("/dashboard");
+		}
+	}
+
 	render(){
+
+	const {errors} = this.state;
+
 		return (
 		<div className="login">
 		    <div className="container">
@@ -41,12 +54,20 @@ class Login extends Component {
 		                <h1 className="display-4 text-center">Log In</h1>
 		                <form onSubmit={this.onSubmit}>
 		                    <div className="form-group">
-		                        <input type="username" className="form-control form-control-lg" placeholder="Username" name="username"
+		                        <input type="username" className={classnames("form-control form-control-lg",{"is-invalid":errors.username})} placeholder="Username" name="username"
 		                        	value={this.state.username} onChange={this.onChange}/>
+		                        {
+		                        	errors.username && (
+		                        		<div className="invalid-feedback">{errors.username}</div>)
+		                        }
 		                    </div>
 		                    <div className="form-group">
-		                        <input type="password" className="form-control form-control-lg" placeholder="Password" name="password"
+		                        <input type="password" className={classnames("form-control form-control-lg",{"is-invalid":errors.password})} placeholder="Password" name="password"
 		                        	value={this.state.password} onChange={this.onChange}/>
+		                        {
+		                        	errors.password && (
+		                        		<div className="invalid-feedback">{errors.password}</div>)
+		                        }
 		                    </div>
 		                    <input type="submit" className="btn btn-info btn-block mt-4" />
 		                </form>
@@ -65,7 +86,8 @@ const mapStateToProps = state => ({
 
 Login.propTypes = {
 	login: PropTypes.func.isRequired,	
-	errors: PropTypes.object.isRequired
+	errors: PropTypes.object.isRequired,
+	security: PropTypes.object.isRequired
 };
 
 export default connect(mapStateToProps, { login }) (Login);

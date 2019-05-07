@@ -20,7 +20,6 @@ export const createPlayer = (player, history) => async dispatch => {
 	}
 };
 
-
 export const login = loginRequest => async dispatch => {
 	try {
 		const res = await axios.post("/api/player/login", loginRequest);
@@ -36,10 +35,19 @@ export const login = loginRequest => async dispatch => {
 
 	}
 	catch (err) {
-		console.log("error");
-		// dispatch({
-		// 	type: GET_ERRORS,
-		// 	payload: err.response.data
-		// });
+		// console.log("error");
+		dispatch({
+			type: GET_ERRORS,
+			payload: err.response.data
+		});
 	}
+};
+
+export const logout = () => dispatch => {
+	localStorage.removeItem("jwtToken");
+	setJWTToken(false);
+	dispatch({
+		type: SET_CURRENT_USER,
+		payload: {}
+	});
 };
