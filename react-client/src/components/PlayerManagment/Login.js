@@ -6,6 +6,12 @@ import { login } from '../../actions/securityActions';
 
 class Login extends Component {
 
+	componentDidMount(){
+		if (this.props.security.isTokenValid) {
+			this.props.history.push("/dashboard");
+		}
+	};
+
 	constructor(){
 		super();
 

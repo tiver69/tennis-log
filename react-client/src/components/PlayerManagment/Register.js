@@ -6,6 +6,12 @@ import classnames from 'classnames';
 
 class Register extends Component {
 
+	componentDidMount(){
+		if (this.props.security.isTokenValid) {
+			this.props.history.push("/dashboard");
+		}
+	};
+
 	constructor(){
 		super();
 
@@ -136,12 +142,15 @@ class Register extends Component {
 }
 
 const mapStateToProps = state => ({
-    errors: state.errors
+    errors: state.errors,
+    security: state.security,
+
 });
 
 Register.propTypes = {
 	createPlayer: PropTypes.func.isRequired,	
 	errors: PropTypes.object.isRequired,
+	security: PropTypes.object.isRequired
 };
 
 export default connect(mapStateToProps, { createPlayer }) (Register);
