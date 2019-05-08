@@ -27,12 +27,16 @@ public class PlayerService {
         return playerRepository.getById(playerId);
     }
 
+    public Player getByUsername(String username){
+        return playerRepository.findByUsername(username);
+    }
+
     public Iterable<Player> findAll() {
         return playerRepository.findAll();
     }
 
     public Iterable<Match> findAllPlayerMatches(String username) {
-        Long id = playerRepository.findByUsername(username).getId();
+        Long id = getByUsername(username).getId();
         return matchRepository.findByPlayerOneIdOrPlayerTwoId(id, id);
     }
 

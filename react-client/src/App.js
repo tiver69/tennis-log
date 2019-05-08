@@ -10,6 +10,7 @@ import AddMatch from './components/TournamentBoard/Match/AddMatch';
 import UpdateMatch from './components/TournamentBoard/Match/UpdateMatch';
 import Landing from './components/Layout/Landing';
 import Register from './components/PlayerManagment/Register';
+import PlayerPage from './components/PlayerManagment/PlayerPage';
 import Login from './components/PlayerManagment/Login';
 import Footer from './components/Layout/Footer';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
@@ -59,6 +60,7 @@ return (
 			<SecuredRoute exact path="/tournamentBoard/:tournamentId" component={ TournamentBoard }/>
 			<SecuredRoute exact path="/addMatch/:tournamentId" component={ AddMatch }/>
 			<SecuredRoute exact path="/updateMatch/t-:tournamentId/m-:matchId" component={ UpdateMatch }/>
+			<SecuredRoute exact path="/account" component={ PlayerPage }/>
 		</Switch>
 		<Footer />
 	</div>

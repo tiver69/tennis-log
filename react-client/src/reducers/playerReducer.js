@@ -1,7 +1,8 @@
-import { GET_PLAYERS } from "../actions/types";
+import { GET_PLAYERS, GET_CURRENT_PLAYER } from "../actions/types";
 
 const initialState = {
-	players: []
+	players: [],
+	currentPlayer: {}
 };
 
 export default function(state = initialState, action){
@@ -12,6 +13,12 @@ export default function(state = initialState, action){
 				players: action.payload
 			};
 
+		case GET_CURRENT_PLAYER:
+			return {
+				...state,
+				currentPlayer: action.payload
+			};
+		
 		default:
 			return state;
 	}

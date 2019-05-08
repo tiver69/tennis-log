@@ -14,6 +14,7 @@ export const DELETE_MATCH = "DELETE_MATCH";
 //Types for PLAYERS
 
 export const GET_PLAYERS = "GET_PLAYERS";
+export const GET_CURRENT_PLAYER = "GET_CURRENT_PLAYER";
 
 //Types for SECURITY
 

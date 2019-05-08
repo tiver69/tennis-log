@@ -2,6 +2,8 @@ package org.dss.tennislog.web;
 
 import org.dss.tennislog.domain.Match;
 import org.dss.tennislog.domain.Player;
+import org.dss.tennislog.domain.Tournament;
+import org.dss.tennislog.exceptions.DataNotFoundException;
 import org.dss.tennislog.payload.JWTLoginSuccessResponse;
 import org.dss.tennislog.payload.LoginRequest;
 import org.dss.tennislog.security.JwtTokenProvider;
@@ -82,6 +84,16 @@ public class PlayerController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = TOKEN_PREFIX + tokenProvider.generateToken(authentication);
         return ResponseEntity.ok(new JWTLoginSuccessResponse(true,jwt));
+    }
+
+    @GetMapping("/current")
+    public ResponseEntity<?> getCurrentPlayer(Principal principal){
+
+        Player player = playerService.getByUsername(principal.getName());
+        if (player == null) {
+            throw new DataNotFoundException("Player with username '" + principal.getName() + "' doesn't exist");
+        }
+        return new ResponseEntity<Player>(player, HttpStatus.OK);
     }
 
 }
