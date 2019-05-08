@@ -1,8 +1,9 @@
-import { GET_PLAYERS, GET_CURRENT_PLAYER } from "../actions/types";
+import { GET_PLAYERS, GET_CURRENT_PLAYER, GET_CURRENT_PLAYER_MATCHES } from "../actions/types";
 
 const initialState = {
 	players: [],
-	currentPlayer: {}
+	currentPlayer: {},
+	currentPlayerMatches: []
 };
 
 export default function(state = initialState, action){
@@ -19,6 +20,12 @@ export default function(state = initialState, action){
 				currentPlayer: action.payload
 			};
 		
+		case GET_CURRENT_PLAYER_MATCHES:
+			return {
+				...state,
+				currentPlayerMatches: action.payload
+			};
+
 		default:
 			return state;
 	}

@@ -24,7 +24,6 @@ class MatchItem extends Component {
                     <h5 className="card-title">{tennisMatch.score}</h5>
                     <p className="card-text text-truncate text-right">
                         {tennisMatch.date}
-                        {((tennisMatch.playedStatus).toString()==="false").toString()}
                     </p>
                     <Link to={`/updateMatch/t-${tournamentId}/m-${tennisMatch.id}`} className="btn btn-primary">
                         View / Update
