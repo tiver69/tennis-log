@@ -80,7 +80,7 @@ class RegisterExisting extends Component {
 
 	componentDidMount (){
     	const { playerId } = this.props.match.params;
-		this.props.getNewPlayer(playerId);
+		this.props.getNewPlayer(playerId, this.props.history);
     };
 
 	render(){
@@ -106,7 +106,7 @@ class RegisterExisting extends Component {
 		                    <form onSubmit={this.onSubmit}>
 		                        <div className="form-group">
 		                            <input type="date" className={classnames("form-control form-control-lg",{"is-invalid":errors.birthday})} placeholder="Age" name="birthday"
-		                                value={this.state.birthday} onChange={this.onChange} />
+		                                value={this.state.birthday || ''} onChange={this.onChange} />
 				                        {
 				                        	errors.birthday && (
 				                        		<div className="invalid-feedback">{errors.birthday}</div>)
@@ -128,7 +128,7 @@ class RegisterExisting extends Component {
 		                        </div>
 		                        <div className="form-group">
 		                            <input type="username" className={classnames("form-control form-control-lg",{"is-invalid":errors.username})} placeholder="Username" name="username"
-		                            	value={this.state.username} onChange={this.onChange}/>
+		                            	value={this.state.username || ''} onChange={this.onChange}/>
 				                        {
 				                        	errors.username && (
 				                        		<div className="invalid-feedback">{errors.username}</div>)

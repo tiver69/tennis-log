@@ -60,7 +60,13 @@ export const getUnregistered = () => async dispatch => {
 	});
 };
 
-export const getNewPlayer = (playerId) => async dispatch => {
+export const getNewPlayer = (playerId, history) => async dispatch => {
+
+	dispatch({
+		type:GET_ERRORS,
+		payload: {}
+	});
+
 	try {
 		const res = await axios.get(`/api/player/free/${playerId}`);
 		dispatch({
@@ -69,9 +75,6 @@ export const getNewPlayer = (playerId) => async dispatch => {
 		});
 	}
 	catch (err) {
-		dispatch({
-			type: GET_ERRORS,
-			payload: err.response.data
-		});
+		history.push("/unregistered");
 	}
 };
