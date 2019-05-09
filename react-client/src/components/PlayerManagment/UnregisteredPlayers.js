@@ -34,7 +34,7 @@ class UnregisteredPlayers extends Component {
                 <div className="card-body bg-light text-center">
                     <h5 className="card-title">{player.leadingHand || '?'}-handed</h5>
                     <p className="card-text text-truncate text-right">
-                        In tennis for {calculate_age(new Date(player.experience))} years
+                        In tennis for {calculate_age(new Date(player.experience,1,1))} years
                     </p>
                 </div>
             </div>

@@ -13,10 +13,26 @@ class MatchItem extends Component {
 	render(){
 
         const {tennisMatch} = this.props;
-        const {tournamentId} =this.props;
+        const {tournamentId} = this.props;
+        const {viewMode} = this.props;
+
+        const buttons = (viewMode) => {
+            if (!viewMode)
+            return(
+            <React.Fragment>
+                <Link to={`/updateMatch/t-${tournamentId}/m-${tennisMatch.id}`} className="btn btn-primary">
+                    View / Update
+                </Link>
+                <button className="btn btn-danger ml-4" onClick={this.onDeleteClick.bind(this, tennisMatch.id)}>
+                    Delete
+                </button>
+            </React.Fragment>
+            );
+        };
 
 		return (
             <div className="card mb-1 bg-light">
+            {viewMode}
                 <div className="text-center card-header text-primary">
                      {tennisMatch.playerOne.lastName} {tennisMatch.playerOne.firstName} --  {tennisMatch.playerTwo.lastName} {tennisMatch.playerTwo.firstName}
                 </div>
@@ -25,12 +41,7 @@ class MatchItem extends Component {
                     <p className="card-text text-truncate text-right">
                         {tennisMatch.date}
                     </p>
-                    <Link to={`/updateMatch/t-${tournamentId}/m-${tennisMatch.id}`} className="btn btn-primary">
-                        View / Update
-                    </Link>
-                    <button className="btn btn-danger ml-4" onClick={this.onDeleteClick.bind(this, tennisMatch.id)}>
-                        Delete
-                    </button>
+                   {buttons(viewMode)}
                 </div>
             </div>
 		);

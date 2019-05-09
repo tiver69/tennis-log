@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { getCurrentPlayer, getCurrentPlayerMatches } from '../../actions/playerActions';
-import MatchItemView from '../TournamentBoard/Match/MatchItemView';
+import MatchItem from '../TournamentBoard/Match/MatchItem';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -37,7 +37,7 @@ class PlayerPage extends Component {
             }
         	else {
                 const tennisMatches = currentPlayerMatches.map(tennisMatch => (
-                    <MatchItemView key={tennisMatch.id} tennisMatch={tennisMatch} />
+                    <MatchItem key={tennisMatch.id} tennisMatch={tennisMatch} viewMode={true} />
                 ));
 
                 for(let i=0; i<tennisMatches.length; i++){
@@ -93,7 +93,7 @@ class PlayerPage extends Component {
                 <div className="card-body bg-light text-center">
                     <h5 className="card-title">{currentPlayer.leadingHand}-handed</h5>
                     <p className="card-text text-truncate text-right">
-                        In tennis for {calculate_age(new Date(currentPlayer.experience))} years
+                        In tennis for {calculate_age(new Date(currentPlayer.experience,1,1))} years
                     </p>
                 </div>
                 {filterMatches(currentPlayerMatches)}

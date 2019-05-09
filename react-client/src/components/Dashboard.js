@@ -15,6 +15,7 @@ class Dashboard extends Component {
 	render(){
 
     const { tournaments } = this.props.tournament;
+    const {player} = this.props.security;
 
 	return (
     <div className="projects">
@@ -27,7 +28,7 @@ class Dashboard extends Component {
                     <br />
                     <hr />
                     {tournaments.map(tournament => (
-                        <TournamentItem key={tournament.id} tournament={tournament} />
+                        <TournamentItem key={tournament.id} tournament={tournament} roles={player.roles}/>
                         ))
                     }
                 </div>
@@ -40,13 +41,14 @@ class Dashboard extends Component {
 }
 
 Dashboard.propTypes = {
-    tournament: PropTypes.object.isRequired,
+    tournament: PropTypes.object.isRequired,    
+    security: PropTypes.object.isRequired,
     getTournaments: PropTypes.func.isRequired
 }
 
 const mapStateToProps = state => ({
-    tournament:state.tournament
-
+    tournament:state.tournament,
+    security: state.security
 });
 
 export default connect(mapStateToProps, {getTournaments}) (Dashboard);
