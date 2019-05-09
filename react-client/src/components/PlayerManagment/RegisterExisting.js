@@ -16,7 +16,7 @@ class RegisterExisting extends Component {
 		    "lastName": "",
 		    "password": "",
 		    "confirmPassword": "",
-		    "age": "",
+		    "birthday": "",
 		    "experience": "",
 		    "leadingHand": "",
 			"errors": {}
@@ -39,7 +39,7 @@ class RegisterExisting extends Component {
 			lastName: this.state.lastName,
 			password: this.state.password,
 			confirmPassword: this.state.confirmPassword,
-			age: this.state.age,
+			birthday: this.state.birthday,
 			experience: this.state.experience,
 			leadingHand: this.state.leadingHand
 		};
@@ -60,7 +60,7 @@ class RegisterExisting extends Component {
 		    lastName,
 		    password,
 		    confirmPassword,
-		    age,
+		    birthday,
 		    experience,
 		    leadingHand,
 		} = nextProps.security.player;
@@ -72,7 +72,7 @@ class RegisterExisting extends Component {
 		    lastName,
 		    password,
 		    confirmPassword,
-		    age,
+		    birthday,
 		    experience,
 		    leadingHand,
 		});
@@ -105,23 +105,23 @@ class RegisterExisting extends Component {
 		                    </p>
 		                    <form onSubmit={this.onSubmit}>
 		                        <div className="form-group">
-		                            <input type="number" className={classnames("form-control form-control-lg",{"is-invalid":errors.age})} placeholder="Age" name="age"
-		                                value={this.state.age} onChange={this.onChange} />
+		                            <input type="date" className={classnames("form-control form-control-lg",{"is-invalid":errors.birthday})} placeholder="Age" name="birthday"
+		                                value={this.state.birthday} onChange={this.onChange} />
 				                        {
-				                        	errors.age && (
-				                        		<div className="invalid-feedback">{errors.age}</div>)
+				                        	errors.birthday && (
+				                        		<div className="invalid-feedback">{errors.birthday}</div>)
 				                        }
 		                        </div>
 		                        <div className="form-group">
 		                            <select className="form-control form-control-lg" name="leadingHand"
 		                            	value={this.state.leadingHand || ''} onChange={this.onChange}>
 		                                <option value="">Select Leading Hand</option>
-		                                <option value="true">Left</option>
-		                                <option value="false">Right</option>
+		                                <option value="Left">Left</option>
+		                                <option value="Right">Right</option>
 		                            </select>
 		                        </div>
 		                        <div className="form-group">
-		                            <input type="number" className="form-control form-control-lg" placeholder="Expirience" name="experience"
+		                            <input type="number" className="form-control form-control-lg" placeholder="Play tennis since" name="experience"
 		                                value={this.state.experience || ''} onChange={this.onChange} />
 		                        </div>
 		                        <div className="form-group">

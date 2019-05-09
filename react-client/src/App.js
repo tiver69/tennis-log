@@ -11,6 +11,7 @@ import UpdateMatch from './components/TournamentBoard/Match/UpdateMatch';
 import Landing from './components/Layout/Landing';
 import Register from './components/PlayerManagment/Register';
 import RegisterExisting from './components/PlayerManagment/RegisterExisting';
+import UpdateExisting from './components/PlayerManagment/UpdateExisting';
 import PlayerPage from './components/PlayerManagment/PlayerPage';
 import UnregisteredPlayers from './components/PlayerManagment/UnregisteredPlayers';
 import Login from './components/PlayerManagment/Login';
@@ -35,8 +36,8 @@ if (jwtToken) {
 
 	const currentTime = Date.now()/1000;
 	if (decoded_jwtToken.exp < currentTime) {
-		store.dispatch(logout())
-			window.location.href = "/";
+		store.dispatch(logout());
+		window.location.href = "/";
 	}
 }
 
@@ -66,6 +67,7 @@ return (
 			<SecuredRoute exact path="/addMatch/:tournamentId" component={ AddMatch }/>
 			<SecuredRoute exact path="/updateMatch/t-:tournamentId/m-:matchId" component={ UpdateMatch }/>
 			<SecuredRoute exact path="/account" component={ PlayerPage }/>
+			<SecuredRoute exact path="/account/update" component={ UpdateExisting }/>
 		</Switch>
 		<Footer />
 	</div>

@@ -25,16 +25,26 @@ export const getCurrentPlayer = () => async dispatch => {
 };
 
 export const getCurrentPlayerMatches = () => async dispatch => {
-	try {
 	const res = await axios.get("/api/player/matches");
 	dispatch({
 		type: GET_CURRENT_PLAYER_MATCHES,
 		payload: res.data
 	});
-	} catch(err) {
+};
+
+export const updatePlayer = (player, history) => async dispatch => {
+	try {
+		await axios.post("/api/player/current/update", player);
+		history.push("/account");
 		dispatch({
-			type:GET_ERRORS,
-			payload:err.response.data
+			type: GET_ERRORS,
+			payload: {}
+		});
+	}
+	catch (err) {
+		dispatch({
+			type: GET_ERRORS,
+			payload: err.response.data
 		});
 	}
 };

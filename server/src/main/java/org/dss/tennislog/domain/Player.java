@@ -1,5 +1,6 @@
 package org.dss.tennislog.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
@@ -10,6 +11,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.util.Collection;
+import java.util.Date;
 
 @Entity
 @Table(name = "players")
@@ -39,11 +41,12 @@ public class Player implements UserDetails {
     @Transient
     private String confirmPassword;
 
-    @Column
-    @NotNull(message = "Age is required")
-    private Integer age;
+    @Column(name="birth_date")
+    @NotNull(message = "Birthday is required")
+    @JsonFormat(pattern = "yyyy-mm-dd")
+    private Date birthday;
 
-    @Column
+    @Column(name="experience_year")
     private Integer experience;
 
     @Column(name = "leading_hand")

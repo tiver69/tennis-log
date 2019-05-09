@@ -25,6 +25,5 @@ public class PlayerValidator implements Validator {
         if (!player.getPassword().equals(player.getConfirmPassword())) {
             errors.rejectValue("confirmPassword", "Match", "Passwords must match");
         }
-
     }
 }

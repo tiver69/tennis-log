@@ -44,7 +44,7 @@ public class PlayerService {
         return matchRepository.findByPlayerOneIdOrPlayerTwoId(id, id);
     }
 
-    public Player saveOrUpdate(Player newPlayer){
+    public Player save(Player newPlayer){
         try {
             newPlayer.setPassword(bCryptPasswordEncoder.encode(newPlayer.getPassword()));
             //setup username if blank
@@ -53,6 +53,18 @@ public class PlayerService {
             return playerRepository.save(newPlayer);
         } catch (Exception e) {
             throw new UsernameAlreadyExistsException("Username '"+ newPlayer.getUsername() + "' already exists");
+        }
+    }
+
+    public Player update(Player updatePlayer){
+        Player oldPlayer = playerRepository.getById(updatePlayer.getId());
+        try {
+            updatePlayer.setPassword(oldPlayer.getPassword());
+            updatePlayer.setUsername(updatePlayer.getUsername());
+            updatePlayer.setConfirmPassword("");
+            return playerRepository.save(updatePlayer);
+        } catch (Exception e) {
+            throw new UsernameAlreadyExistsException("Username '"+ updatePlayer.getUsername() + "' already exists");
         }
     }
 

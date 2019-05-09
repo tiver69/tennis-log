@@ -75,13 +75,12 @@ public class PlayerController {
 
     @PostMapping("/free/register")
     public ResponseEntity<?> registerPlayer(@Valid @RequestBody Player player, BindingResult result){
-        //validate passwords match
         playerValidator.validate(player,result);
 
         ResponseEntity<?> errorMap = mapValidationErrorService.mapValidationService(result);
         if (errorMap != null) return errorMap;
 
-        Player newPlayer = playerService.saveOrUpdate(player);
+        Player newPlayer = playerService.save(player);
         return new ResponseEntity<Player>(newPlayer, HttpStatus.CREATED);
     }
 
@@ -111,6 +110,15 @@ public class PlayerController {
             throw new DataNotFoundException("Player with username '" + principal.getName() + "' doesn't exist");
         }
         return new ResponseEntity<Player>(player, HttpStatus.OK);
+    }
+
+    @PostMapping("/current/update")
+    public ResponseEntity<?> updateCurrentPlayer(@Valid @RequestBody Player player, BindingResult result){
+        ResponseEntity<?> errorMap = mapValidationErrorService.mapValidationService(result);
+        if (errorMap != null) return errorMap;
+
+        Player newPlayer = playerService.update(player);
+        return new ResponseEntity<Player>(newPlayer, HttpStatus.CREATED);
     }
 
 }

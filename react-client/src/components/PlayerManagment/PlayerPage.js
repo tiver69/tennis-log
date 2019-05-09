@@ -20,6 +20,13 @@ class PlayerPage extends Component {
 		let sheduled = []
         let finished = []
 
+        function calculate_age(dob) { 
+	    	var diff_ms = Date.now() - dob.getTime();
+	   		var age_dt = new Date(diff_ms); 
+	  
+	   		return Math.abs(age_dt.getUTCFullYear() - 1970);
+		}
+
         const filterMatches = (currentPlayerMatches) => {
             if (currentPlayerMatches.length < 1){
             	return (
@@ -76,16 +83,17 @@ class PlayerPage extends Component {
 
 		return (
 			<div className="card mb-1 bg-light">
-                <Link to={`/account`} className="btn btn-primary">
+                <Link to={"/account/update/"} className="btn btn-primary">
                     Update
                 </Link>
                 <div className="text-center card-header text-primary">
-                	{currentPlayer.firstName} {currentPlayer.lastName} - {currentPlayer.age}
+                	{currentPlayer.firstName} {currentPlayer.lastName} - {currentPlayer.birthday}{" "} 
+                	({calculate_age(new Date(currentPlayer.birthday))} years) 
                 </div>
                 <div className="card-body bg-light text-center">
-                    <h5 className="card-title">{currentPlayer.leadingHand}</h5>
+                    <h5 className="card-title">{currentPlayer.leadingHand}-handed</h5>
                     <p className="card-text text-truncate text-right">
-                        {currentPlayer.experience}
+                        In tennis for {calculate_age(new Date(currentPlayer.experience))} years
                     </p>
                 </div>
                 {filterMatches(currentPlayerMatches)}
