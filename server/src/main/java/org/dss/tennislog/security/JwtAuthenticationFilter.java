@@ -36,7 +36,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 Long playerId = jwtTokenProvider.getPlayerIdFromJWT(jwt);
                 Player playerDetails = customPlayerDetailService.loadPlayerById(playerId);
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                        playerDetails, null, Collections.emptyList()/*collection for roles*/);
+                        playerDetails, null, playerDetails.getRoles());
                 authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             }

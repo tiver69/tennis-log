@@ -55,12 +55,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.cors().and()
-                .csrf().disable()
-                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .authorizeRequests().antMatchers(
+        http
+                    .cors()
+                .and()
+                    .csrf().disable()
+                    .exceptionHandling().authenticationEntryPoint(unauthorizedHandler)
+                .and()
+                    .sessionManagement()
+                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+                    .authorizeRequests().antMatchers(
                         "/",
                         "/favicon.ico",
                         "/**/*.png",
@@ -70,9 +73,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.html",
                         "/**/*.css",
                         "/**/*.js"
-                ).permitAll()
-                .antMatchers(SIGN_UP_URLS).permitAll()
-                .anyRequest().authenticated();
-        http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+                    ).permitAll()
+                    .antMatchers(SIGN_UP_URLS).permitAll()
+                    .anyRequest().authenticated();
+        http
+                .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 }

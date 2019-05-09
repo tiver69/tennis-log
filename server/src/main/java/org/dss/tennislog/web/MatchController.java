@@ -7,6 +7,7 @@ import org.dss.tennislog.services.MatchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,6 +25,7 @@ public class MatchController {
     private MapValidationErrorService mapValidationErrorService;
 
     @PostMapping("/{playerOneId}-{playerTwoId}/{tournamentId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> createNewMatch(@Valid @RequestBody Match match, BindingResult result,
                                             @PathVariable Long playerOneId, @PathVariable Long playerTwoId,
                                             @PathVariable Long tournamentId){
@@ -50,6 +52,7 @@ public class MatchController {
     }
 
     @DeleteMapping("/{matchId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> deleteMatch(@PathVariable Long matchId){
         matchService.deleteById(matchId);
         return new ResponseEntity<String>("Match with ID '" + matchId+"' was deleted.", HttpStatus.OK);

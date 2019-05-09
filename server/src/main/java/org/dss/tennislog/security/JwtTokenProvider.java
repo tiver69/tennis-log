@@ -32,6 +32,7 @@ public class JwtTokenProvider {
         claims.put("username", player.getUsername());
         claims.put("firstName", player.getFirstName());
         claims.put("lastName", player.getLastName());
+        claims.put("roles", player.getRoles());
         //roles somewhere here
         return Jwts.builder()
                 .setSubject(playerId)

@@ -8,6 +8,7 @@ import org.dss.tennislog.services.TournamentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,6 +26,7 @@ public class TournamentController {
     private MapValidationErrorService mapValidationErrorService;
 
     @PostMapping("")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> createNewTournament(@Valid @RequestBody Tournament tournament, BindingResult result){
 
         ResponseEntity<?> errorMap = mapValidationErrorService.mapValidationService(result);
@@ -50,6 +52,7 @@ public class TournamentController {
     }
 
     @DeleteMapping("/{tournamentId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> deleteTournament(@PathVariable Long tournamentId){
         tournamentService.deleteById(tournamentId);
         return new ResponseEntity<String>("Tournament with ID '" + tournamentId+"' and all its matches were deleted.", HttpStatus.OK);

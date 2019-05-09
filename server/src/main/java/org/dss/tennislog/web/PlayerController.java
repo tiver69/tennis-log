@@ -12,6 +12,7 @@ import org.dss.tennislog.validator.PlayerValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -45,17 +46,19 @@ public class PlayerController {
     private AuthenticationManager authenticationManager;
 
     @GetMapping("/matches")
+    @PreAuthorize("hasAuthority('USER')")
     public Iterable<Match> findAllPlayerMatches(Principal principal){
         return playerService.findAllPlayerMatches(principal.getName());
     }
 
     @GetMapping("/all")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Iterable<Player> findAll() {
         return playerService.findAll();
     }
 
     @GetMapping("/free/{playerId}")
-    public ResponseEntity<?> getTournamentById(@PathVariable Long playerId){
+    public ResponseEntity<?> getPlayerById(@PathVariable Long playerId){
 
         Player player = playerService.getById(playerId);
 
@@ -103,6 +106,7 @@ public class PlayerController {
     }
 
     @GetMapping("/current")
+    @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity<?> getCurrentPlayer(Principal principal){
 
         Player player = playerService.getByUsername(principal.getName());
@@ -113,6 +117,7 @@ public class PlayerController {
     }
 
     @PostMapping("/current/update")
+    @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity<?> updateCurrentPlayer(@Valid @RequestBody Player player, BindingResult result){
         ResponseEntity<?> errorMap = mapValidationErrorService.mapValidationService(result);
         if (errorMap != null) return errorMap;
