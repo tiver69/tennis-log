@@ -48,16 +48,10 @@ public class PlayerService {
         try {
             newPlayer.setPassword(bCryptPasswordEncoder.encode(newPlayer.getPassword()));
             //setup username if blank
-
-            LoggerFactory.getLogger(TennisLogApplication.class).info(newPlayer.getUsername());
             newPlayer.setUsername(newPlayer.getUsername());
-
-            LoggerFactory.getLogger(TennisLogApplication.class).info(newPlayer.getUsername());
-            //check pass
             newPlayer.setConfirmPassword("");
             return playerRepository.save(newPlayer);
         } catch (Exception e) {
-            LoggerFactory.getLogger(TennisLogApplication.class).info("here");
             throw new UsernameAlreadyExistsException("Username '"+ newPlayer.getUsername() + "' already exists");
         }
     }

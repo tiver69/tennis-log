@@ -2,7 +2,6 @@ package org.dss.tennislog.web;
 
 import org.dss.tennislog.domain.Match;
 import org.dss.tennislog.domain.Player;
-import org.dss.tennislog.domain.Tournament;
 import org.dss.tennislog.exceptions.DataNotFoundException;
 import org.dss.tennislog.payload.JWTLoginSuccessResponse;
 import org.dss.tennislog.payload.LoginRequest;
@@ -21,7 +20,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-
 import java.security.Principal;
 
 import static org.dss.tennislog.security.SecurityConstants.TOKEN_PREFIX;
