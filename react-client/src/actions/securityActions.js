@@ -1,11 +1,11 @@
 import axios from 'axios';
-import { GET_ERRORS, SET_CURRENT_USER } from './types';
+import { GET_ERRORS, SET_CURRENT_USER, GET_UNREGISTERED, GET_NEW_PLAYER } from './types';
 import setJWTToken from '../securityUtils/securityJWTToken';
 import jwt_decode from 'jwt-decode';
 
 export const createPlayer = (player, history) => async dispatch => {
 	try {
-		await axios.post("/api/player/register", player);
+		await axios.post("/api/player/free/register", player);
 		history.push("/login");
 		dispatch({
 			type: GET_ERRORS,
@@ -22,7 +22,7 @@ export const createPlayer = (player, history) => async dispatch => {
 
 export const login = loginRequest => async dispatch => {
 	try {
-		const res = await axios.post("/api/player/login", loginRequest);
+		const res = await axios.post("/api/player/free/login", loginRequest);
 		const { token } = res.data;
 		localStorage.setItem("jwtToken", token);
 		setJWTToken(token);
@@ -50,4 +50,28 @@ export const logout = () => dispatch => {
 		type: SET_CURRENT_USER,
 		payload: {}
 	});
+};
+
+export const getUnregistered = () => async dispatch => {
+	const res = await axios.get("/api/player/free/unregistered");
+	dispatch({
+		type: GET_UNREGISTERED,
+		payload: res.data
+	});
+};
+
+export const getNewPlayer = (playerId) => async dispatch => {
+	try {
+		const res = await axios.get(`/api/player/free/${playerId}`);
+		dispatch({
+			type: GET_NEW_PLAYER,
+			payload: res.data
+		});
+	}
+	catch (err) {
+		dispatch({
+			type: GET_ERRORS,
+			payload: err.response.data
+		});
+	}
 };

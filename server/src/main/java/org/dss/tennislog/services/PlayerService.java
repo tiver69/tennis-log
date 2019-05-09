@@ -35,6 +35,10 @@ public class PlayerService {
         return playerRepository.findAll();
     }
 
+    public Iterable<Player> findUnregistered() {
+        return playerRepository.findByPassword(null);
+    }
+
     public Iterable<Match> findAllPlayerMatches(String username) {
         Long id = getByUsername(username).getId();
         return matchRepository.findByPlayerOneIdOrPlayerTwoId(id, id);

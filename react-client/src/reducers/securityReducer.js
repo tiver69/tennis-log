@@ -1,8 +1,9 @@
-import { SET_CURRENT_USER } from '../actions/types';
+import { SET_CURRENT_USER, GET_UNREGISTERED, GET_NEW_PLAYER } from '../actions/types';
 
 const initialState ={
 	player: {},
-	isTokenValid: false
+	isTokenValid: false,
+	unregistered: []
 };
 
 const booleanActionPayload = (payload) =>{
@@ -21,7 +22,17 @@ export default function (state = initialState, action){
 				...state,
 				isTokenValid: booleanActionPayload(action.payload),
 				player: action.payload
-			}
+			};
+		case GET_UNREGISTERED:
+			return {
+				...state,
+				unregistered: action.payload
+			};
+		case GET_NEW_PLAYER:
+			return {
+				...state,
+				player: action.payload
+			};
 
 		default:
 			return state;

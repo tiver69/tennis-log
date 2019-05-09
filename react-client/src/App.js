@@ -10,7 +10,9 @@ import AddMatch from './components/TournamentBoard/Match/AddMatch';
 import UpdateMatch from './components/TournamentBoard/Match/UpdateMatch';
 import Landing from './components/Layout/Landing';
 import Register from './components/PlayerManagment/Register';
+import RegisterExisting from './components/PlayerManagment/RegisterExisting';
 import PlayerPage from './components/PlayerManagment/PlayerPage';
+import UnregisteredPlayers from './components/PlayerManagment/UnregisteredPlayers';
 import Login from './components/PlayerManagment/Login';
 import Footer from './components/Layout/Footer';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
@@ -50,6 +52,9 @@ return (
 		<Route exact path="/" component={ Landing }/>
 		<Route exact path="/register" component={ Register }/>
 		<Route exact path="/login" component={ Login }/>
+		<Route exact path="/unregistered" component={ UnregisteredPlayers }/>
+		<Route exact path="/register/:playerId" component={ RegisterExisting }/>
+			
 		{
 			//Private routes
 		}

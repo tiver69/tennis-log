@@ -1,22 +1,16 @@
 import React, { Component } from 'react';
-import { createPlayer } from '../../actions/securityActions';
-import { Link } from 'react-router-dom';
+import { getNewPlayer, createPlayer} from '../../actions/securityActions';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
 
-class Register extends Component {
-
-	componentDidMount(){
-		if (this.props.security.isTokenValid) {
-			this.props.history.push("/dashboard");
-		}
-	};
+class RegisterExisting extends Component {
 
 	constructor(){
 		super();
 
-		this.state = {
+		this.state={
+			"id":"",
 		    "username": "",
 		    "firstName": "",
 		    "lastName": "",
@@ -25,8 +19,8 @@ class Register extends Component {
 		    "age": "",
 		    "experience": "",
 		    "leadingHand": "",
-		    "errors": {}
-		}
+			"errors": {}
+		} 
 
 		this.onChange = this.onChange.bind(this);
 		this.onSubmit = this.onSubmit.bind(this);
@@ -39,6 +33,7 @@ class Register extends Component {
 	onSubmit(e){
 		e.preventDefault();
 		const newPlayer = {
+			id: this.state.id,
 			username: this.state.username,
 			firstName: this.state.firstName,
 			lastName: this.state.lastName,
@@ -53,41 +48,62 @@ class Register extends Component {
 	}
 
 	componentWillReceiveProps(nextProps){
+
 		if(nextProps.errors){
 			this.setState({errors:nextProps.errors});
 		}
+
+		const {
+			id,
+		    username,
+		    firstName,
+		    lastName,
+		    password,
+		    confirmPassword,
+		    age,
+		    experience,
+		    leadingHand,
+		} = nextProps.security.player;
+
+		this.setState({
+			id,
+		    username,
+		    firstName,
+		    lastName,
+		    password,
+		    confirmPassword,
+		    age,
+		    experience,
+		    leadingHand,
+		});
 	}
 
+	componentDidMount (){
+    	const { playerId } = this.props.match.params;
+		this.props.getNewPlayer(playerId);
+    };
+
 	render(){
+		const { errors } = this.state;	
 
-		const { errors } = this.state;
-
-		return (
-		<div className="register">
+		const filterErrors = (errors) => {
+            	if (errors.idNotFound) {
+            		return (
+            				<div className="alert alert-danger text" role="alert">
+            					{errors.idNotFound}
+            				</div>
+            			)
+            	}
+            	else {
+                return (
+				<div className="register">
 		        <div className="container">
 		            <div className="row">
 		                <div className="col-md-8 m-auto">
 		                    <h1 className="display-4 text-center">Sign Up</h1>
-		                    <p className="lead text-center">Create your Account OR {" "}
-		                    <Link to="/unregistered">Create for existing</Link>
+		                    <p className="lead text-center">As {this.state.lastName} {this.state.firstName}
 		                    </p>
 		                    <form onSubmit={this.onSubmit}>
-		                        <div className="form-group">
-		                            <input type="text" className={classnames("form-control form-control-lg",{"is-invalid":errors.firstName})} placeholder="First Name" name="firstName"
-		                                value={this.state.firstName} onChange={this.onChange} />
-			                        {
-			                        	errors.firstName && (
-			                        		<div className="invalid-feedback">{errors.firstName}</div>)
-			                        }
-		                        </div>
-		                        <div className="form-group">
-		                            <input type="text" className={classnames("form-control form-control-lg",{"is-invalid":errors.lastName})} placeholder="Last Name" name="lastName"
-		                                value={this.state.lastName} onChange={this.onChange} />
-				                        {
-				                        	errors.lastName && (
-				                        		<div className="invalid-feedback">{errors.lastName}</div>)
-				                        }
-		                        </div>
 		                        <div className="form-group">
 		                            <input type="number" className={classnames("form-control form-control-lg",{"is-invalid":errors.age})} placeholder="Age" name="age"
 		                                value={this.state.age} onChange={this.onChange} />
@@ -98,7 +114,7 @@ class Register extends Component {
 		                        </div>
 		                        <div className="form-group">
 		                            <select className="form-control form-control-lg" name="leadingHand"
-		                            	value={this.state.leadingHand} onChange={this.onChange}>
+		                            	value={this.state.leadingHand || ''} onChange={this.onChange}>
 		                                <option value="">Select Leading Hand</option>
 		                                <option value="true">Left</option>
 		                                <option value="false">Right</option>
@@ -106,7 +122,7 @@ class Register extends Component {
 		                        </div>
 		                        <div className="form-group">
 		                            <input type="number" className="form-control form-control-lg" placeholder="Expirience" name="experience"
-		                                value={this.state.experience} onChange={this.onChange} />
+		                                value={this.state.experience || ''} onChange={this.onChange} />
 		                        </div>
 		                        <div className="form-group">
 		                        </div>
@@ -120,7 +136,7 @@ class Register extends Component {
 		                        </div>
 		                        <div className="form-group">
 		                            <input type="password" className={classnames("form-control form-control-lg",{"is-invalid":errors.password})} placeholder="Password" name="password"
-		                            	value={this.state.password} onChange={this.onChange}/>
+		                            	value={this.state.password || ''} onChange={this.onChange}/>
 				                        {
 				                        	errors.password && (
 				                        		<div className="invalid-feedback">{errors.password}</div>)
@@ -128,7 +144,7 @@ class Register extends Component {
 		                        </div>
 		                        <div className="form-group">
 		                            <input type="password" className={classnames("form-control form-control-lg",{"is-invalid":errors.confirmPassword})} placeholder="Confirm Password"
-		                                name="confirmPassword" value={this.state.confirmPassword} onChange={this.onChange}/>
+		                                name="confirmPassword" value={this.state.confirmPassword || ''} onChange={this.onChange}/>
 				                        {
 				                        	errors.confirmPassword && (
 				                        		<div className="invalid-feedback">{errors.confirmPassword}</div>)
@@ -139,21 +155,29 @@ class Register extends Component {
 		                </div>
 		            </div>
 		        </div>
-		    </div>
+		    	</div>
+                );
+            }
+    	};
+
+		return (
+			<div className="container">
+				{filterErrors(errors)}
+			</div>
 		);
 	}
 }
 
-const mapStateToProps = state => ({
-    errors: state.errors,
-    security: state.security,
-
-});
-
-Register.propTypes = {
-	createPlayer: PropTypes.func.isRequired,	
+RegisterExisting.propTypes = {
+	security: PropTypes.object.isRequired,	
+	getNewPlayer: PropTypes.func.isRequired,
 	errors: PropTypes.object.isRequired,
-	security: PropTypes.object.isRequired
-};
+	createPlayer: PropTypes.func.isRequired,
+}
 
-export default connect(mapStateToProps, { createPlayer }) (Register);
+const mapStateToProps = state => ({
+    security:state.security,    
+    errors: state.errors
+})
+
+export default connect(mapStateToProps, {getNewPlayer, createPlayer})(RegisterExisting);

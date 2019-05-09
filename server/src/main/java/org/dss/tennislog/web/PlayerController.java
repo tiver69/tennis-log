@@ -56,7 +56,26 @@ public class PlayerController {
         return playerService.findAll();
     }
 
-    @PostMapping("/register")
+    @GetMapping("/free/{playerId}")
+    public ResponseEntity<?> getTournamentById(@PathVariable Long playerId){
+
+        Player player = playerService.getById(playerId);
+
+        if (player.getPassword() != null){
+            throw new DataNotFoundException("Player with ID '" + playerId + "' already exist");
+        }
+        if (player == null) {
+            throw new DataNotFoundException("Player with ID '" + playerId + "' doesn't exist");
+        }
+        return new ResponseEntity<Player>(player, HttpStatus.OK);
+    }
+
+    @GetMapping("/free/unregistered")
+    public Iterable<Player> findUnregistered() {
+        return playerService.findUnregistered();
+    }
+
+    @PostMapping("/free/register")
     public ResponseEntity<?> registerPlayer(@Valid @RequestBody Player player, BindingResult result){
         //validate passwords match
         playerValidator.validate(player,result);
@@ -68,7 +87,7 @@ public class PlayerController {
         return new ResponseEntity<Player>(newPlayer, HttpStatus.CREATED);
     }
 
-    @PostMapping("/login")
+    @PostMapping("/free/login")
     public ResponseEntity<?> authenticatePlayer(@Valid @RequestBody LoginRequest loginRequest,
                                                 BindingResult result){
         ResponseEntity<?> errorMap = mapValidationErrorService.mapValidationService(result);
