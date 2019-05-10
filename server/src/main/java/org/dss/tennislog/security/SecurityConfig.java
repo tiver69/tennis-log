@@ -1,7 +1,7 @@
 package org.dss.tennislog.security;
 
 
-import org.dss.tennislog.services.CustomPlayerDetailService;
+import org.dss.tennislog.services.PlayerDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,7 +31,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private JwtAuthenticationEntryPoint unauthorizedHandler;
 
     @Autowired
-    private CustomPlayerDetailService customPlayerDetailService;
+    private PlayerDetailService playerDetailService;
 
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter(){
@@ -43,7 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
-        authenticationManagerBuilder.userDetailsService(customPlayerDetailService)
+        authenticationManagerBuilder.userDetailsService(playerDetailService)
                 .passwordEncoder(bCryptPasswordEncoder);
     }
 

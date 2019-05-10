@@ -1,7 +1,7 @@
 package org.dss.tennislog.security;
 
 import org.dss.tennislog.domain.Player;
-import org.dss.tennislog.services.CustomPlayerDetailService;
+import org.dss.tennislog.services.PlayerDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -14,7 +14,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Collections;
 
 import static org.dss.tennislog.security.SecurityConstants.HEADER_STRING;
 import static org.dss.tennislog.security.SecurityConstants.TOKEN_PREFIX;
@@ -25,7 +24,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private JwtTokenProvider jwtTokenProvider;
 
     @Autowired
-    private CustomPlayerDetailService customPlayerDetailService;
+    private PlayerDetailService playerDetailService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
@@ -34,7 +33,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             String jwt = getJWTFromRequest(httpServletRequest);
             if (StringUtils.hasText(jwt) && jwtTokenProvider.validateToken(jwt)){
                 Long playerId = jwtTokenProvider.getPlayerIdFromJWT(jwt);
-                Player playerDetails = customPlayerDetailService.loadPlayerById(playerId);
+                Player playerDetails = playerDetailService.loadPlayerById(playerId);
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                         playerDetails, null, playerDetails.getRoles());
                 authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));

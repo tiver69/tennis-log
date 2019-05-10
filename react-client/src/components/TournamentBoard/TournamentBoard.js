@@ -35,6 +35,19 @@ class TournamentBoard extends Component {
 		let sheduled = []
         let finished = []
 
+		const CreateMatchButton = (view) => {
+			if (view) {
+			return (
+				<React.Fragment>
+                	<Link to={`/addMatch/${tournamentId}`} className="btn btn-primary mb-3">
+			     		<i className="fas fa-plus-circle"> Create Match </i>
+					</Link>
+					<br />
+	            </React.Fragment>
+			);
+			}
+		}
+
         const filterMatches = (errors, matches) => {
             if (matches.length < 1){
             	if (errors.idNotFound) {
@@ -47,11 +60,6 @@ class TournamentBoard extends Component {
             	else {
                 return (
                 	<React.Fragment>
-                	<Link to={`/addMatch/${tournamentId}`} className="btn btn-primary mb-3">
-			     		<i className="fas fa-plus-circle"> Create Match </i>
-					</Link>
-					<br />
-					<hr />
                     <div className="alert alert-info text-center" role="alert">
                     No matches here. 
                     </div>
@@ -76,11 +84,6 @@ class TournamentBoard extends Component {
 
 			return (
 				<React.Fragment>
-					<Link to={`/addMatch/${tournamentId}`} className="btn btn-primary mb-3">
-					     <i className="fas fa-plus-circle"> Create Match </i>
-					</Link>
-					<br />
-					<hr />
 			        <div className="container">
 			            <div className="row">
 			                <div className="col-md-6">
@@ -116,6 +119,8 @@ class TournamentBoard extends Component {
 
         return (
 		<div className="container">
+		{CreateMatchButton(this.props.security.player.roles.includes("ADMIN"))}
+		<hr />
         {BoardContent}
         {
         	// matches.map(tennisMatch => (

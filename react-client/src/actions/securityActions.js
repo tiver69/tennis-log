@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { GET_ERRORS, SET_CURRENT_USER, GET_UNREGISTERED, GET_NEW_PLAYER } from './types';
+import { GET_ERRORS, SET_CURRENT_USER, GET_CURRENT_PLAYER, GET_CURRENT_PLAYER_MATCHES } from './types';
 import setJWTToken from '../securityUtils/securityJWTToken';
 import jwt_decode from 'jwt-decode';
 
@@ -52,29 +52,25 @@ export const logout = () => dispatch => {
 	});
 };
 
-export const getUnregistered = () => async dispatch => {
-	const res = await axios.get("/api/player/free/unregistered");
+export const getCurrentPlayer = () => async dispatch => {
+	try {
+	const res = await axios.get("/api/player/current");
 	dispatch({
-		type: GET_UNREGISTERED,
+		type: GET_CURRENT_PLAYER,
 		payload: res.data
 	});
-};
-
-export const getNewPlayer = (playerId, history) => async dispatch => {
-
-	dispatch({
-		type:GET_ERRORS,
-		payload: {}
-	});
-
-	try {
-		const res = await axios.get(`/api/player/free/${playerId}`);
+	} catch(err) {
 		dispatch({
-			type: GET_NEW_PLAYER,
-			payload: res.data
+			type:GET_ERRORS,
+			payload:err.response.data
 		});
 	}
-	catch (err) {
-		history.push("/unregistered");
-	}
+};
+
+export const getCurrentPlayerMatches = () => async dispatch => {
+	const res = await axios.get("/api/player/matches");
+	dispatch({
+		type: GET_CURRENT_PLAYER_MATCHES,
+		payload: res.data
+	});
 };

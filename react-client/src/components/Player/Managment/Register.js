@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { createPlayer } from '../../actions/securityActions';
+import { createPlayer } from '../../../actions/securityActions';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -46,7 +46,8 @@ class Register extends Component {
 			confirmPassword: this.state.confirmPassword,
 			birthday: this.state.birthday,
 			experience: this.state.experience,
-			leadingHand: this.state.leadingHand
+			leadingHand: this.state.leadingHand,
+			roles: []
 		};
 		// console.log(newPlayer);
 		this.props.createPlayer( newPlayer, this.props.history);

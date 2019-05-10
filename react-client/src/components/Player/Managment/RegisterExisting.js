@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { getNewPlayer, createPlayer} from '../../actions/securityActions';
+import { createPlayer} from '../../../actions/securityActions';
+import { getNewPlayer } from '../../../actions/playerActions';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
@@ -41,7 +42,8 @@ class RegisterExisting extends Component {
 			confirmPassword: this.state.confirmPassword,
 			birthday: this.state.birthday,
 			experience: this.state.experience,
-			leadingHand: this.state.leadingHand
+			leadingHand: this.state.leadingHand,
+			roles: [],
 		};
 		// console.log(newPlayer);
 		this.props.createPlayer( newPlayer, this.props.history);
@@ -63,7 +65,7 @@ class RegisterExisting extends Component {
 		    birthday,
 		    experience,
 		    leadingHand,
-		} = nextProps.security.player;
+		} = nextProps.player.player;
 
 		this.setState({
 			id,
@@ -79,6 +81,9 @@ class RegisterExisting extends Component {
 	}
 
 	componentDidMount (){
+		if (this.props.security.isTokenValid) {
+			this.props.history.push("/dashboard");
+		}
     	const { playerId } = this.props.match.params;
 		this.props.getNewPlayer(playerId, this.props.history);
     };
@@ -169,14 +174,16 @@ class RegisterExisting extends Component {
 }
 
 RegisterExisting.propTypes = {
-	security: PropTypes.object.isRequired,	
+	security: PropTypes.object.isRequired,
+	player: PropTypes.object.isRequired,	
 	getNewPlayer: PropTypes.func.isRequired,
 	errors: PropTypes.object.isRequired,
 	createPlayer: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = state => ({
-    security:state.security,    
+    security:state.security,
+    player: state.player,  
     errors: state.errors
 })
 

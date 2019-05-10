@@ -3,14 +3,15 @@ import { Redirect, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-const SecuredRoute = ({component:Component, security, ...otherProps}) => (
+const SecuredUserRoute = ({component:Component, security, ...otherProps}) => (
 	<Route {...otherProps} 
-		render = {props => security.isTokenValid === true ? 
+		render = {props => (security.isTokenValid === true
+			 && security.player.roles.includes("USER")) ? 
 		(<Component {...props}/>) : (<Redirect to="/login"/>)}/>
 
 );
 
-SecuredRoute.propTypes = {
+SecuredUserRoute.propTypes = {
 	security: PropTypes.object.isRequired
 }
 
@@ -19,4 +20,4 @@ const mapStateToProps = state => ({
 })
 
 
-export default connect(mapStateToProps)(SecuredRoute);
+export default connect(mapStateToProps)(SecuredUserRoute);

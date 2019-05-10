@@ -2,6 +2,7 @@ package org.dss.tennislog.services;
 
 import org.dss.tennislog.domain.Match;
 import org.dss.tennislog.domain.Player;
+import org.dss.tennislog.domain.Role;
 import org.dss.tennislog.exceptions.UsernameAlreadyExistsException;
 import org.dss.tennislog.repositories.MatchRepository;
 import org.dss.tennislog.repositories.PlayerRepository;
@@ -48,6 +49,7 @@ public class PlayerService {
             //setup username if blank
             newPlayer.setUsername(newPlayer.getUsername());
             newPlayer.setConfirmPassword("");
+            newPlayer.getRoles().add(Role.USER);
             return playerRepository.save(newPlayer);
         } catch (Exception e) {
             throw new UsernameAlreadyExistsException("Username '"+ newPlayer.getUsername() + "' already exists");

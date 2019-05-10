@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { getCurrentPlayer, getCurrentPlayerMatches } from '../../actions/playerActions';
+import { getCurrentPlayer, getCurrentPlayerMatches } from '../../actions/securityActions';
 import MatchItem from '../TournamentBoard/Match/MatchItem';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -14,8 +14,8 @@ class PlayerPage extends Component {
 
 	render(){
 
-		const { currentPlayer } = this.props.currentPlayer;
-		const { currentPlayerMatches } = this.props.currentPlayer;
+		const { currentPlayer } = this.props.security;
+		const { currentPlayerMatches } = this.props.security;
 
 		let sheduled = []
         let finished = []
@@ -105,7 +105,7 @@ class PlayerPage extends Component {
 const mapStateToProps = state => ({
     errors: state.errors,
     currentPlayer: state.player,
-
+    security: state.security
 });
 
 PlayerPage.propTypes = {

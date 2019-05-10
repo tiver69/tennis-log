@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import TournamentItem from './Tournament/TournamentItem';
-import CreateTournamentButton from './Tournament/CreateTournamentButton';
 import { connect } from 'react-redux';
 import { getTournaments } from '../actions/tournamentActions';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
 
 class Dashboard extends Component {
@@ -15,7 +15,19 @@ class Dashboard extends Component {
 	render(){
 
     const { tournaments } = this.props.tournament;
-    const {player} = this.props.security;
+    const { player } = this.props.security;
+
+    const CreateTournamentButton = (view) => {
+        if (view) {
+        return (
+            <React.Fragment>
+            <Link to="/addTournament" className="btn btn-lg btn-info">
+                Create a Tournament
+            </Link>
+            </React.Fragment>
+        );
+        }
+    }
 
 	return (
     <div className="projects">
@@ -23,9 +35,7 @@ class Dashboard extends Component {
             <div className="row">
                 <div className="col-md-12">
                     <h1 className="display-4 text-center">Tournaments</h1>
-                    <br />
-                        <CreateTournamentButton/>
-                    <br />
+                    {CreateTournamentButton(player.roles.includes("ADMIN"))}
                     <hr />
                     {tournaments.map(tournament => (
                         <TournamentItem key={tournament.id} tournament={tournament} roles={player.roles}/>

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { getCurrentPlayer, updatePlayer } from '../../actions/playerActions';
+import { updatePlayer } from '../../../actions/playerActions';
+import { getCurrentPlayer } from '../../../actions/securityActions';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
@@ -17,6 +18,7 @@ class UpdateExisting extends Component {
 		    "birthday": "",
 		    "experience": "",
 		    "leadingHand": "",
+		    "roles": [],
 			"errors": {}
 		} 
 
@@ -38,10 +40,11 @@ class UpdateExisting extends Component {
 			password: "old_pass",
 			birthday: this.state.birthday,
 			experience: this.state.experience,
-			leadingHand: this.state.leadingHand
+			leadingHand: this.state.leadingHand,
+			roles: this.state.roles
 		};
-		// console.log(newPlayer);
-		this.props.updatePlayer( newPlayer, this.props.history);
+		console.log(newPlayer);
+		this.props.updatePlayer(newPlayer, this.props.history);
 	}
 
 	componentWillReceiveProps(nextProps){
@@ -59,7 +62,8 @@ class UpdateExisting extends Component {
 		    birthday,
 		    experience,
 		    leadingHand,
-		} = nextProps.player.currentPlayer;
+		    roles,
+		} = nextProps.security.currentPlayer;
 
 		this.setState({
 			id,
@@ -70,6 +74,7 @@ class UpdateExisting extends Component {
 		    birthday,
 		    experience,
 		    leadingHand,
+		    roles
 		});
 	}
 

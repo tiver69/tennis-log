@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { getUnregistered } from '../../actions/securityActions';
+import { getUnregistered } from '../../actions/playerActions';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -7,12 +7,15 @@ import { connect } from 'react-redux';
 class UnregisteredPlayers extends Component {
 
 	componentDidMount (){
+        if (this.props.security.isTokenValid) {
+            this.props.history.push("/dashboard");
+        }
 		this.props.getUnregistered();
     };
 
 	render(){
 
-		const { unregistered } = this.props.security;
+		const { unregistered } = this.props.player;
 
 		let rowOne = []
         let rowTwo = []
@@ -66,13 +69,14 @@ class UnregisteredPlayers extends Component {
 }
 
 const mapStateToProps = state => ({
-    security: state.security,
-
+    player: state.player,
+    security: state.security
 });
 
 UnregisteredPlayers.propTypes = {
 	getUnregistered: PropTypes.func.isRequired,	
-	security: PropTypes.object.isRequired
+	player: PropTypes.object.isRequired,
+    security: PropTypes.object.isRequired
 };
 
 export default connect(mapStateToProps, {getUnregistered})(UnregisteredPlayers);

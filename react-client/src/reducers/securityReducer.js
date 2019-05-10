@@ -1,9 +1,10 @@
-import { SET_CURRENT_USER, GET_UNREGISTERED, GET_NEW_PLAYER } from '../actions/types';
+import { SET_CURRENT_USER, GET_CURRENT_PLAYER, GET_CURRENT_PLAYER_MATCHES } from '../actions/types';
 
 const initialState ={
 	player: {},
 	isTokenValid: false,
-	unregistered: []
+	currentPlayer: {},
+	currentPlayerMatches: []
 };
 
 const booleanActionPayload = (payload) =>{
@@ -23,15 +24,15 @@ export default function (state = initialState, action){
 				isTokenValid: booleanActionPayload(action.payload),
 				player: action.payload
 			};
-		case GET_UNREGISTERED:
+		case GET_CURRENT_PLAYER:
 			return {
 				...state,
-				unregistered: action.payload
+				currentPlayer: action.payload
 			};
-		case GET_NEW_PLAYER:
+		case GET_CURRENT_PLAYER_MATCHES:
 			return {
 				...state,
-				player: action.payload
+				currentPlayerMatches: action.payload
 			};
 
 		default:

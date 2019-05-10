@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { deleteTournament } from '../../actions/tournamentActions';
-import classnames from 'classnames';
 
 
 class TournamentItem extends Component {

@@ -1,9 +1,9 @@
-import { GET_PLAYERS, GET_CURRENT_PLAYER, GET_CURRENT_PLAYER_MATCHES } from "../actions/types";
+import { GET_PLAYERS, GET_UNREGISTERED, GET_NEW_PLAYER } from "../actions/types";
 
 const initialState = {
+	player: {},
 	players: [],
-	currentPlayer: {},
-	currentPlayerMatches: []
+	unregistered: []
 };
 
 export default function(state = initialState, action){
@@ -13,17 +13,15 @@ export default function(state = initialState, action){
 				...state,
 				players: action.payload
 			};
-
-		case GET_CURRENT_PLAYER:
+		case GET_UNREGISTERED:
 			return {
 				...state,
-				currentPlayer: action.payload
+				unregistered: action.payload
 			};
-		
-		case GET_CURRENT_PLAYER_MATCHES:
+		case GET_NEW_PLAYER:
 			return {
 				...state,
-				currentPlayerMatches: action.payload
+				player: action.payload
 			};
 
 		default:
