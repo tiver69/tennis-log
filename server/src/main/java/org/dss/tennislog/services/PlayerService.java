@@ -1,12 +1,10 @@
 package org.dss.tennislog.services;
 
-import org.dss.tennislog.TennisLogApplication;
 import org.dss.tennislog.domain.Match;
 import org.dss.tennislog.domain.Player;
 import org.dss.tennislog.exceptions.UsernameAlreadyExistsException;
 import org.dss.tennislog.repositories.MatchRepository;
 import org.dss.tennislog.repositories.PlayerRepository;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;

@@ -24,7 +24,7 @@ class Register extends Component {
 		    "confirmPassword": "",
 		    "birthday": "",
 		    "experience": "",
-		    "leadingHand": "",
+		    "leadingHand": null,
 		    "errors": {}
 		}
 
@@ -98,8 +98,8 @@ class Register extends Component {
 		                        </div>
 		                        <div className="form-group">
 		                            <select className="form-control form-control-lg" name="leadingHand"
-		                            	value={this.state.leadingHand} onChange={this.onChange}>
-		                                <option value="">Select Leading Hand</option>
+		                            	value={this.state.leadingHand||'null'} onChange={this.onChange}>
+		                                <option value='null'>Select Leading Hand</option>
 		                                <option value="Left">Left</option>
 		                                <option value="Right">Right</option>
 		                            </select>
