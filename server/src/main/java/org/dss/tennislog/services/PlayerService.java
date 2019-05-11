@@ -1,11 +1,15 @@
 package org.dss.tennislog.services;
 
+import org.aspectj.apache.bcel.util.Play;
+import org.dss.tennislog.TennisLogApplication;
 import org.dss.tennislog.domain.Match;
 import org.dss.tennislog.domain.Player;
 import org.dss.tennislog.domain.Role;
+import org.dss.tennislog.exceptions.DataNotFoundException;
 import org.dss.tennislog.exceptions.UsernameAlreadyExistsException;
 import org.dss.tennislog.repositories.MatchRepository;
 import org.dss.tennislog.repositories.PlayerRepository;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -69,4 +73,19 @@ public class PlayerService {
         }
     }
 
+    public Player setAdmin(Long playerId){
+        Player player = playerRepository.getById(playerId);
+        if (player == null) throw new DataNotFoundException("Player with ID '"+ playerId +"' doesn't exist");
+        player.getRoles().add(Role.ADMIN);
+//        LoggerFactory.getLogger(TennisLogApplication.class).info(player.getRoles().toString());
+        return playerRepository.save(player);
+    }
+
+    public Player removeAdmin(Long playerId){
+        Player player = playerRepository.getById(playerId);
+        if (player == null) throw new DataNotFoundException("Player with ID '"+ playerId +"' doesn't exist");
+        player.getRoles().remove(Role.ADMIN);
+//        LoggerFactory.getLogger(TennisLogApplication.class).info(player.getRoles().toString());
+        return playerRepository.save(player);
+    }
 }

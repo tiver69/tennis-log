@@ -117,4 +117,18 @@ public class PlayerController {
         }
         return new ResponseEntity<Player>(player, HttpStatus.OK);
     }
+
+    @PostMapping("/set-admin/{playerId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<Player> setAdminToPlayer(@PathVariable Long playerId){
+        Player player = playerService.setAdmin(playerId);
+        return new ResponseEntity<Player>(player, HttpStatus.OK);
+    }
+
+    @PostMapping("/remove-admin/{playerId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<Player> removeAdminFromPlayer(@PathVariable Long playerId){
+        Player player = playerService.removeAdmin(playerId);
+        return new ResponseEntity<Player>(player, HttpStatus.OK);
+    }
 }

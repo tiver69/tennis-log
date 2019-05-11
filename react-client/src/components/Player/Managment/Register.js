@@ -7,7 +7,7 @@ import classnames from 'classnames';
 class Register extends Component {
 
 	componentDidMount(){
-		if (this.props.security.isTokenValid) {
+		if (this.props.security.isTokenValid && !this.props.security.player.roles.includes("ADMIN")) {
 			this.props.history.push("/dashboard");
 		}
 	};
@@ -49,7 +49,9 @@ class Register extends Component {
 			roles: []
 		};
 		// console.log(newPlayer);
-		this.props.createPlayer( newPlayer, this.props.history);
+		this.props.createPlayer( newPlayer, 
+			(this.props.security.isTokenValid && this.props.security.player.roles.includes("ADMIN")) ? true : false, 
+			this.props.history);
 	}
 
 	componentWillReceiveProps(nextProps){
