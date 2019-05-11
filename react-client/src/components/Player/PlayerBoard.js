@@ -15,9 +15,7 @@ class PlayerBoard extends Component {
 		const { players } = this.props.player;
 
 		const PlayersItems = players.map(player => (
-            	<div className="col-md-6" key={player.id}>
-                    <PlayerItem player={player} view={true}/>
-                </div>
+            <PlayerItem player={player} key={player.id} view={true}/>
         ));
 
 		return (

@@ -13,10 +13,8 @@ export const DELETE_MATCH = "DELETE_MATCH";
 
 //Types for PLAYERS
 
-export const GET_NEW_PLAYER = "GET_NEW_PLAYER";
 export const GET_PLAYER = "GET_PLAYER";
 export const GET_PLAYERS = "GET_PLAYERS";
-export const GET_UNREGISTERED = "GET_UNREGISTERED";
 
 //Types for SECURITY
 

@@ -45,47 +45,6 @@ public class PlayerController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    @GetMapping("/matches")
-    @PreAuthorize("hasAuthority('USER')")
-    public Iterable<Match> findAllPlayerMatches(Principal principal){
-        return playerService.findAllPlayerMatches(principal.getName());
-    }
-
-    @GetMapping("/all")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public Iterable<Player> findAll() {
-        return playerService.findAll();
-    }
-
-    @GetMapping("/free/{playerId}")
-    public ResponseEntity<?> getPlayerByIdFree(@PathVariable Long playerId){
-        Player player = playerService.getById(playerId);
-
-        if (player.getPassword() != null){
-            throw new DataNotFoundException("Player with ID '" + playerId + "' already exist");
-        }
-        if (player == null) {
-            throw new DataNotFoundException("Player with ID '" + playerId + "' doesn't exist");
-        }
-        return new ResponseEntity<Player>(player, HttpStatus.OK);
-    }
-
-    @GetMapping("/{playerId}")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<?> getPlayerById(@PathVariable Long playerId){
-        Player player = playerService.getById(playerId);
-
-        if (player == null) {
-            throw new DataNotFoundException("Player with ID '" + playerId + "' doesn't exist");
-        }
-        return new ResponseEntity<Player>(player, HttpStatus.OK);
-    }
-
-    @GetMapping("/free/unregistered")
-    public Iterable<Player> findUnregistered() {
-        return playerService.findUnregistered();
-    }
-
     @PostMapping("/free/register")
     public ResponseEntity<?> registerPlayer(@Valid @RequestBody Player player, BindingResult result){
         playerValidator.validate(player,result);
@@ -136,4 +95,26 @@ public class PlayerController {
         return new ResponseEntity<Player>(newPlayer, HttpStatus.CREATED);
     }
 
+    @GetMapping("/matches")
+    @PreAuthorize("hasAuthority('USER')")
+    public Iterable<Match> findAllPlayerMatches(Principal principal){
+        return playerService.findAllPlayerMatches(principal.getName());
+    }
+
+    @GetMapping("/all")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public Iterable<Player> findAll() {
+        return playerService.findAll();
+    }
+
+    @GetMapping("/{playerId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<?> getPlayerById(@PathVariable Long playerId){
+        Player player = playerService.getById(playerId);
+
+        if (player == null) {
+            throw new DataNotFoundException("Player with ID '" + playerId + "' doesn't exist");
+        }
+        return new ResponseEntity<Player>(player, HttpStatus.OK);
+    }
 }

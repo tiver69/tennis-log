@@ -10,6 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 @Service
 public class PlayerService {
 
@@ -34,10 +38,6 @@ public class PlayerService {
         return playerRepository.findAll();
     }
 
-    public Iterable<Player> findUnregistered() {
-        return playerRepository.findByPassword(null);
-    }
-
     public Iterable<Match> findAllPlayerMatches(String username) {
         Long id = getByUsername(username).getId();
         return matchRepository.findByPlayerOneIdOrPlayerTwoId(id, id);
@@ -46,10 +46,10 @@ public class PlayerService {
     public Player save(Player newPlayer){
         try {
             newPlayer.setPassword(bCryptPasswordEncoder.encode(newPlayer.getPassword()));
-            //setup username if blank
             newPlayer.setUsername(newPlayer.getUsername());
             newPlayer.setConfirmPassword("");
-            newPlayer.getRoles().add(Role.USER);
+            newPlayer.setRoles(
+                    Stream.of(Role.USER).collect(Collectors.toCollection(HashSet::new)));
             return playerRepository.save(newPlayer);
         } catch (Exception e) {
             throw new UsernameAlreadyExistsException("Username '"+ newPlayer.getUsername() + "' already exists");
@@ -59,12 +59,9 @@ public class PlayerService {
     public Player update(Player updatePlayer){
         Player oldPlayer = playerRepository.getById(updatePlayer.getId());
         try {
-            if (oldPlayer.getPassword()!=null)
-                updatePlayer.setPassword(oldPlayer.getPassword());
-            updatePlayer.setPassword(null);
+            updatePlayer.setPassword(oldPlayer.getPassword());
             updatePlayer.setUsername(updatePlayer.getUsername());
             updatePlayer.setConfirmPassword("");
-//            if (updatePlayer.getRoles().isEmpty())
             return playerRepository.save(updatePlayer);
         } catch (Exception e) {
             e.printStackTrace();

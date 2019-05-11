@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
 
-class UpdateExisting extends Component {
+class UpdatePlayer extends Component {
 
 	constructor(){
 		super();
@@ -37,7 +37,7 @@ class UpdateExisting extends Component {
 			username: this.state.username,
 			firstName: this.state.firstName,
 			lastName: this.state.lastName,
-			password: "old_pass",
+			password: "unchanched",
 			birthday: this.state.birthday,
 			experience: this.state.experience,
 			leadingHand: this.state.leadingHand,
@@ -199,7 +199,7 @@ class UpdateExisting extends Component {
 	}
 }
 
-UpdateExisting.propTypes = {
+UpdatePlayer.propTypes = {
 	security: PropTypes.object.isRequired,	
 	getCurrentPlayer: PropTypes.func.isRequired,
 	errors: PropTypes.object.isRequired,
@@ -214,4 +214,4 @@ const mapStateToProps = state => ({
     player: state.player,
 })
 
-export default connect(mapStateToProps, {getCurrentPlayer, updatePlayer, getPlayer})(UpdateExisting);
+export default connect(mapStateToProps, {getCurrentPlayer, updatePlayer, getPlayer})(UpdatePlayer);

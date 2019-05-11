@@ -10,11 +10,9 @@ import AddMatch from './components/TournamentBoard/Match/AddMatch';
 import UpdateMatch from './components/TournamentBoard/Match/UpdateMatch';
 import Landing from './components/Layout/Landing';
 import Register from './components/Player/Managment/Register';
-import RegisterExisting from './components/Player/Managment/RegisterExisting';
-import UpdateExisting from './components/Player/Managment/UpdateExisting';
+import UpdatePlayer from './components/Player/Managment/UpdatePlayer';
 import PlayerPage from './components/Player/PlayerPage';
 import PlayerBoard from './components/Player/PlayerBoard';
-import UnregisteredPlayers from './components/Player/UnregisteredPlayers';
 import Login from './components/Player/Managment/Login';
 import Footer from './components/Layout/Footer';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
@@ -55,8 +53,6 @@ return (
 		<Route exact path="/" component={ Landing }/>
 		<Route exact path="/register" component={ Register }/>
 		<Route exact path="/login" component={ Login }/>
-		<Route exact path="/unregistered" component={ UnregisteredPlayers }/>
-		<Route exact path="/register/:playerId" component={ RegisterExisting }/>
 			
 		{
 			//Private User routes
@@ -65,7 +61,7 @@ return (
 			<SecuredUserRoute exact path="/dashboard" component={ Dashboard }/>
 			<SecuredUserRoute exact path="/tournamentBoard/:tournamentId" component={ TournamentBoard }/>
 			<SecuredUserRoute exact path="/account" component={ PlayerPage }/>
-			<SecuredUserRoute exact path="/account/update" component={ UpdateExisting }/>
+			<SecuredUserRoute exact path="/account/update" component={ UpdatePlayer }/>
 		{
 			//Private Admin routes
 		}
@@ -74,7 +70,7 @@ return (
 			<SecuredAdminRoute exact path="/addMatch/:tournamentId" component={ AddMatch }/>
 			<SecuredAdminRoute exact path="/updateMatch/t-:tournamentId/m-:matchId" component={ UpdateMatch }/>
 			<SecuredAdminRoute exact path="/playerBoard" component={ PlayerBoard }/>
-			<SecuredUserRoute exact path="/updatePlayer/:playerId" component={ UpdateExisting }/>
+			<SecuredUserRoute exact path="/updatePlayer/:playerId" component={ UpdatePlayer }/>
 		</Switch>
 		<Footer />
 	</div>

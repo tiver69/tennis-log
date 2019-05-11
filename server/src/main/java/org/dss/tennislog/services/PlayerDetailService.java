@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class PlayerDetailService implements UserDetailsService {
 
     @Autowired
-    PlayerRepository playerRepository;
+    private PlayerRepository playerRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

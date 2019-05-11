@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { createPlayer } from '../../../actions/securityActions';
-import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
@@ -69,9 +68,7 @@ class Register extends Component {
 		            <div className="row">
 		                <div className="col-md-8 m-auto">
 		                    <h1 className="display-4 text-center">Sign Up</h1>
-		                    <p className="lead text-center">Create your Account OR {" "}
-		                    <Link to="/unregistered">Create for existing</Link>
-		                    </p>
+		                    <p className="lead text-center">Create your Account</p>
 		                    <form onSubmit={this.onSubmit}>
 		                        <div className="form-group">
 		                            <input type="text" className={classnames("form-control form-control-lg",{"is-invalid":errors.firstName})} placeholder="First Name" name="firstName"
