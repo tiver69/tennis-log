@@ -1,6 +1,8 @@
 package org.dss.tennislog.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,6 +12,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.util.Collection;
+import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Table(name = "players")
@@ -34,25 +38,34 @@ public class Player implements UserDetails {
     private String lastName;
 
     @NotBlank(message = "Password field is required")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     @Transient
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String confirmPassword;
 
-    @Column
-    @NotNull(message = "Age is required")
-    private Integer age;
+    @Column(name="birth_date")
+    @NotNull(message = "Birthday is required")
+    @JsonFormat(pattern = "yyyy-mm-dd")
+    private Date birthday;
 
-    @Column
+    @Column(name="experience_year")
     private Integer experience;
 
     @Column(name = "leading_hand")
     private String leadingHand;
 
+    @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
+    @CollectionTable(name = "player_role", joinColumns = @JoinColumn(name = "player_id"))
+    @Enumerated(EnumType.STRING)
+    @Column(name = "name")
+    private Set<Role> roles;
+
     @Override
     @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return getRoles();
     }
 
     @Override

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class CustomPlayerDetailService implements UserDetailsService {
+public class PlayerDetailService implements UserDetailsService {
 
     @Autowired
     PlayerRepository playerRepository;
@@ -19,15 +19,17 @@ public class CustomPlayerDetailService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Player player = playerRepository.findByUsername(username);
 
-        if (player == null) new UsernameNotFoundException("Player not found");
+        if (player == null) throw new UsernameNotFoundException("Player not found");
         return player;
     }
 
     @Transactional
     public  Player loadPlayerById(Long id){
         Player player = playerRepository.getById(id);
-        if (player == null) new UsernameNotFoundException("Player not found");
+        if (player == null) throw new UsernameNotFoundException("Player not found");
         return player;
     }
+
+
 
 }

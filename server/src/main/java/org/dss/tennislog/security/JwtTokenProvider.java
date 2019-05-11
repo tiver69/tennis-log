@@ -30,8 +30,7 @@ public class JwtTokenProvider {
         Map<String, Object> claims = new HashMap<>();
         claims.put("id", playerId);
         claims.put("username", player.getUsername());
-        claims.put("firstName", player.getFirstName());
-        claims.put("lastName", player.getLastName());
+        claims.put("roles", player.getRoles());
         //roles somewhere here
         return Jwts.builder()
                 .setSubject(playerId)

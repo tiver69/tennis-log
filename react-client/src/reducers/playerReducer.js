@@ -1,7 +1,9 @@
-import { GET_PLAYERS } from "../actions/types";
+import { GET_PLAYERS, GET_UNREGISTERED, GET_NEW_PLAYER, GET_PLAYER } from "../actions/types";
 
 const initialState = {
-	players: []
+	player: {},
+	players: [],
+	unregistered: []
 };
 
 export default function(state = initialState, action){
@@ -10,6 +12,21 @@ export default function(state = initialState, action){
 			return {
 				...state,
 				players: action.payload
+			};
+		case GET_UNREGISTERED:
+			return {
+				...state,
+				unregistered: action.payload
+			};
+		case GET_NEW_PLAYER:
+			return {
+				...state,
+				player: action.payload
+			};
+		case GET_PLAYER:
+			return {
+				...state,
+				player: action.payload
 			};
 
 		default:
