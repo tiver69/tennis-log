@@ -13,6 +13,7 @@ import Register from './components/Player/Managment/Register';
 import RegisterExisting from './components/Player/Managment/RegisterExisting';
 import UpdateExisting from './components/Player/Managment/UpdateExisting';
 import PlayerPage from './components/Player/PlayerPage';
+import PlayerBoard from './components/Player/PlayerBoard';
 import UnregisteredPlayers from './components/Player/UnregisteredPlayers';
 import Login from './components/Player/Managment/Login';
 import Footer from './components/Layout/Footer';
@@ -72,6 +73,8 @@ return (
 			<SecuredAdminRoute exact path="/updateTournament/:tournamentId" component={ UpdateTournament }/>
 			<SecuredAdminRoute exact path="/addMatch/:tournamentId" component={ AddMatch }/>
 			<SecuredAdminRoute exact path="/updateMatch/t-:tournamentId/m-:matchId" component={ UpdateMatch }/>
+			<SecuredAdminRoute exact path="/playerBoard" component={ PlayerBoard }/>
+			<SecuredUserRoute exact path="/updatePlayer/:playerId" component={ UpdateExisting }/>
 		</Switch>
 		<Footer />
 	</div>

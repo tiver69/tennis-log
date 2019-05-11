@@ -20,9 +20,18 @@ class Header extends Component {
 			    <ul className="navbar-nav mr-auto">
 			        <li className="nav-item">
 			            <Link className="nav-link" to="/dashboard">
-			                Dashboard
+			                Tournaments
 			            </Link>
 			        </li>
+			        { 
+			      	isTokenValid &&
+			        player.roles.includes("ADMIN") &&
+			        <li className="nav-item">
+			            <Link className="nav-link" to="/playerboard">
+			                Players
+			            </Link>
+			        </li>
+			    	}
 			    </ul>
 
 		        <ul className="navbar-nav ml-auto">
@@ -42,14 +51,6 @@ class Header extends Component {
 
 		const playerIsNotAuthenticated = (
 			<div className="collapse navbar-collapse" id="mobile-nav">
-			    <ul className="navbar-nav mr-auto">
-			        <li className="nav-item">
-			            <Link className="nav-link" to="/dashboard">
-			                Dashboard
-			            </Link>
-			        </li>
-			    </ul>
-
 		        <ul className="navbar-nav ml-auto">
 		            <li className="nav-item">
 		                <Link className="nav-link " to="/register">

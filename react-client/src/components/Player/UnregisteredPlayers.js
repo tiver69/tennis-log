@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { getUnregistered } from '../../actions/playerActions';
+import PlayerItem from './PlayerItem';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -17,51 +18,18 @@ class UnregisteredPlayers extends Component {
 
 		const { unregistered } = this.props.player;
 
-		let rowOne = []
-        let rowTwo = []
-
-        function calculate_age(dob) { 
-            var diff_ms = Date.now() - dob.getTime();
-               var age_dt = new Date(diff_ms); 
-      
-               return Math.abs(age_dt.getUTCFullYear() - 1970);
-        }
-
         const unregisteredPlayers = unregistered.map(player => (
-        	<Link key={player.id} to={`/register/${player.id}`}>
-			<div className="card mb-1 bg-light" >
-                <div className="text-center card-header text-primary">
-                	{player.firstName} {player.lastName} - {player.birthday}{" "} 
-                    ({calculate_age(new Date(player.birthday))} years) 
-                </div>
-                <div className="card-body bg-light text-center">
-                    <h5 className="card-title">{player.leadingHand || '?'}-handed</h5>
-                    <p className="card-text text-truncate text-right">
-                        In tennis for {calculate_age(new Date(player.experience,1,1))} years
-                    </p>
-                </div>
-            </div>
+            <div key={player.id} className="col-md-6">
+        	<Link to={`/register/${player.id}`}>
+			    <PlayerItem player={player} view={false}/>
             </Link>
+            </div>
         ));
-
-        for(let i=0; i<unregisteredPlayers.length; i++){
-            if (i%2===0){
-                rowOne.push(unregisteredPlayers[i])
-            }
-            if (i%2!==0){
-                rowTwo.push(unregisteredPlayers[i])
-            }
-        }
 
 		return (
 		<div className="container">
 	    	<div className="row">
-	        	<div className="col-md-6">
-				{rowOne}
-				</div>
-				<div className="col-md-6">
-				{rowTwo}
-				</div>
+				{unregisteredPlayers}
 			</div>
 		</div>
 		);

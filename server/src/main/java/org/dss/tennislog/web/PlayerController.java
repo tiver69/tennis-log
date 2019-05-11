@@ -58,13 +58,23 @@ public class PlayerController {
     }
 
     @GetMapping("/free/{playerId}")
-    public ResponseEntity<?> getPlayerById(@PathVariable Long playerId){
-
+    public ResponseEntity<?> getPlayerByIdFree(@PathVariable Long playerId){
         Player player = playerService.getById(playerId);
 
         if (player.getPassword() != null){
             throw new DataNotFoundException("Player with ID '" + playerId + "' already exist");
         }
+        if (player == null) {
+            throw new DataNotFoundException("Player with ID '" + playerId + "' doesn't exist");
+        }
+        return new ResponseEntity<Player>(player, HttpStatus.OK);
+    }
+
+    @GetMapping("/{playerId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<?> getPlayerById(@PathVariable Long playerId){
+        Player player = playerService.getById(playerId);
+
         if (player == null) {
             throw new DataNotFoundException("Player with ID '" + playerId + "' doesn't exist");
         }

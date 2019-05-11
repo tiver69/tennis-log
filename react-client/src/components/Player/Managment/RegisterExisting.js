@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { createPlayer} from '../../../actions/securityActions';
-import { getNewPlayer } from '../../../actions/playerActions';
+import { getPlayer } from '../../../actions/playerActions';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
@@ -81,11 +81,11 @@ class RegisterExisting extends Component {
 	}
 
 	componentDidMount (){
-		if (this.props.security.isTokenValid) {
+		if (this.props.security.isTokenValid && !this.props.security.player.roles.includes("ADMIN")) {
 			this.props.history.push("/dashboard");
 		}
     	const { playerId } = this.props.match.params;
-		this.props.getNewPlayer(playerId, this.props.history);
+		this.props.getPlayer(playerId, this.props.history);
     };
 
 	render(){
@@ -176,7 +176,7 @@ class RegisterExisting extends Component {
 RegisterExisting.propTypes = {
 	security: PropTypes.object.isRequired,
 	player: PropTypes.object.isRequired,	
-	getNewPlayer: PropTypes.func.isRequired,
+	getPlayer: PropTypes.func.isRequired,
 	errors: PropTypes.object.isRequired,
 	createPlayer: PropTypes.func.isRequired,
 }
@@ -187,4 +187,4 @@ const mapStateToProps = state => ({
     errors: state.errors
 })
 
-export default connect(mapStateToProps, {getNewPlayer, createPlayer})(RegisterExisting);
+export default connect(mapStateToProps, {getPlayer, createPlayer})(RegisterExisting);

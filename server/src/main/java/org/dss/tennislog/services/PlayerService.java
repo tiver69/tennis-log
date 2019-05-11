@@ -59,11 +59,15 @@ public class PlayerService {
     public Player update(Player updatePlayer){
         Player oldPlayer = playerRepository.getById(updatePlayer.getId());
         try {
-            updatePlayer.setPassword(oldPlayer.getPassword());
+            if (oldPlayer.getPassword()!=null)
+                updatePlayer.setPassword(oldPlayer.getPassword());
+            updatePlayer.setPassword(null);
             updatePlayer.setUsername(updatePlayer.getUsername());
             updatePlayer.setConfirmPassword("");
+//            if (updatePlayer.getRoles().isEmpty())
             return playerRepository.save(updatePlayer);
         } catch (Exception e) {
+            e.printStackTrace();
             throw new UsernameAlreadyExistsException("Username '"+ updatePlayer.getUsername() + "' already exists");
         }
     }

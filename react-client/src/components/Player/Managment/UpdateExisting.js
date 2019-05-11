@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { updatePlayer } from '../../../actions/playerActions';
+import { updatePlayer, getPlayer } from '../../../actions/playerActions';
 import { getCurrentPlayer } from '../../../actions/securityActions';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -43,8 +43,9 @@ class UpdateExisting extends Component {
 			leadingHand: this.state.leadingHand,
 			roles: this.state.roles
 		};
-		console.log(newPlayer);
-		this.props.updatePlayer(newPlayer, this.props.history);
+		// console.log(newPlayer);
+		const { playerId } = this.props.match.params;
+		this.props.updatePlayer(newPlayer, playerId ? true: false, this.props.history);
 	}
 
 	componentWillReceiveProps(nextProps){
@@ -53,33 +54,66 @@ class UpdateExisting extends Component {
 			this.setState({errors:nextProps.errors});
 		}
 
-		const {
-			id,
-		    username,
-		    firstName,
-		    lastName,
-		    password,
-		    birthday,
-		    experience,
-		    leadingHand,
-		    roles,
-		} = nextProps.security.currentPlayer;
+		const { playerId } = this.props.match.params;
 
-		this.setState({
-			id,
-		    username,
-		    firstName,
-		    lastName,
-		    password,
-		    birthday,
-		    experience,
-		    leadingHand,
-		    roles
-		});
+    	if (playerId){
+			const {
+				id,
+			    username,
+			    firstName,
+			    lastName,
+			    password,
+			    birthday,
+			    experience,
+			    leadingHand,
+			    roles,
+			} = nextProps.player.player;
+
+			this.setState({
+				id,
+			    username,
+			    firstName,
+			    lastName,
+			    password,
+			    birthday,
+			    experience,
+			    leadingHand,
+			    roles
+			});
+		}
+    	else{
+			const {
+				id,
+			    username,
+			    firstName,
+			    lastName,
+			    password,
+			    birthday,
+			    experience,
+			    leadingHand,
+			    roles,
+			} = nextProps.security.currentPlayer;
+
+			this.setState({
+				id,
+			    username,
+			    firstName,
+			    lastName,
+			    password,
+			    birthday,
+			    experience,
+			    leadingHand,
+			    roles
+			});
+		}
 	}
 
 	componentDidMount (){
-		this.props.getCurrentPlayer();
+    	const { playerId } = this.props.match.params;
+    	if (playerId)
+			this.props.getPlayer(playerId, this.props.history);
+    	else
+			this.props.getCurrentPlayer();
     };
 
 	render(){
@@ -103,7 +137,7 @@ class UpdateExisting extends Component {
 		                    <form onSubmit={this.onSubmit}>
 								<div className="form-group">
 		                            <input type="text" className={classnames("form-control form-control-lg",{"is-invalid":errors.firstName})} placeholder="First Name" name="firstName"
-		                                value={this.state.firstName} onChange={this.onChange} />
+		                                value={this.state.firstName || ''} onChange={this.onChange} />
 			                        {
 			                        	errors.firstName && (
 			                        		<div className="invalid-feedback">{errors.firstName}</div>)
@@ -111,7 +145,7 @@ class UpdateExisting extends Component {
 		                        </div>
 		                        <div className="form-group">
 		                            <input type="text" className={classnames("form-control form-control-lg",{"is-invalid":errors.lastName})} placeholder="Last Name" name="lastName"
-		                                value={this.state.lastName} onChange={this.onChange} />
+		                                value={this.state.lastName || ''} onChange={this.onChange} />
 				                        {
 				                        	errors.lastName && (
 				                        		<div className="invalid-feedback">{errors.lastName}</div>)
@@ -119,7 +153,7 @@ class UpdateExisting extends Component {
 		                        </div>
 		                        <div className="form-group">
 		                            <input type="date" className={classnames("form-control form-control-lg",{"is-invalid":errors.birthday})} placeholder="Age" name="birthday"
-		                                value={this.state.birthday} onChange={this.onChange} />
+		                                value={this.state.birthday || ''} onChange={this.onChange} />
 				                        {
 				                        	errors.birthday && (
 				                        		<div className="invalid-feedback">{errors.birthday}</div>)
@@ -141,7 +175,7 @@ class UpdateExisting extends Component {
 		                        </div>
 		                        <div className="form-group">
 		                            <input type="username" className={classnames("form-control form-control-lg",{"is-invalid":errors.username})} placeholder="Username" name="username"
-		                            	value={this.state.username} onChange={this.onChange}/>
+		                            	value={this.state.username ||''} onChange={this.onChange}/>
 				                        {
 				                        	errors.username && (
 				                        		<div className="invalid-feedback">{errors.username}</div>)
@@ -158,7 +192,7 @@ class UpdateExisting extends Component {
     	};
 
 		return (
-			<div className="container">
+			<div className="container">		
 				{filterErrors(errors)}
 			</div>
 		);
@@ -169,7 +203,8 @@ UpdateExisting.propTypes = {
 	security: PropTypes.object.isRequired,	
 	getCurrentPlayer: PropTypes.func.isRequired,
 	errors: PropTypes.object.isRequired,
-	updatePlayer: PropTypes.func.isRequired,
+	updatePlayer: PropTypes.func.isRequired,	
+	getPlayer: PropTypes.func.isRequired,
 	player: PropTypes.object.isRequired
 }
 
@@ -179,4 +214,4 @@ const mapStateToProps = state => ({
     player: state.player,
 })
 
-export default connect(mapStateToProps, {getCurrentPlayer, updatePlayer})(UpdateExisting);
+export default connect(mapStateToProps, {getCurrentPlayer, updatePlayer, getPlayer})(UpdateExisting);

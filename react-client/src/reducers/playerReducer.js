@@ -1,4 +1,4 @@
-import { GET_PLAYERS, GET_UNREGISTERED, GET_NEW_PLAYER } from "../actions/types";
+import { GET_PLAYERS, GET_UNREGISTERED, GET_NEW_PLAYER, GET_PLAYER } from "../actions/types";
 
 const initialState = {
 	player: {},
@@ -19,6 +19,11 @@ export default function(state = initialState, action){
 				unregistered: action.payload
 			};
 		case GET_NEW_PLAYER:
+			return {
+				...state,
+				player: action.payload
+			};
+		case GET_PLAYER:
 			return {
 				...state,
 				player: action.payload

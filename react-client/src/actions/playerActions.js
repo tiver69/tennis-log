@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { GET_PLAYERS, GET_ERRORS, GET_UNREGISTERED, GET_NEW_PLAYER } from './types';
+import { GET_PLAYERS, GET_ERRORS, GET_UNREGISTERED, GET_NEW_PLAYER, GET_PLAYER } from './types';
 
 export const getPlayers = () => async dispatch => {
 	const res = await axios.get("/api/player/all");
@@ -9,14 +9,17 @@ export const getPlayers = () => async dispatch => {
 	});
 };
 
-export const updatePlayer = (player, history) => async dispatch => {
+export const updatePlayer = (player, isAdminUpdate, history) => async dispatch => {
 	try {
 		await axios.post("/api/player/current/update", player);
-		history.push("/account");
 		dispatch({
 			type: GET_ERRORS,
 			payload: {}
 		});
+		if (isAdminUpdate)
+			history.push("/playerboard");
+		else
+			history.push("/account");
 	}
 	catch (err) {
 		dispatch({
@@ -50,5 +53,24 @@ export const getNewPlayer = (playerId, history) => async dispatch => {
 	}
 	catch (err) {
 		history.push("/unregistered");
+	}
+};
+
+export const getPlayer = (playerId, history) => async dispatch => {
+
+	dispatch({
+		type:GET_ERRORS,
+		payload: {}
+	});
+
+	try {
+		const res = await axios.get(`/api/player/${playerId}`);
+		dispatch({
+			type: GET_PLAYER,
+			payload: res.data
+		});
+	}
+	catch (err) {
+		history.push("/playerboard");
 	}
 };

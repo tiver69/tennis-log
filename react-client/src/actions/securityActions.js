@@ -53,6 +53,12 @@ export const logout = () => dispatch => {
 };
 
 export const getCurrentPlayer = () => async dispatch => {
+
+	dispatch({
+		type:GET_ERRORS,
+		payload: {}
+	});
+	
 	try {
 	const res = await axios.get("/api/player/current");
 	dispatch({
