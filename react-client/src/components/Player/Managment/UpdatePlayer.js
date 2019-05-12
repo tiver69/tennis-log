@@ -152,11 +152,15 @@ class UpdatePlayer extends Component {
 				                        }
 		                        </div>
 		                        <div className="form-group">
-		                            <input type="date" className={classnames("form-control form-control-lg",{"is-invalid":errors.birthday})} placeholder="Age" name="birthday"
-		                                value={this.state.birthday || ''} onChange={this.onChange} />
+		                            <input type="date" className={classnames("form-control form-control-lg",{"is-invalid":errors.birthday}, {"is-invalid":errors.experience})} placeholder="Birthday" name="birthday"
+		                                value={this.state.birthday||''} onChange={this.onChange} />
 				                        {
 				                        	errors.birthday && (
 				                        		<div className="invalid-feedback">{errors.birthday}</div>)
+				                        }
+				                        {
+				                        	errors.experience && (
+				                        		<div className="invalid-feedback">{errors.experience}</div>)
 				                        }
 		                        </div>
 		                        <div className="form-group">
@@ -168,8 +172,12 @@ class UpdatePlayer extends Component {
 		                            </select>
 		                        </div>
 		                        <div className="form-group">
-		                            <input type="number" className="form-control form-control-lg" placeholder="Play tennis since" name="experience"
+		                            <input type="number" className={classnames("form-control form-control-lg",{"is-invalid":errors.experience})} placeholder="Play tennis since" name="experience"
 		                                value={this.state.experience || ''} onChange={this.onChange} />
+				                        {
+				                        	errors.experience && (
+				                        		<div className="invalid-feedback">{errors.experience}</div>)
+				                        }
 		                        </div>
 		                        <div className="form-group">
 		                        </div>

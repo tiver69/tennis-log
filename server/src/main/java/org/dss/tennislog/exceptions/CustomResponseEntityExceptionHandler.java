@@ -17,14 +17,9 @@ import java.util.Map;
 public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler
-    public final ResponseEntity<Object> handlePlayerNotFoundException(DataNotFoundException ex, WebRequest request){
+    public final ResponseEntity<Object> handleDataNotFoundException(DataNotFoundException ex, WebRequest request){
         DataNotFoundExceptionResponse exceptionResponse = new DataNotFoundExceptionResponse(ex.getMessage());
         return new ResponseEntity(exceptionResponse, HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler
-    public final ResponseEntity<Map<String,String>> handleCreateMatchException(CreateMatchException ex, WebRequest request){
-        return new ResponseEntity(ex.getErrorMap(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler

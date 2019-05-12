@@ -47,7 +47,7 @@ class PlayerItem extends Component {
             <div className="col-md-6" >
             <div className="card mb-1 bg-light">
                 <div className="text-center card-header text-primary">
-                    {player.firstName} {player.lastName} - {player.birthday}{" "} 
+                    {player.lastName} {player.firstName} - {player.birthday}{" "} 
                     ({calculate_age(new Date(player.birthday))} years) 
                 </div>
                 <div className="card-body bg-light text-center">

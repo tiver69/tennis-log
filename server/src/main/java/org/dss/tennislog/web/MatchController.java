@@ -4,6 +4,7 @@ import org.dss.tennislog.domain.Match;
 import org.dss.tennislog.exceptions.DataNotFoundException;
 import org.dss.tennislog.services.MapValidationErrorService;
 import org.dss.tennislog.services.MatchService;
+import org.dss.tennislog.validator.MatchValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,9 @@ public class MatchController {
     private MatchService matchService;
 
     @Autowired
+    private MatchValidator matchValidator;
+
+    @Autowired
     private MapValidationErrorService mapValidationErrorService;
 
     @PostMapping("/{playerOneId}-{playerTwoId}/{tournamentId}")
@@ -29,14 +33,18 @@ public class MatchController {
     public ResponseEntity<?> createNewMatch(@Valid @RequestBody Match match, BindingResult result,
                                             @PathVariable Long playerOneId, @PathVariable Long playerTwoId,
                                             @PathVariable Long tournamentId){
+        match = matchValidator.validate(playerOneId, playerTwoId, tournamentId, match, result);
+
         ResponseEntity<?> errorMap = mapValidationErrorService.mapValidationService(result);
-        Match newMatch = matchService.saveOrUpdate(playerOneId, playerTwoId, tournamentId, match);
-        if (errorMap != null || newMatch == null) return  errorMap;
+        if (errorMap != null) return  errorMap;
+
+        Match newMatch = matchService.saveOrUpdate(match);
         return new ResponseEntity<Match>(newMatch,
                 HttpStatus.CREATED);
     }
 
     @GetMapping("/{matchId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> getMatchById(@PathVariable Long matchId){
 
         Match match = matchService.getById(matchId);
@@ -44,11 +52,6 @@ public class MatchController {
             throw new DataNotFoundException("Match with ID '" + matchId + "' doesn't exist");
         }
         return new ResponseEntity<Match>(match, HttpStatus.OK);
-    }
-
-    @GetMapping("/all")
-    public Iterable<Match> findAll() {
-        return matchService.findAll();
     }
 
     @DeleteMapping("/{matchId}")

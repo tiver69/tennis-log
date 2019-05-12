@@ -17,11 +17,13 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.parameters.P;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.Optional;
 
 import static org.dss.tennislog.security.SecurityConstants.TOKEN_PREFIX;
 
@@ -79,15 +81,14 @@ public class PlayerController {
     public ResponseEntity<?> getCurrentPlayer(Principal principal){
 
         Player player = playerService.getByUsername(principal.getName());
-        if (player == null) {
-            throw new DataNotFoundException("Player with username '" + principal.getName() + "' doesn't exist");
-        }
         return new ResponseEntity<Player>(player, HttpStatus.OK);
     }
 
-    @PostMapping("/current/update")
+    @PostMapping("/update")
     @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity<?> updateCurrentPlayer(@Valid @RequestBody Player player, BindingResult result){
+        playerValidator.validateDates(player, result);
+
         ResponseEntity<?> errorMap = mapValidationErrorService.mapValidationService(result);
         if (errorMap != null) return errorMap;
 
@@ -110,11 +111,8 @@ public class PlayerController {
     @GetMapping("/{playerId}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> getPlayerById(@PathVariable Long playerId){
-        Player player = playerService.getById(playerId);
 
-        if (player == null) {
-            throw new DataNotFoundException("Player with ID '" + playerId + "' doesn't exist");
-        }
+        Player player = playerService.getById(playerId);
         return new ResponseEntity<Player>(player, HttpStatus.OK);
     }
 

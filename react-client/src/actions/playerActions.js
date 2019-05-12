@@ -11,7 +11,7 @@ export const getPlayers = () => async dispatch => {
 
 export const updatePlayer = (player, isAdminUpdate, history) => async dispatch => {
 	try {
-		await axios.post("/api/player/current/update", player);
+		await axios.post("/api/player/update", player);
 		dispatch({
 			type: GET_ERRORS,
 			payload: {}

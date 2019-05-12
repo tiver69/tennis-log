@@ -122,10 +122,6 @@ class UpdateMatch extends Component {
 	                        	errors.playerOne && (
 	                        		<div className="invalid-feedback">{errors.playerOne}</div>)
 	                        }
-	                        {
-	                        	errors.players && (
-	                        		<div className="invalid-feedback">{errors.players}</div>)	                        	
-	                        }
 	                        </div>
 
 	                        <div className="form-group">
@@ -140,11 +136,7 @@ class UpdateMatch extends Component {
 	                        {
 	                        	errors.playerTwo && (
 	                        		<div className="invalid-feedback">{errors.playerTwo}</div>)
-	                        }
-	                        {
-	                        	errors.players && (
-	                        		<div className="invalid-feedback">{errors.players}</div>)	                        	
-	                        }                            
+	                        }                          
 	                        </div>
 
 	                        <div className="form-group">

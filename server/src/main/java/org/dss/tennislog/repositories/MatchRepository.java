@@ -1,18 +1,13 @@
 package org.dss.tennislog.repositories;
 
 import org.dss.tennislog.domain.Match;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.CrudRepository;
 
-import java.util.List;
+import java.util.Optional;
 
-//@Repository
 public interface MatchRepository extends CrudRepository<Match, Long> {
-    Match getById(Long id);
-    @Override
+    Optional<Match> getById(Long id);
     Iterable<Match> findAll();
-
-    Iterable<Match> findByPlayerOneIdOrPlayerTwoId(Long id1, Long id2);
-
-    Iterable<Match> findByTournamentId(Long id);
+    Iterable<Match> findByPlayerOneIdOrPlayerTwoIdOrderByDate(Long id1, Long id2);
+    Iterable<Match> findByTournamentIdOrderByDate(Long id);
 }

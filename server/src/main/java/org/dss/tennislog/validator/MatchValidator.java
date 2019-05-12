@@ -3,11 +3,14 @@ package org.dss.tennislog.validator;
 import org.dss.tennislog.domain.Match;
 import org.dss.tennislog.domain.Player;
 import org.dss.tennislog.domain.Tournament;
-import org.dss.tennislog.exceptions.CreateMatchException;
+import org.dss.tennislog.exceptions.DataNotFoundException;
 import org.dss.tennislog.repositories.PlayerRepository;
 import org.dss.tennislog.repositories.TournamentRepository;
+import org.dss.tennislog.services.PlayerService;
+import org.dss.tennislog.services.TournamentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.validation.Errors;
 
 @Component
 public class MatchValidator {
@@ -17,30 +20,46 @@ public class MatchValidator {
     @Autowired
     private PlayerRepository playerRepository;
 
-    public Match validate(Long playerOneId, Long playerTwoId, Long tournamentId, Match match) {
-        CreateMatchException ex = new CreateMatchException();
-        if(playerOneId == playerTwoId)
-            ex.addException("players", "Players must be different.");
-        Player playerOne = playerRepository.getById(playerOneId);
-        if (playerOne == null)
-            ex.addException("playerOne", "Player with ID '" + playerOneId + "' doesn't exist.");
-        Player playerTwo = playerRepository.getById(playerTwoId);
-        if (playerTwo == null)
-            ex.addException("playerTwo", "Player with ID '" + playerTwoId + "' doesn't exist.");
-        Tournament tournament = tournamentRepository.getById(tournamentId);
-        if (tournament == null)
-            ex.addException("tournament", "Tournament with ID '"+ tournamentId + "' does not exist.");
+    @Autowired
+    private PlayerService playerService;
+    @Autowired
+    private TournamentService tournamentService;
+
+    public Match validate(Long playerOneId, Long playerTwoId, Long tournamentId, Match match, Errors errors) {
+        Player playerOne = null;
+        Player playerTwo = null;
+        Tournament tournament = null;
+        if (playerOneId != null && playerOneId.equals(playerTwoId)) {
+            errors.rejectValue("playerOne", "Equal", "Players must be different.");
+            errors.rejectValue("playerTwo", "Equal", "Players must be different.");
+        }
+        else {
+            try {
+                playerOne = playerService.getById(playerOneId);
+            } catch (DataNotFoundException e) {
+                errors.rejectValue("playerOne", "Empty", "Player with ID '" + playerOneId + "' doesn't exist");
+            }
+            try {
+                playerTwo = playerService.getById(playerTwoId);
+            } catch (DataNotFoundException e) {
+                errors.rejectValue("playerTwo", "Empty", "Player with ID '" + playerOneId + "' doesn't exist");
+            }
+        }
+        try {
+            tournament = tournamentService.getById(tournamentId);
+        } catch (DataNotFoundException e) {
+            errors.rejectValue("tournament", "Empty", "Tournament with ID '" + playerOneId + "' doesn't exist");
+        }
         if (match.getPlayedStatus() == null || !match.getPlayedStatus()) {
             match.setPlayedStatus(false);
             match.setScore("0:0");
         }
         if (match.getPlayedStatus()) {
             if (match.getScore() == null || match.getScore().equals("") || match.getScore().equals("0:0"))
-                ex.addException("score", "Score must be specified for a played match.");
+                errors.rejectValue("score", "Empty", "Score must be specified for a played match.");
             if (match.getWinner() == null)
-                ex.addException("winner", "Winner must be specified for a played match.");
+                errors.rejectValue("winner", "Empty", "Winner must be specified for a played match.");
         }
-        if (ex.isThrowable()) throw ex;
 
         match.setPlayerOne(playerOne);
         match.setPlayerTwo(playerTwo);
