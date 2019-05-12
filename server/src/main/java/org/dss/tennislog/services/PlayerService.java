@@ -3,12 +3,19 @@ package org.dss.tennislog.services;
 import org.dss.tennislog.domain.Match;
 import org.dss.tennislog.domain.Player;
 import org.dss.tennislog.domain.Role;
+import org.dss.tennislog.exceptions.DataNotFoundException;
 import org.dss.tennislog.exceptions.UsernameAlreadyExistsException;
 import org.dss.tennislog.repositories.MatchRepository;
 import org.dss.tennislog.repositories.PlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class PlayerService {
@@ -23,33 +30,41 @@ public class PlayerService {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public Player getById(Long playerId){
-        return playerRepository.getById(playerId);
+        Optional<Player> player = playerRepository.getById(playerId);
+
+        if(player.isPresent()) {
+            return player.get();
+        } else {
+            throw new DataNotFoundException("Player with ID '" + playerId + "' doesn't exist");
+        }
     }
 
     public Player getByUsername(String username){
-        return playerRepository.findByUsername(username);
+        Optional<Player> player = playerRepository.findByUsername(username);
+
+        if(player.isPresent()) {
+            return player.get();
+        } else {
+            throw new UsernameNotFoundException("Player with username '" + username + "' doesn't exist");
+        }
     }
 
     public Iterable<Player> findAll() {
-        return playerRepository.findAll();
-    }
-
-    public Iterable<Player> findUnregistered() {
-        return playerRepository.findByPassword(null);
+        return playerRepository.findAllByOrderByLastName();
     }
 
     public Iterable<Match> findAllPlayerMatches(String username) {
         Long id = getByUsername(username).getId();
-        return matchRepository.findByPlayerOneIdOrPlayerTwoId(id, id);
+        return matchRepository.findByPlayerOneIdOrPlayerTwoIdOrderByDate(id, id);
     }
 
     public Player save(Player newPlayer){
         try {
             newPlayer.setPassword(bCryptPasswordEncoder.encode(newPlayer.getPassword()));
-            //setup username if blank
             newPlayer.setUsername(newPlayer.getUsername());
             newPlayer.setConfirmPassword("");
-            newPlayer.getRoles().add(Role.USER);
+            newPlayer.setRoles(
+                    Stream.of(Role.USER).collect(Collectors.toCollection(HashSet::new)));
             return playerRepository.save(newPlayer);
         } catch (Exception e) {
             throw new UsernameAlreadyExistsException("Username '"+ newPlayer.getUsername() + "' already exists");
@@ -57,14 +72,11 @@ public class PlayerService {
     }
 
     public Player update(Player updatePlayer){
-        Player oldPlayer = playerRepository.getById(updatePlayer.getId());
+        Player oldPlayer = getById(updatePlayer.getId());
         try {
-            if (oldPlayer.getPassword()!=null)
-                updatePlayer.setPassword(oldPlayer.getPassword());
-            updatePlayer.setPassword(null);
+            updatePlayer.setPassword(oldPlayer.getPassword());
             updatePlayer.setUsername(updatePlayer.getUsername());
             updatePlayer.setConfirmPassword("");
-//            if (updatePlayer.getRoles().isEmpty())
             return playerRepository.save(updatePlayer);
         } catch (Exception e) {
             e.printStackTrace();
@@ -72,4 +84,17 @@ public class PlayerService {
         }
     }
 
+    public Player setAdmin(Long playerId){
+        Player player = getById(playerId);
+        player.getRoles().add(Role.ADMIN);
+//        LoggerFactory.getLogger(TennisLogApplication.class).info(player.getRoles().toString());
+        return playerRepository.save(player);
+    }
+
+    public Player removeAdmin(Long playerId){
+        Player player = getById(playerId);
+        player.getRoles().remove(Role.ADMIN);
+//        LoggerFactory.getLogger(TennisLogApplication.class).info(player.getRoles().toString());
+        return playerRepository.save(player);
+    }
 }

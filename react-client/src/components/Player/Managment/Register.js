@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { createPlayer } from '../../../actions/securityActions';
-import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
@@ -8,7 +7,7 @@ import classnames from 'classnames';
 class Register extends Component {
 
 	componentDidMount(){
-		if (this.props.security.isTokenValid) {
+		if (this.props.security.isTokenValid && !this.props.security.player.roles.includes("ADMIN")) {
 			this.props.history.push("/dashboard");
 		}
 	};
@@ -29,11 +28,27 @@ class Register extends Component {
 		}
 
 		this.onChange = this.onChange.bind(this);
+		this.onChangeLastName = this.onChangeLastName.bind(this);
+		this.onChangeBirthday = this.onChangeBirthday.bind(this);
 		this.onSubmit = this.onSubmit.bind(this);
 	}
 
 	onChange(e) {
 		this.setState({[e.target.name]:e.target.value});
+	}
+
+	onChangeLastName(e) {
+		this.setState({
+			[e.target.name]:e.target.value,
+			username:e.target.value.toLowerCase()+(new Date(this.state.birthday).getUTCFullYear()%100 || '1')}
+			);
+	}
+
+	onChangeBirthday(e) {
+		this.setState({
+			[e.target.name]:e.target.value,
+			username:(this.state.lastName || 'lastName')+(new Date(e.target.value).getUTCFullYear()%100 || '1')}
+			);
 	}
 
 	onSubmit(e){
@@ -49,8 +64,10 @@ class Register extends Component {
 			leadingHand: this.state.leadingHand,
 			roles: []
 		};
-		// console.log(newPlayer);
-		this.props.createPlayer( newPlayer, this.props.history);
+		console.log(newPlayer);
+		this.props.createPlayer( newPlayer, 
+			(this.props.security.isTokenValid && this.props.security.player.roles.includes("ADMIN")) ? true : false, 
+			this.props.history);
 	}
 
 	componentWillReceiveProps(nextProps){
@@ -69,9 +86,7 @@ class Register extends Component {
 		            <div className="row">
 		                <div className="col-md-8 m-auto">
 		                    <h1 className="display-4 text-center">Sign Up</h1>
-		                    <p className="lead text-center">Create your Account OR {" "}
-		                    <Link to="/unregistered">Create for existing</Link>
-		                    </p>
+		                    <p className="lead text-center">Create your Account</p>
 		                    <form onSubmit={this.onSubmit}>
 		                        <div className="form-group">
 		                            <input type="text" className={classnames("form-control form-control-lg",{"is-invalid":errors.firstName})} placeholder="First Name" name="firstName"
@@ -83,18 +98,22 @@ class Register extends Component {
 		                        </div>
 		                        <div className="form-group">
 		                            <input type="text" className={classnames("form-control form-control-lg",{"is-invalid":errors.lastName})} placeholder="Last Name" name="lastName"
-		                                value={this.state.lastName} onChange={this.onChange} />
+		                                value={this.state.lastName} onChange={this.onChangeLastName} />
 				                        {
 				                        	errors.lastName && (
 				                        		<div className="invalid-feedback">{errors.lastName}</div>)
 				                        }
 		                        </div>
 		                        <div className="form-group">
-		                            <input type="date" className={classnames("form-control form-control-lg",{"is-invalid":errors.birthday})} placeholder="Birthday" name="birthday"
-		                                value={this.state.birthday||''} onChange={this.onChange} />
+		                            <input type="date" className={classnames("form-control form-control-lg",{"is-invalid":errors.birthday}, {"is-invalid":errors.experience})} placeholder="Birthday" name="birthday"
+		                                value={this.state.birthday||''} onChange={this.onChangeBirthday} />
 				                        {
 				                        	errors.birthday && (
 				                        		<div className="invalid-feedback">{errors.birthday}</div>)
+				                        }
+				                        {
+				                        	errors.experience && (
+				                        		<div className="invalid-feedback">{errors.experience}</div>)
 				                        }
 		                        </div>
 		                        <div className="form-group">
@@ -106,8 +125,12 @@ class Register extends Component {
 		                            </select>
 		                        </div>
 		                        <div className="form-group">
-		                            <input type="number" className="form-control form-control-lg" placeholder="Play tennis since" name="experience"
+		                            <input type="number" className={classnames("form-control form-control-lg",{"is-invalid":errors.experience})} placeholder="Play tennis since" name="experience"
 		                                value={this.state.experience} onChange={this.onChange} />
+				                        {
+				                        	errors.experience && (
+				                        		<div className="invalid-feedback">{errors.experience}</div>)
+				                        }
 		                        </div>
 		                        <div className="form-group">
 		                        </div>

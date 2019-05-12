@@ -8,6 +8,8 @@ import org.dss.tennislog.repositories.TournamentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class TournamentService {
 
@@ -22,26 +24,26 @@ public class TournamentService {
     }
 
     public Tournament getById(Long tournamentId){
-        return tournamentRepository.getById(tournamentId);
+        Optional<Tournament> tournament = tournamentRepository.getById(tournamentId);
+
+        if(tournament.isPresent()) {
+            return tournament.get();
+        } else {
+            throw new DataNotFoundException("Tournament with ID '"+ tournamentId + "' does not exist.");
+        }
     }
 
     public Iterable<Tournament> findAll() {
-        return tournamentRepository.findAll();
+        return tournamentRepository.findAllByOrderByStartDate();
     }
 
     public void deleteById(Long tournamentId){
-        Tournament tournament = tournamentRepository.getById(tournamentId);
-        if (tournament == null) {
-            throw new DataNotFoundException("Cannot delete with ID '"+ tournamentId + "'. This tournament does not exist.");
-        }
+        Tournament tournament = getById(tournamentId);
         tournamentRepository.delete(tournament);
     }
 
     public Iterable<Match> findAllTournamentMatches(Long tournamentId){
-        Tournament tournament = tournamentRepository.getById(tournamentId);
-        if (tournament == null) {
-            throw new DataNotFoundException("Tournament with ID '"+ tournamentId + "' does not exist.");
-        }
-        return matchRepository.findByTournamentId(tournamentId);
+        Tournament tournament = getById(tournamentId);
+        return matchRepository.findByTournamentIdOrderByDate(tournamentId);
     }
 }

@@ -25,6 +25,18 @@ public class TournamentController {
     @Autowired
     private MapValidationErrorService mapValidationErrorService;
 
+    @GetMapping("/all")
+    @PreAuthorize("hasAuthority('USER')")
+    public Iterable<Tournament> findAll() {
+        return tournamentService.findAll();
+    }
+
+    @GetMapping("/{tournamentId}/matches")
+    @PreAuthorize("hasAuthority('USER')")
+    public Iterable<Match> findAllMatches(@PathVariable Long tournamentId){
+        return tournamentService.findAllTournamentMatches(tournamentId);
+    }
+
     @PostMapping("")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> createNewTournament(@Valid @RequestBody Tournament tournament, BindingResult result){
@@ -37,6 +49,7 @@ public class TournamentController {
     }
 
     @GetMapping("/{tournamentId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> getTournamentById(@PathVariable Long tournamentId){
 
         Tournament tournament = tournamentService.getById(tournamentId);
@@ -46,21 +59,10 @@ public class TournamentController {
         return new ResponseEntity<Tournament>(tournament, HttpStatus.OK);
     }
 
-    @GetMapping("/all")
-    public Iterable<Tournament> findAll() {
-        return tournamentService.findAll();
-    }
-
     @DeleteMapping("/{tournamentId}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> deleteTournament(@PathVariable Long tournamentId){
         tournamentService.deleteById(tournamentId);
         return new ResponseEntity<String>("Tournament with ID '" + tournamentId+"' and all its matches were deleted.", HttpStatus.OK);
     }
-
-    @GetMapping("/{tournamentId}/matches")
-    public Iterable<Match> findAllMatches(@PathVariable Long tournamentId){
-        return tournamentService.findAllTournamentMatches(tournamentId);
-    }
-
 }

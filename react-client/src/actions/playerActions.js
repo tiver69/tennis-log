@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { GET_PLAYERS, GET_ERRORS, GET_UNREGISTERED, GET_NEW_PLAYER, GET_PLAYER } from './types';
+import { GET_PLAYERS, GET_ERRORS, GET_PLAYER } from './types';
 
 export const getPlayers = () => async dispatch => {
 	const res = await axios.get("/api/player/all");
@@ -11,7 +11,7 @@ export const getPlayers = () => async dispatch => {
 
 export const updatePlayer = (player, isAdminUpdate, history) => async dispatch => {
 	try {
-		await axios.post("/api/player/current/update", player);
+		await axios.post("/api/player/update", player);
 		dispatch({
 			type: GET_ERRORS,
 			payload: {}
@@ -26,33 +26,6 @@ export const updatePlayer = (player, isAdminUpdate, history) => async dispatch =
 			type: GET_ERRORS,
 			payload: err.response.data
 		});
-	}
-};
-
-export const getUnregistered = () => async dispatch => {
-	const res = await axios.get("/api/player/free/unregistered");
-	dispatch({
-		type: GET_UNREGISTERED,
-		payload: res.data
-	});
-};
-
-export const getNewPlayer = (playerId, history) => async dispatch => {
-
-	dispatch({
-		type:GET_ERRORS,
-		payload: {}
-	});
-
-	try {
-		const res = await axios.get(`/api/player/free/${playerId}`);
-		dispatch({
-			type: GET_NEW_PLAYER,
-			payload: res.data
-		});
-	}
-	catch (err) {
-		history.push("/unregistered");
 	}
 };
 

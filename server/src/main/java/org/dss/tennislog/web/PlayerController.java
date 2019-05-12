@@ -17,11 +17,13 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.parameters.P;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.Optional;
 
 import static org.dss.tennislog.security.SecurityConstants.TOKEN_PREFIX;
 
@@ -44,47 +46,6 @@ public class PlayerController {
 
     @Autowired
     private AuthenticationManager authenticationManager;
-
-    @GetMapping("/matches")
-    @PreAuthorize("hasAuthority('USER')")
-    public Iterable<Match> findAllPlayerMatches(Principal principal){
-        return playerService.findAllPlayerMatches(principal.getName());
-    }
-
-    @GetMapping("/all")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public Iterable<Player> findAll() {
-        return playerService.findAll();
-    }
-
-    @GetMapping("/free/{playerId}")
-    public ResponseEntity<?> getPlayerByIdFree(@PathVariable Long playerId){
-        Player player = playerService.getById(playerId);
-
-        if (player.getPassword() != null){
-            throw new DataNotFoundException("Player with ID '" + playerId + "' already exist");
-        }
-        if (player == null) {
-            throw new DataNotFoundException("Player with ID '" + playerId + "' doesn't exist");
-        }
-        return new ResponseEntity<Player>(player, HttpStatus.OK);
-    }
-
-    @GetMapping("/{playerId}")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<?> getPlayerById(@PathVariable Long playerId){
-        Player player = playerService.getById(playerId);
-
-        if (player == null) {
-            throw new DataNotFoundException("Player with ID '" + playerId + "' doesn't exist");
-        }
-        return new ResponseEntity<Player>(player, HttpStatus.OK);
-    }
-
-    @GetMapping("/free/unregistered")
-    public Iterable<Player> findUnregistered() {
-        return playerService.findUnregistered();
-    }
 
     @PostMapping("/free/register")
     public ResponseEntity<?> registerPlayer(@Valid @RequestBody Player player, BindingResult result){
@@ -120,15 +81,14 @@ public class PlayerController {
     public ResponseEntity<?> getCurrentPlayer(Principal principal){
 
         Player player = playerService.getByUsername(principal.getName());
-        if (player == null) {
-            throw new DataNotFoundException("Player with username '" + principal.getName() + "' doesn't exist");
-        }
         return new ResponseEntity<Player>(player, HttpStatus.OK);
     }
 
-    @PostMapping("/current/update")
+    @PostMapping("/update")
     @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity<?> updateCurrentPlayer(@Valid @RequestBody Player player, BindingResult result){
+        playerValidator.validateDates(player, result);
+
         ResponseEntity<?> errorMap = mapValidationErrorService.mapValidationService(result);
         if (errorMap != null) return errorMap;
 
@@ -136,4 +96,37 @@ public class PlayerController {
         return new ResponseEntity<Player>(newPlayer, HttpStatus.CREATED);
     }
 
+    @GetMapping("/matches")
+    @PreAuthorize("hasAuthority('USER')")
+    public Iterable<Match> findAllPlayerMatches(Principal principal){
+        return playerService.findAllPlayerMatches(principal.getName());
+    }
+
+    @GetMapping("/all")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public Iterable<Player> findAll() {
+        return playerService.findAll();
+    }
+
+    @GetMapping("/{playerId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<?> getPlayerById(@PathVariable Long playerId){
+
+        Player player = playerService.getById(playerId);
+        return new ResponseEntity<Player>(player, HttpStatus.OK);
+    }
+
+    @PostMapping("/set-admin/{playerId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<Player> setAdminToPlayer(@PathVariable Long playerId){
+        Player player = playerService.setAdmin(playerId);
+        return new ResponseEntity<Player>(player, HttpStatus.OK);
+    }
+
+    @PostMapping("/remove-admin/{playerId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<Player> removeAdminFromPlayer(@PathVariable Long playerId){
+        Player player = playerService.removeAdmin(playerId);
+        return new ResponseEntity<Player>(player, HttpStatus.OK);
+    }
 }

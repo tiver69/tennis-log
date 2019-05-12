@@ -29,14 +29,6 @@ public class Player implements UserDetails {
     @Column(unique = true)
     private String username;
 
-    @Column(name = "first_name")
-    @NotBlank(message = "First name is required")
-    private String firstName;
-
-    @NotBlank(message = "Last name is required")
-    @Column(name = "last_name")
-    private String lastName;
-
     @NotBlank(message = "Password field is required")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
@@ -44,6 +36,14 @@ public class Player implements UserDetails {
     @Transient
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String confirmPassword;
+
+    @Column(name = "first_name")
+    @NotBlank(message = "First name is required")
+    private String firstName;
+
+    @NotBlank(message = "Last name is required")
+    @Column(name = "last_name")
+    private String lastName;
 
     @Column(name="birth_date")
     @NotNull(message = "Birthday is required")

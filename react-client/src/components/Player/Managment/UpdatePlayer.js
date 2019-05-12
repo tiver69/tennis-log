@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
 
-class UpdateExisting extends Component {
+class UpdatePlayer extends Component {
 
 	constructor(){
 		super();
@@ -37,7 +37,7 @@ class UpdateExisting extends Component {
 			username: this.state.username,
 			firstName: this.state.firstName,
 			lastName: this.state.lastName,
-			password: "old_pass",
+			password: "unchanched",
 			birthday: this.state.birthday,
 			experience: this.state.experience,
 			leadingHand: this.state.leadingHand,
@@ -152,11 +152,15 @@ class UpdateExisting extends Component {
 				                        }
 		                        </div>
 		                        <div className="form-group">
-		                            <input type="date" className={classnames("form-control form-control-lg",{"is-invalid":errors.birthday})} placeholder="Age" name="birthday"
-		                                value={this.state.birthday || ''} onChange={this.onChange} />
+		                            <input type="date" className={classnames("form-control form-control-lg",{"is-invalid":errors.birthday}, {"is-invalid":errors.experience})} placeholder="Birthday" name="birthday"
+		                                value={this.state.birthday||''} onChange={this.onChange} />
 				                        {
 				                        	errors.birthday && (
 				                        		<div className="invalid-feedback">{errors.birthday}</div>)
+				                        }
+				                        {
+				                        	errors.experience && (
+				                        		<div className="invalid-feedback">{errors.experience}</div>)
 				                        }
 		                        </div>
 		                        <div className="form-group">
@@ -168,8 +172,12 @@ class UpdateExisting extends Component {
 		                            </select>
 		                        </div>
 		                        <div className="form-group">
-		                            <input type="number" className="form-control form-control-lg" placeholder="Play tennis since" name="experience"
+		                            <input type="number" className={classnames("form-control form-control-lg",{"is-invalid":errors.experience})} placeholder="Play tennis since" name="experience"
 		                                value={this.state.experience || ''} onChange={this.onChange} />
+				                        {
+				                        	errors.experience && (
+				                        		<div className="invalid-feedback">{errors.experience}</div>)
+				                        }
 		                        </div>
 		                        <div className="form-group">
 		                        </div>
@@ -199,7 +207,7 @@ class UpdateExisting extends Component {
 	}
 }
 
-UpdateExisting.propTypes = {
+UpdatePlayer.propTypes = {
 	security: PropTypes.object.isRequired,	
 	getCurrentPlayer: PropTypes.func.isRequired,
 	errors: PropTypes.object.isRequired,
@@ -214,4 +222,4 @@ const mapStateToProps = state => ({
     player: state.player,
 })
 
-export default connect(mapStateToProps, {getCurrentPlayer, updatePlayer, getPlayer})(UpdateExisting);
+export default connect(mapStateToProps, {getCurrentPlayer, updatePlayer, getPlayer})(UpdatePlayer);

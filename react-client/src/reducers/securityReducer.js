@@ -1,4 +1,4 @@
-import { SET_CURRENT_USER, GET_CURRENT_PLAYER, GET_CURRENT_PLAYER_MATCHES } from '../actions/types';
+import { SET_CURRENT_USER, GET_CURRENT_PLAYER, GET_CURRENT_PLAYER_MATCHES, SET_ADMIN, REMOVE_ADMIN } from '../actions/types';
 
 const initialState ={
 	player: {},
@@ -33,6 +33,14 @@ export default function (state = initialState, action){
 			return {
 				...state,
 				currentPlayerMatches: action.payload
+			};
+		case SET_ADMIN:
+			return {
+				...state
+			};
+		case REMOVE_ADMIN:
+			return {
+				...state
 			};
 
 		default:

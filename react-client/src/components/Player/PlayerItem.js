@@ -1,16 +1,24 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { setAdmin, removeAdmin } from '../../actions/securityActions';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 
 class PlayerItem extends Component {
 
-    onDeleteClick = matchId =>{
-        this.props.deleteMatch(matchId);
+    onSetAdminClick = playerId =>{
+        // console.log(playerId);
+        this.props.setAdmin(playerId);
+    }
+
+    onRemoveAdminClick = playerId =>{
+        // console.log(playerId);
+        this.props.removeAdmin(playerId);
     }
 
 	render(){
 
         const {player} = this.props;
-        const {view} = this.props;
 
         function calculate_age(dob) { 
             var diff_ms = Date.now() - dob.getTime();
@@ -19,37 +27,27 @@ class PlayerItem extends Component {
                return Math.abs(age_dt.getUTCFullYear() - 1970);
         }
 
-        const CrudButtons = (view) => {
-            if (view) {
-                if (player.roles.includes("USER")) 
-                    return (
-                        <React.Fragment>
-                            <Link to={`/updatePlayer/${player.id}`} className="btn btn-primary ml-4">
-                                Update Info
-                            </Link>
-                            <button className="btn btn-danger ml-4" onClick={this.onDeleteClick.bind(this, player.id)}>
-                                Delete account
-                            </button>
-                        </React.Fragment>
-                    );
-                else 
-                    return (
-                        <React.Fragment>
-                        <Link to={`/updatePlayer/${player.id}`} className="btn btn-primary ml-4">
-                                Update Info
-                            </Link>
-                        <Link to={`/register/${player.id}`} className="btn btn-success ml-4">
-                            Create account
-                        </Link>
-                        </React.Fragment>
-                    );
-            }
-        }
+        const adminButton = (isAdmin) => {
+            if (isAdmin)
+                return(
+                    <li onClick={this.onRemoveAdminClick.bind(this, player.id)} className="btn btn-danger ml-4">
+                        Remove Admin
+                    </li>
+                );
+            else
+                return(
+                    <li onClick={this.onSetAdminClick.bind(this, player.id)} className="btn btn-success ml-4">
+                        Set Admin
+                    </li>
+                );
+        };
+
 
 		return (
+            <div className="col-md-6" >
             <div className="card mb-1 bg-light">
                 <div className="text-center card-header text-primary">
-                    {player.firstName} {player.lastName} - {player.birthday}{" "} 
+                    {player.lastName} {player.firstName} - {player.birthday}{" "} 
                     ({calculate_age(new Date(player.birthday))} years) 
                 </div>
                 <div className="card-body bg-light text-center">
@@ -57,12 +55,28 @@ class PlayerItem extends Component {
                     <p className="card-text text-truncate text-right">
                         In tennis for {calculate_age(new Date(player.experience,1,1))} years
                     </p>
-                    {CrudButtons(view)}
+                    <Link to={`/updatePlayer/${player.id}`} className="btn btn-primary ml-4">
+                        Update Info
+                    </Link>
+                    {Number(this.props.security.player.id) !== Number(player.id) 
+                        && adminButton(player.roles && player.roles.includes("ADMIN"))}
                 </div>
+            </div>
             </div>
 		);
 	}
 }
 
-export default PlayerItem;
-		                   
+const mapStateToProps = state => ({
+    security: state.security,
+
+});
+
+
+PlayerItem.propTypes = {
+    setAdmin: PropTypes.func.isRequired,
+    removeAdmin: PropTypes.func.isRequired,
+    security: PropTypes.object.isRequired
+}
+
+export default connect (mapStateToProps, { setAdmin, removeAdmin })(PlayerItem);

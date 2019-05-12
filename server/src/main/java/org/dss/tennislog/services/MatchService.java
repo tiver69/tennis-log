@@ -3,25 +3,29 @@ package org.dss.tennislog.services;
 import org.dss.tennislog.domain.Match;
 import org.dss.tennislog.exceptions.DataNotFoundException;
 import org.dss.tennislog.repositories.MatchRepository;
-import org.dss.tennislog.validator.MatchValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class MatchService {
 
     @Autowired
     private MatchRepository matchRepository;
-    @Autowired
-    private MatchValidator matchValidator;
 
-    public Match saveOrUpdate(Long playerOneId, Long playerTwoId, Long tournamentId, Match match) {
-        match = matchValidator.validate(playerOneId, playerTwoId, tournamentId, match);
+    public Match saveOrUpdate(Match match) {
         return matchRepository.save(match);
     }
 
     public Match getById(Long matchId) {
-        return matchRepository.getById(matchId);
+        Optional<Match> match = matchRepository.getById(matchId);
+
+        if(match.isPresent()) {
+            return match.get();
+        } else {
+            throw new DataNotFoundException("Match with ID '" + matchId + "' doesn't exist");
+        }
     }
 
     public Iterable<Match> findAll() {
@@ -29,10 +33,7 @@ public class MatchService {
     }
 
     public void deleteById(Long matchId) {
-        Match match = matchRepository.getById(matchId);
-        if (match == null) {
-            throw new DataNotFoundException("Cannot delete with ID '" + matchId + "'. This match does not exist.");
-        }
+        Match match = getById(matchId);
         matchRepository.delete(match);
     }
 }
