@@ -30,8 +30,8 @@ public class MatchValidator {
         Player playerTwo = null;
         Tournament tournament = null;
         if (playerOneId != null && playerOneId.equals(playerTwoId)) {
-            errors.rejectValue("playerOne", "Equal", "Players must be different.");
-            errors.rejectValue("playerTwo", "Equal", "Players must be different.");
+            errors.rejectValue("playerOne", "Equal", "Players must be different");
+            errors.rejectValue("playerTwo", "Equal", "Players must be different");
         }
         else {
             try {
@@ -56,14 +56,43 @@ public class MatchValidator {
         }
         if (match.getPlayedStatus()) {
             if (match.getScore() == null || match.getScore().equals("") || match.getScore().equals("0:0"))
-                errors.rejectValue("score", "Empty", "Score must be specified for a played match.");
-            if (match.getWinner() == null)
-                errors.rejectValue("winner", "Empty", "Winner must be specified for a played match.");
+                errors.rejectValue("score", "Empty", "Score must be specified for a played match");
+
+            int playerOneScore = 0;
+            int playerTwoScore = 0;
+            for (String scoreSet : match.getScore().split(" ")) {
+                playerOneScore = playerOneScore +
+                        Integer.parseInt(
+                        scoreSet.substring(0,scoreSet.indexOf(":")));
+                playerTwoScore = playerTwoScore +
+                        Integer.parseInt(
+                        scoreSet.substring(scoreSet.indexOf(":")+1));
+            }
+            if (playerOneScore == playerTwoScore)
+                errors.rejectValue("score", "Equal", "Score must specify the winner");
+            else
+                if (playerOneScore < playerTwoScore) {
+                    Player swap = playerOne;
+                    playerOne = playerTwo;
+                    playerTwo = swap;
+                    match.setScore(swapPlayerScore(match.getScore()));
+                }
         }
 
         match.setPlayerOne(playerOne);
         match.setPlayerTwo(playerTwo);
         match.setTournament(tournament);
         return match;
+    }
+
+    private String swapPlayerScore(String score){
+        StringBuilder swapScore = new StringBuilder();
+        for (String scoreSet : score.split(" ")) {
+            swapScore.append(scoreSet.substring(scoreSet.indexOf(":") + 1))
+                    .append(":")
+                    .append(scoreSet.substring(0, scoreSet.indexOf(":")))
+                    .append(" ");
+        }
+        return swapScore.toString();
     }
 }

@@ -34,8 +34,6 @@ public class Match {
     private Boolean playedStatus;
     @Column
     private String score;
-    @Column
-    private Boolean winner;
 
     @ManyToOne
     @JoinColumn(name = "tournament_id", referencedColumnName = "id", nullable = false, updatable = false)
