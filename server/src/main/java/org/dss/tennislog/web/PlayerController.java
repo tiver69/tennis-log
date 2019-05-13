@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.Map;
 import java.util.Optional;
 
 import static org.dss.tennislog.security.SecurityConstants.TOKEN_PREFIX;
@@ -100,6 +101,13 @@ public class PlayerController {
     @PreAuthorize("hasAuthority('USER')")
     public Iterable<Match> findAllPlayerMatches(Principal principal){
         return playerService.findAllPlayerMatches(principal.getName());
+    }
+
+    @GetMapping("/statistic")
+    @PreAuthorize("hasAuthority('USER')")
+    public ResponseEntity<?> getPlayerStatistic(Principal principal){
+        Map<String,Map<String, Long>> statistic = playerService.getPlayerStatistic(principal.getName());
+        return new ResponseEntity<>(statistic, HttpStatus.OK);
     }
 
     @GetMapping("/all")

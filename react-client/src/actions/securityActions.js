@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { GET_ERRORS, SET_CURRENT_USER, GET_CURRENT_PLAYER, GET_CURRENT_PLAYER_MATCHES, SET_ADMIN, REMOVE_ADMIN } from './types';
+import { GET_ERRORS, SET_CURRENT_USER, GET_CURRENT_PLAYER, GET_CURRENT_PLAYER_MATCHES, SET_ADMIN, REMOVE_ADMIN, GET_CURRENT_PLAYER_STATISTIC } from './types';
 import setJWTToken from '../securityUtils/securityJWTToken';
 import jwt_decode from 'jwt-decode';
 
@@ -107,4 +107,12 @@ export const removeAdmin = playerId => async dispatch => {
 		});
 	}
 	window.location.reload();
+};
+
+export const getCurrentPlayerStatistic = () => async dispatch => {
+	const res = await axios.get("/api/player/statistic");
+	dispatch({
+		type: GET_CURRENT_PLAYER_STATISTIC,
+		payload: res.data
+	});
 };

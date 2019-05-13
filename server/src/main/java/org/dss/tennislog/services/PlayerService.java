@@ -6,14 +6,14 @@ import org.dss.tennislog.domain.Role;
 import org.dss.tennislog.exceptions.DataNotFoundException;
 import org.dss.tennislog.exceptions.UsernameAlreadyExistsException;
 import org.dss.tennislog.repositories.MatchRepository;
+import org.dss.tennislog.repositories.query.PlayerMatchStatistic;
 import org.dss.tennislog.repositories.PlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -96,5 +96,39 @@ public class PlayerService {
         player.getRoles().remove(Role.ADMIN);
 //        LoggerFactory.getLogger(TennisLogApplication.class).info(player.getRoles().toString());
         return playerRepository.save(player);
+    }
+
+    public Map<String, Map<String, Long>> getPlayerStatistic(String username){
+        Long playerId = getByUsername(username).getId();
+        long winnerMatch = matchRepository.countByPlayerOneIdAndPlayedStatus(playerId, true);
+        long loseMatch = matchRepository.countByPlayerTwoIdAndPlayedStatus(playerId, true);
+
+        Map<String,Map<String, Long>> statistic = new HashMap<>();
+        statistic.put("general", new HashMap<>());
+        statistic.get("general").put("winner", winnerMatch);
+        statistic.get("general").put("lose", loseMatch);
+        statistic.putAll(getPlayerStatisticToOtherPlayers(playerId));
+
+        return  statistic;
+    }
+
+    private Map<String,Map<String, Long>> getPlayerStatisticToOtherPlayers(Long playerId) {
+        List<PlayerMatchStatistic> matchWinnerStatistic = matchRepository.countWinnerStatistic(getById(playerId));
+        List<PlayerMatchStatistic> matchLoseStatistics = matchRepository.countLoseStatistic(getById(playerId));
+
+        Map<String,Map<String, Long>> statistic = new HashMap<>();
+
+        matchWinnerStatistic.forEach(r-> {
+            statistic.put(r.getPlayerTwo(), new HashMap<>());
+            statistic.get(r.getPlayerTwo()).put("win", r.getCount());
+        });
+
+        matchLoseStatistics.forEach(rr-> {
+            if (!statistic.containsKey(rr.getPlayerTwo())) {
+                statistic.put(rr.getPlayerTwo(), new HashMap<>());
+            }
+            statistic.get(rr.getPlayerTwo()).put("lose",rr.getCount());
+        });
+        return statistic;
     }
 }

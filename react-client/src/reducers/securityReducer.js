@@ -1,10 +1,11 @@
-import { SET_CURRENT_USER, GET_CURRENT_PLAYER, GET_CURRENT_PLAYER_MATCHES, SET_ADMIN, REMOVE_ADMIN } from '../actions/types';
+import { SET_CURRENT_USER, GET_CURRENT_PLAYER, GET_CURRENT_PLAYER_MATCHES, SET_ADMIN, REMOVE_ADMIN, GET_CURRENT_PLAYER_STATISTIC } from '../actions/types';
 
 const initialState ={
 	player: {},
 	isTokenValid: false,
 	currentPlayer: {},
-	currentPlayerMatches: []
+	currentPlayerMatches: [],
+	currentPlayerStatistic: {}
 };
 
 const booleanActionPayload = (payload) =>{
@@ -34,6 +35,11 @@ export default function (state = initialState, action){
 				...state,
 				currentPlayerMatches: action.payload
 			};
+		case GET_CURRENT_PLAYER_STATISTIC:
+			return {
+				...state,
+				currentPlayerStatistic: action.payload
+			};
 		case SET_ADMIN:
 			return {
 				...state
@@ -42,7 +48,6 @@ export default function (state = initialState, action){
 			return {
 				...state
 			};
-
 		default:
 			return state;
 	}
