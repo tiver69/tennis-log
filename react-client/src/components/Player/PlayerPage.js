@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { getCurrentPlayer, getCurrentPlayerMatches, getCurrentPlayerStatistic } from '../../actions/securityActions';
-import MatchItem from '../TournamentBoard/Match/MatchItem';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { Chart } from "react-google-charts";
 import classnames from 'classnames';
+import Charts from './Elements/Charts';
+import Matches from './Elements/Matches';
 
 class PlayerPage extends Component {
 
@@ -13,14 +13,14 @@ class PlayerPage extends Component {
 		super();
 
 		this.state = {
-			displayMatches: true,
-     		chartData:null
+			displayMatches: true
 		}
 	}
 
 	componentDidMount (){
 		this.props.getCurrentPlayer();
 		this.props.getCurrentPlayerMatches();
+		this.props.getCurrentPlayerStatistic();
     };
 
     onDisplayMatchesClick = (e) =>{
@@ -33,31 +33,13 @@ class PlayerPage extends Component {
 		this.setState({
 			displayMatches:false
 		});
-
-		this.props.getCurrentPlayerStatistic();
     }
-
-    getPlayerStatisticForChart = (currentPlayerStatistic) =>{
-		// const { currentPlayerStatistic } = this.props.security;
-	    var currentPlayerStatisticKeys = Object.keys(currentPlayerStatistic);
-		let output = [['Player', 'Win', 'Lose']];
-		currentPlayerStatisticKeys.map((keys) => {
-			if (keys !== "general")
-				output.push([keys, currentPlayerStatistic[keys]["win"], currentPlayerStatistic[keys]["lose"]]);
-				// console.log(keys, currentPlayerStatistic[keys]["winner"], currentPlayerStatistic[keys]["lose"]);
-			return "";
-		});
-		// console.log(output);
-		return(output);
-		}
 
 	render(){
 
 		const { currentPlayer } = this.props.security;
 		const { currentPlayerMatches } = this.props.security;
-
-		let sheduled = []
-        let finished = []
+		const { currentPlayerStatistic } = this.props.security;
 
         function calculate_age(dob) { 
 	    	var diff_ms = Date.now() - dob.getTime();
@@ -65,129 +47,6 @@ class PlayerPage extends Component {
 	  
 	   		return Math.abs(age_dt.getUTCFullYear() - 1970);
 		}
-
-		const filterStatistic = () => {
-			const { currentPlayerStatistic } = this.props.security;
-			const { currentPlayerMatches } = this.props.security;
-
-			if (currentPlayerMatches.length < 1){
-            	return (
-            		<div className="alert alert-danger text" role="alert">
-            			You dont have matches yet
-            		</div>
-            	);
-            }
-        	else {
-	           	const { general } = currentPlayerStatistic;
-
-	           	if (general)
-	            return (
-					<div className="container">
-				        <div className="row">
-				        <div className="w-50">
-							<Chart							
-							  height={'400px'}
-							  chartType="PieChart"
-							  loader={<div>Loading Statistic</div>}
-							  data={[
-							    ['Status', 'Count'],
-							    ['Win', general.winner],
-							    ['Lose', general.lose]
-							  ]}
-							  options={{
-							    title: 'General statistic',
-							    sliceVisibilityThreshold: 0.2, // 20%,
-							    legend: { position: 'bottom', alignment: 'start' },
-							  }}
-							  rootProps={{ 'data-testid': '7' }}
-							/>
-						</div>
-
-				        <div className="w-50">
-							<Chart
-							  height={'400px'}
-							  chartType="ColumnChart"
-							  loader={<div>Loading Chart</div>}
-							  data={
-							  	this.getPlayerStatisticForChart(currentPlayerStatistic)
-							  }
-							  options={{
-							    legend: { position: 'bottom', alignment: 'start' },
-							    chart: {
-							      title: 'Performance',
-							      subtitle: 'with ohers players',
-							    },
-							    wAxis: {
-							    	viewWindow: {max:  1},
-							    },
-							    hAxis: {
-							    	slantedText:true,
-							    	slantedTextAngle:45 
-							    },
-							  }}
-							  // For tests
-							  rootProps={{ 'data-testid': '2' }}
-							/>
-						</div>
-						</div>
-					</div>
-					);
-        	}
-        };
-
-        const filterMatches = (currentPlayerMatches) => {
-            if (currentPlayerMatches.length < 1){
-            	return (
-            		<div className="alert alert-danger text" role="alert">
-            			You dont have matches yet
-            		</div>
-            	)
-            }
-        	else {
-                const tennisMatches = currentPlayerMatches.map(tennisMatch => (
-                    <MatchItem key={tennisMatch.id} tennisMatch={tennisMatch} viewMode={true} />
-                ));
-
-                for(let i=0; i<tennisMatches.length; i++){
-                    if ((tennisMatches[i].props.tennisMatch.playedStatus).toString() === "false"){
-                        sheduled.push(tennisMatches[i])
-                    }
-                    if ((tennisMatches[i].props.tennisMatch.playedStatus).toString() === "true"){
-                        finished.push(tennisMatches[i])
-                    }
-            	}
-			return (
-				<React.Fragment>
-			        <div className="container">
-			            <div className="row">
-			                <div className="col-md-6">
-			                    <div className="card text-center mb-2">
-			                        <div className="card-header bg-secondary text-white">
-			                            <h3>SCHEDULED ({sheduled.length})</h3>
-			                        </div>
-			                    </div>
-
-		                    {
-		                    	sheduled
-		                    }
-			                </div>
-			                <div className="col-md-6">
-			                    <div className="card text-center mb-2">
-			                        <div className="card-header bg-success text-white">
-			                            <h3>FINNISHED ({finished.length})</h3>
-			                        </div>
-			                    </div>
-			                {
-			                	finished
-			                }
-			                </div>
-
-			            </div>
-			        </div>
-			    </React.Fragment>
-			)
-			}
-        };
 
 		return (
 			<div className="card mb-1 bg-light">
@@ -220,8 +79,18 @@ class PlayerPage extends Component {
 		                </button>
 			        </div>
 			    </div>
-                {this.state.displayMatches && filterMatches(currentPlayerMatches)}
-                {!this.state.displayMatches && filterStatistic()}
+			
+				{
+					(currentPlayerMatches.length < 1) &&
+					<div className="alert alert-danger text" role="alert">
+            			You dont have matches yet
+            		</div>
+            	}
+                {!(currentPlayerMatches.length < 1) && this.state.displayMatches && 
+                	<Matches currentPlayerMatches={currentPlayerMatches}/>}
+                {!(currentPlayerMatches.length < 1) && !this.state.displayMatches && 
+                	<Charts currentPlayerStatistic={currentPlayerStatistic}/>
+                }
             </div>
 		);
 	}
