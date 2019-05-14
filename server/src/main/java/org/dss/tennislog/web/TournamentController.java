@@ -1,8 +1,10 @@
 package org.dss.tennislog.web;
 
 import org.dss.tennislog.domain.Match;
+import org.dss.tennislog.domain.Player;
 import org.dss.tennislog.domain.Tournament;
 import org.dss.tennislog.exceptions.DataNotFoundException;
+import org.dss.tennislog.repositories.query.PlayerMatchStatistic;
 import org.dss.tennislog.services.MapValidationErrorService;
 import org.dss.tennislog.services.TournamentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/tournament")
@@ -35,6 +40,19 @@ public class TournamentController {
     @PreAuthorize("hasAuthority('USER')")
     public Iterable<Match> findAllMatches(@PathVariable Long tournamentId){
         return tournamentService.findAllTournamentMatches(tournamentId);
+    }
+
+    @GetMapping("/{tournamentId}/result")
+    @PreAuthorize("hasAuthority('USER')")
+    public HashMap<Player, Long> countTournamentResult(@PathVariable Long tournamentId){
+        return tournamentService.countTournamentResult(tournamentId);
+    }
+
+    @GetMapping("/results")
+    @PreAuthorize("hasAuthority('USER')")
+    public ResponseEntity<?> getCommonResults(){
+        List<PlayerMatchStatistic> results = tournamentService.countCommonResult();
+        return new ResponseEntity<>(results, HttpStatus.OK);
     }
 
     @PostMapping("")

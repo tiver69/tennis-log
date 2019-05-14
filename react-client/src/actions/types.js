@@ -15,6 +15,7 @@ export const DELETE_MATCH = "DELETE_MATCH";
 
 export const GET_PLAYER = "GET_PLAYER";
 export const GET_PLAYERS = "GET_PLAYERS";
+export const GET_PLAYERS_POINTS = "GET_PLAYERS_POINTS";
 
 
 //Types for SECURITY

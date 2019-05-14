@@ -31,7 +31,7 @@ public class MatchValidator {
         Tournament tournament = null;
         if (playerOneId != null && playerOneId.equals(playerTwoId)) {
             errors.rejectValue("playerOne", "Equal", "Players must be different");
-            errors.rejectValue("playerTwo", "Equal", "Players must be different");
+            errors.rejectValue("player", "Equal", "Players must be different");
         }
         else {
             try {
@@ -42,7 +42,7 @@ public class MatchValidator {
             try {
                 playerTwo = playerService.getById(playerTwoId);
             } catch (DataNotFoundException e) {
-                errors.rejectValue("playerTwo", "Empty", "Player with ID '" + playerOneId + "' doesn't exist");
+                errors.rejectValue("player", "Empty", "Player with ID '" + playerOneId + "' doesn't exist");
             }
         }
         try {

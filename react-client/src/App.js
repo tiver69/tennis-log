@@ -62,6 +62,7 @@ return (
 			<SecuredUserRoute exact path="/tournamentBoard/:tournamentId" component={ TournamentBoard }/>
 			<SecuredUserRoute exact path="/account" component={ PlayerPage }/>
 			<SecuredUserRoute exact path="/account/update" component={ UpdatePlayer }/>
+			<SecuredUserRoute exact path="/playerBoard" component={ PlayerBoard }/>
 		{
 			//Private Admin routes
 		}
@@ -69,7 +70,6 @@ return (
 			<SecuredAdminRoute exact path="/updateTournament/:tournamentId" component={ UpdateTournament }/>
 			<SecuredAdminRoute exact path="/addMatch/:tournamentId" component={ AddMatch }/>
 			<SecuredAdminRoute exact path="/updateMatch/t-:tournamentId/m-:matchId" component={ UpdateMatch }/>
-			<SecuredAdminRoute exact path="/playerBoard" component={ PlayerBoard }/>
 			<SecuredUserRoute exact path="/updatePlayer/:playerId" component={ UpdatePlayer }/>
 		</Switch>
 		<Footer />

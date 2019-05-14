@@ -113,21 +113,21 @@ public class PlayerService {
     }
 
     private Map<String,Map<String, Long>> getPlayerStatisticToOtherPlayers(Long playerId) {
-        List<PlayerMatchStatistic> matchWinnerStatistic = matchRepository.countWinnerStatistic(getById(playerId));
-        List<PlayerMatchStatistic> matchLoseStatistics = matchRepository.countLoseStatistic(getById(playerId));
+        List<PlayerMatchStatistic> matchWinnerStatistic = matchRepository.countPlayerWinnerStatistic(getById(playerId));
+        List<PlayerMatchStatistic> matchLoseStatistics = matchRepository.countPlayerLoseStatistic(getById(playerId));
 
         Map<String,Map<String, Long>> statistic = new HashMap<>();
 
         matchWinnerStatistic.forEach(r-> {
-            statistic.put(r.getPlayerTwo(), new HashMap<>());
-            statistic.get(r.getPlayerTwo()).put("win", r.getCount());
+            statistic.put(r.getPlayerTwoString(), new HashMap<>());
+            statistic.get(r.getPlayerTwoString()).put("win", r.getCount());
         });
 
         matchLoseStatistics.forEach(rr-> {
-            if (!statistic.containsKey(rr.getPlayerTwo())) {
-                statistic.put(rr.getPlayerTwo(), new HashMap<>());
+            if (!statistic.containsKey(rr.getPlayerTwoString())) {
+                statistic.put(rr.getPlayerTwoString(), new HashMap<>());
             }
-            statistic.get(rr.getPlayerTwo()).put("lose",rr.getCount());
+            statistic.get(rr.getPlayerTwoString()).put("lose",rr.getCount());
         });
         return statistic;
     }

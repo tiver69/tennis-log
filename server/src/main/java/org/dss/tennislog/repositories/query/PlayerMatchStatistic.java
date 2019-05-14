@@ -5,15 +5,15 @@ import org.dss.tennislog.domain.Player;
 
 @Data
 public class PlayerMatchStatistic {
-    private Player playerTwo;
+    private Player player;
     private Long count;
 
-    public PlayerMatchStatistic(Player playerTwo, Long count) {
-        this.playerTwo = playerTwo;
+    public PlayerMatchStatistic(Player player, Long count) {
+        this.player = player;
         this.count = count;
     }
 
-    public String getPlayerTwo() {
-        return playerTwo.getLastName() + " " + playerTwo.getFirstName();
+    public String getPlayerTwoString() {
+        return player.getLastName() + " " + player.getFirstName();
     }
 }
