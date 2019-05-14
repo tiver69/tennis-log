@@ -53,7 +53,9 @@ public class MatchValidator {
         } catch (DataNotFoundException e) {
             errors.rejectValue("tournament", "Empty", "Tournament with ID '" + playerOneId + "' doesn't exist");
         }
-        if (matchRepository.findByPlayerOneIdAndPlayerTwoIdAndTournamentId(playerOneId,playerTwoId, tournamentId) != null){
+
+        Match findMatch = matchRepository.findByPlayerOneIdAndPlayerTwoIdAndTournamentId(playerOneId,playerTwoId, tournamentId);
+        if (findMatch != null && !findMatch.getId().equals(match.getId())){
             errors.rejectValue("playerOne", "Equal", "Match between players already exists in this tournament");
             errors.rejectValue("playerTwo", "Equal", "Match between players already exists in this tournament");
         }

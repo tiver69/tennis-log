@@ -118,16 +118,18 @@ public class PlayerService {
 
         Map<String,Map<String, Long>> statistic = new HashMap<>();
 
-        matchWinnerStatistic.forEach(r-> {
-            statistic.put(r.getPlayerString(), new HashMap<>());
-            statistic.get(r.getPlayerString()).put("win", r.getCount());
+        matchWinnerStatistic.forEach(winStatistic-> {
+            statistic.put(winStatistic.getPlayerString(), new HashMap<>());
+            statistic.get(winStatistic.getPlayerString()).put("win", winStatistic.getCount());
+            statistic.get(winStatistic.getPlayerString()).put("lose",0L);
         });
 
-        matchLoseStatistics.forEach(rr-> {
-            if (!statistic.containsKey(rr.getPlayerString())) {
-                statistic.put(rr.getPlayerString(), new HashMap<>());
+        matchLoseStatistics.forEach(loseStatistic-> {
+            if (!statistic.containsKey(loseStatistic.getPlayerString())) {
+                statistic.put(loseStatistic.getPlayerString(), new HashMap<>());
+                statistic.get(loseStatistic.getPlayerString()).put("win",0L);
             }
-            statistic.get(rr.getPlayerString()).put("lose",rr.getCount());
+            statistic.get(loseStatistic.getPlayerString()).put("lose",loseStatistic.getCount());
         });
         return statistic;
     }

@@ -38,7 +38,7 @@ class UpdateMatch extends Component {
 		this.onScoreChange = this.onScoreChange.bind(this);
 	}
 
-	componentWillReceiveProps(nextProps){
+	async componentWillReceiveProps(nextProps){
 
 		if(nextProps.errors){
 			this.setState({errors:nextProps.errors});
@@ -48,14 +48,12 @@ class UpdateMatch extends Component {
 			id,
 			date,
 			playedStatus,
-			score,
 		} = nextProps.tennisMatch;
 
 		this.setState({
 			id,
 			date,
 			playedStatus,
-			score,
 		});
 
 		if(nextProps.tennisMatch.playerOne && nextProps.tennisMatch.playerTwo){
@@ -66,6 +64,10 @@ class UpdateMatch extends Component {
 		};
 
 		if (nextProps.tennisMatch.score) {
+			await this.setState({
+				score:nextProps.tennisMatch.score
+			});
+
 			var res = this.state.score.split(/:| /);
 			this.setState({
 				set1Player1 : res[0],
@@ -78,18 +80,18 @@ class UpdateMatch extends Component {
 			});
 			if (res[4])
 			this.setState({
-				set2Player1 : res[4],
-				set2Player2 : res[5]
+				set3Player1 : res[4],
+				set3Player2 : res[5]
 			});
 			if (res[6])
 			this.setState({
-				set2Player1 : res[6],
-				set2Player2 : res[7]
+				set4Player1 : res[6],
+				set4Player2 : res[7]
 			});
 			if (res[8])
 			this.setState({
-				set2Player1 : res[8],
-				set2Player2 : res[9]
+				set5Player1 : res[8],
+				set5Player2 : res[9]
 			});
 		}
 		// console.log(res);
@@ -203,9 +205,9 @@ class UpdateMatch extends Component {
 			return (
 				<React.Fragment>
 				Set - {" "}
-				<input type="number" min="0" className="form-group w-25" name={"set"+number+"Player1"} placeholder="0" 
+				<input type="number" min="0" max="100" className="form-group w-25" name={"set"+number+"Player1"} placeholder="0" 
 					value={val1} onChange={this.onScoreChange}/>{" : "}
-				<input type="number" min="0" className="form-group w-25" name={"set"+number+"Player2"} placeholder="0"
+				<input type="number" min="0" max="100" className="form-group w-25" name={"set"+number+"Player2"} placeholder="0"
 					value={val2} onChange={this.onScoreChange}/>
 				<br/>
 				</React.Fragment>

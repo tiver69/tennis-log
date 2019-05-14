@@ -123,8 +123,8 @@ class AddMatch extends Component {
 			return (
 				<React.Fragment>
 				Set - {" "}
-				<input type="number" min="0" className="form-group w-25" name={"set"+number+"Player1"} placeholder="0"/>{" : "}
-				<input type="number" min="0" className="form-group w-25" name={"set"+number+"Player2"} placeholder="0"/>
+				<input type="number" min="0" max="100" className="form-group w-25" name={"set"+number+"Player1"} placeholder="0"/>{" : "}
+				<input type="number" min="0" max="100" className="form-group w-25" name={"set"+number+"Player2"} placeholder="0"/>
 				<br/>
 				</React.Fragment>
 			);

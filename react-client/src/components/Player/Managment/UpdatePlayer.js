@@ -152,15 +152,11 @@ class UpdatePlayer extends Component {
 				                        }
 		                        </div>
 		                        <div className="form-group">
-		                            <input type="date" className={classnames("form-control form-control-lg",{"is-invalid":errors.birthday}, {"is-invalid":errors.experience})} placeholder="Birthday" name="birthday"
+		                            <input type="date" className={classnames("form-control form-control-lg",{"is-invalid":errors.birthday})} placeholder="Birthday" name="birthday"
 		                                value={this.state.birthday||''} onChange={this.onChange} />
 				                        {
 				                        	errors.birthday && (
 				                        		<div className="invalid-feedback">{errors.birthday}</div>)
-				                        }
-				                        {
-				                        	errors.experience && (
-				                        		<div className="invalid-feedback">{errors.experience}</div>)
 				                        }
 		                        </div>
 		                        <div className="form-group">
