@@ -13,7 +13,7 @@ public class PlayerMatchStatistic {
         this.count = count;
     }
 
-    public String getPlayerTwoString() {
+    public String getPlayerString() {
         return player.getLastName() + " " + player.getFirstName();
     }
 }

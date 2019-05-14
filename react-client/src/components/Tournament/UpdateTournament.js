@@ -47,7 +47,7 @@ class UpdateTournament extends Component {
 
 	componentDidMount() {
 		const{ tournamentId } = this.props.match.params;
-		this.props.getTournament(tournamentId, this.props.history);
+		this.props.getTournament(tournamentId, this.props.history, true);
 	}
 
 	onChange(e){

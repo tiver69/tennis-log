@@ -4,6 +4,7 @@ import org.dss.tennislog.domain.Match;
 import org.dss.tennislog.domain.Player;
 import org.dss.tennislog.domain.Tournament;
 import org.dss.tennislog.exceptions.DataNotFoundException;
+import org.dss.tennislog.repositories.MatchRepository;
 import org.dss.tennislog.repositories.PlayerRepository;
 import org.dss.tennislog.repositories.TournamentRepository;
 import org.dss.tennislog.services.PlayerService;
@@ -19,6 +20,8 @@ public class MatchValidator {
     private TournamentRepository tournamentRepository;
     @Autowired
     private PlayerRepository playerRepository;
+    @Autowired
+    private MatchRepository matchRepository;
 
     @Autowired
     private PlayerService playerService;
@@ -31,7 +34,7 @@ public class MatchValidator {
         Tournament tournament = null;
         if (playerOneId != null && playerOneId.equals(playerTwoId)) {
             errors.rejectValue("playerOne", "Equal", "Players must be different");
-            errors.rejectValue("player", "Equal", "Players must be different");
+            errors.rejectValue("playerTwo", "Equal", "Players must be different");
         }
         else {
             try {
@@ -42,7 +45,7 @@ public class MatchValidator {
             try {
                 playerTwo = playerService.getById(playerTwoId);
             } catch (DataNotFoundException e) {
-                errors.rejectValue("player", "Empty", "Player with ID '" + playerOneId + "' doesn't exist");
+                errors.rejectValue("playerTwo", "Empty", "Player with ID '" + playerOneId + "' doesn't exist");
             }
         }
         try {
@@ -50,6 +53,11 @@ public class MatchValidator {
         } catch (DataNotFoundException e) {
             errors.rejectValue("tournament", "Empty", "Tournament with ID '" + playerOneId + "' doesn't exist");
         }
+        if (matchRepository.findByPlayerOneIdAndPlayerTwoIdAndTournamentId(playerOneId,playerTwoId, tournamentId) != null){
+            errors.rejectValue("playerOne", "Equal", "Match between players already exists in this tournament");
+            errors.rejectValue("playerTwo", "Equal", "Match between players already exists in this tournament");
+        }
+
         if (match.getPlayedStatus() == null || !match.getPlayedStatus()) {
             match.setPlayedStatus(false);
             match.setScore("0:0");

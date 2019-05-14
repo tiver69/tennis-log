@@ -18,6 +18,7 @@ import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/tournament")
@@ -55,6 +56,31 @@ public class TournamentController {
         return new ResponseEntity<>(results, HttpStatus.OK);
     }
 
+    @GetMapping("/round-results/{tournamentId}")
+    @PreAuthorize("hasAuthority('USER')")
+    public ResponseEntity<?> getRoundResults(@PathVariable Long tournamentId){
+        List<List<Match>> results = tournamentService.getAsRoundTournament(tournamentId);
+        return new ResponseEntity<>(results, HttpStatus.OK);
+    }
+
+    @GetMapping("/players/{tournamentId}")
+    @PreAuthorize("hasAuthority('USER')")
+    public ResponseEntity<?> getAllTournamentPlayers(@PathVariable Long tournamentId){
+        List<Player> results = tournamentService.findAllPlayersOfTournament(tournamentId);
+        return new ResponseEntity<>(results, HttpStatus.OK);
+    }
+
+    @GetMapping("/{tournamentId}")
+    @PreAuthorize("hasAuthority('USER')")
+    public ResponseEntity<?> getTournamentById(@PathVariable Long tournamentId){
+
+        Tournament tournament = tournamentService.getById(tournamentId);
+        if (tournament == null) {
+            throw new DataNotFoundException("Tournament with ID '" + tournamentId + "' doesn't exist");
+        }
+        return new ResponseEntity<Tournament>(tournament, HttpStatus.OK);
+    }
+
     @PostMapping("")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> createNewTournament(@Valid @RequestBody Tournament tournament, BindingResult result){
@@ -64,17 +90,6 @@ public class TournamentController {
         //        Tournament tournament = tournamentService.saveOrUpdate(tournament);
         return new ResponseEntity<Tournament>(tournamentService.saveOrUpdate(tournament),
                 HttpStatus.CREATED);
-    }
-
-    @GetMapping("/{tournamentId}")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<?> getTournamentById(@PathVariable Long tournamentId){
-
-        Tournament tournament = tournamentService.getById(tournamentId);
-        if (tournament == null) {
-            throw new DataNotFoundException("Tournament with ID '" + tournamentId + "' doesn't exist");
-        }
-        return new ResponseEntity<Tournament>(tournament, HttpStatus.OK);
     }
 
     @DeleteMapping("/{tournamentId}")

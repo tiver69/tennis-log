@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import { getMatch, createMatch } from '../../../actions/matchActions';
+import { getTournament } from '../../../actions/tournamentActions';
 import { getPlayers } from '../../../actions/playerActions';
 
 class UpdateMatch extends Component {
@@ -99,6 +100,7 @@ class UpdateMatch extends Component {
     	const { matchId } = this.props.match.params;
 		this.props.getMatch(matchId, tournamentId, this.props.history);		
         this.props.getPlayers();
+        this.props.getTournament(tournamentId, this.props.history);
     };
 
     onChange(e) {
@@ -166,6 +168,8 @@ class UpdateMatch extends Component {
 		const { players } = this.props.player;	
 		const { errors } = this.state;		
 		const { tournamentId } = this.props.match.params;
+		const { tournament } =this.props.tournament;
+
 		const set = (number) => {
 
 			let val1;
@@ -214,10 +218,9 @@ class UpdateMatch extends Component {
 	            <div className="row">
 	                <div className="col-md-8 m-auto">
 	                    <Link to={`/tournamentBoard/${tournamentId}`} className="btn btn-light">
-	                        Back to Tournament Board
+	                        Back to {tournament.name}
 	                    </Link>
-	                    <h4 className="display-4 text-center"> Update Match </h4>
-	                    <p className="lead text-center">with ID '{this.state.id}'</p>
+	                    <h4 className="display-4 text-center"> Update Match</h4><p/>
 	                    <form onSubmit={this.onSubmit}>
 
 	                        <div className="form-group form-inline">
@@ -299,6 +302,7 @@ class UpdateMatch extends Component {
 UpdateMatch.propTypes = {
 	getMatch: PropTypes.func.isRequired,
 	tennisMatch: PropTypes.object.isRequired,	
+	getTournament: PropTypes.func.isRequired,
 	getPlayers: PropTypes.func.isRequired,		
 	createMatch: PropTypes.func.isRequired,
 	errors: PropTypes.object.isRequired,
@@ -307,7 +311,8 @@ UpdateMatch.propTypes = {
 const mapStateToProps = state => ({
 	tennisMatch: state.tennisMatch.tennisMatch,
     player:state.player,    
-    errors: state.errors
+    errors: state.errors,
+    tournament: state.tournament
 })
 
-export default connect (mapStateToProps, { getMatch, createMatch, getPlayers })(UpdateMatch);
+export default connect (mapStateToProps, { getMatch, createMatch, getPlayers, getTournament })(UpdateMatch);
