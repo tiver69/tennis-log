@@ -35,8 +35,7 @@ public class MatchValidator {
         if (playerOneId != null && playerOneId.equals(playerTwoId)) {
             errors.rejectValue("playerOne", "Equal", "Players must be different");
             errors.rejectValue("playerTwo", "Equal", "Players must be different");
-        }
-        else {
+        } else {
             try {
                 playerOne = playerService.getById(playerOneId);
             } catch (DataNotFoundException e) {
@@ -54,8 +53,8 @@ public class MatchValidator {
             errors.rejectValue("tournament", "Empty", "Tournament with ID '" + playerOneId + "' doesn't exist");
         }
 
-        Match findMatch = matchRepository.findByPlayerOneIdAndPlayerTwoIdAndTournamentId(playerOneId,playerTwoId, tournamentId);
-        if (findMatch != null && !findMatch.getId().equals(match.getId())){
+        Match findMatch = matchRepository.findByPlayerOneIdAndPlayerTwoIdAndTournamentId(playerOneId, playerTwoId, tournamentId);
+        if (findMatch != null && !findMatch.getId().equals(match.getId())) {
             errors.rejectValue("playerOne", "Equal", "Match between players already exists in this tournament");
             errors.rejectValue("playerTwo", "Equal", "Match between players already exists in this tournament");
         }
@@ -73,20 +72,19 @@ public class MatchValidator {
             for (String scoreSet : match.getScore().split(" ")) {
                 playerOneScore = playerOneScore +
                         Integer.parseInt(
-                        scoreSet.substring(0,scoreSet.indexOf(":")));
+                                scoreSet.substring(0, scoreSet.indexOf(":")));
                 playerTwoScore = playerTwoScore +
                         Integer.parseInt(
-                        scoreSet.substring(scoreSet.indexOf(":")+1));
+                                scoreSet.substring(scoreSet.indexOf(":") + 1));
             }
             if (playerOneScore == playerTwoScore)
                 errors.rejectValue("score", "Equal", "Score must specify the winner");
-            else
-                if (playerOneScore < playerTwoScore) {
-                    Player swap = playerOne;
-                    playerOne = playerTwo;
-                    playerTwo = swap;
-                    match.setScore(swapPlayerScore(match.getScore()));
-                }
+            else if (playerOneScore < playerTwoScore) {
+                Player swap = playerOne;
+                playerOne = playerTwo;
+                playerTwo = swap;
+                match.setScore(swapPlayerScore(match.getScore()));
+            }
         }
 
         match.setPlayerOne(playerOne);
@@ -95,7 +93,7 @@ public class MatchValidator {
         return match;
     }
 
-    private String swapPlayerScore(String score){
+    private String swapPlayerScore(String score) {
         StringBuilder swapScore = new StringBuilder();
         for (String scoreSet : score.split(" ")) {
             swapScore.append(scoreSet.substring(scoreSet.indexOf(":") + 1))

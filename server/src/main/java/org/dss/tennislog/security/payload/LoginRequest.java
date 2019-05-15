@@ -1,11 +1,12 @@
-package org.dss.tennislog.payload;
+package org.dss.tennislog.security.payload;
 
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
 
-@Getter @Setter
+@Getter
+@Setter
 public class LoginRequest {
     @NotBlank(message = "Username cannot be blank")
     private String username;

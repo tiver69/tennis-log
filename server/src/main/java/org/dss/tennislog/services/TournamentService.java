@@ -122,7 +122,7 @@ public class TournamentService {
 
         for (int i = 0; i < players.size(); i++) {
             for (int j = 0; j < players.size(); j++) {
-                if (matchArray[i][j]!= null && matchArray[j][i]== null) matchArray[j][i]=matchArray[i][j];
+                if (matchArray[i][j] != null && matchArray[j][i] == null) matchArray[j][i] = matchArray[i][j];
             }
         }
 

@@ -1,4 +1,4 @@
-package org.dss.tennislog.payload;
+package org.dss.tennislog.security.payload;
 
 import lombok.Data;
 

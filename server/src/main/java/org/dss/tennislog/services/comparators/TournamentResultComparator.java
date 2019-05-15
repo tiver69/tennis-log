@@ -19,22 +19,22 @@ public class TournamentResultComparator implements Comparator<PlayerMatchStatist
 
     @Override
     public int compare(PlayerMatchStatistic o1, PlayerMatchStatistic o2) {
-        if (!o1.getCount().equals(o2.getCount())) return (int)(o2.getCount()-o1.getCount());
+        if (!o1.getCount().equals(o2.getCount())) return (int) (o2.getCount() - o1.getCount());
 
         int o1WinnGames = getWinnGames(
                 matchRepository.findByPlayerOneAndTournamentId(o1.getPlayer(), tournamentId));
         int o2WinnGames = getWinnGames(
                 matchRepository.findByPlayerOneAndTournamentId(o2.getPlayer(), tournamentId));
-        return o2WinnGames-o1WinnGames;
+        return o2WinnGames - o1WinnGames;
     }
 
-    private int getWinnGames(Iterable<Match> matches){
+    private int getWinnGames(Iterable<Match> matches) {
         int winnGames = 0;
-        for (Match match: matches) {
+        for (Match match : matches) {
             for (String scoreSet : match.getScore().split(" ")) {
                 winnGames = winnGames +
                         Integer.parseInt(
-                                scoreSet.substring(0,scoreSet.indexOf(":")));
+                                scoreSet.substring(0, scoreSet.indexOf(":")));
             }
         }
         return winnGames;

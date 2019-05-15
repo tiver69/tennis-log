@@ -8,6 +8,6 @@ public class CommonResultComparator implements Comparator<PlayerMatchStatistic> 
 
     @Override
     public int compare(PlayerMatchStatistic o1, PlayerMatchStatistic o2) {
-        return (int)(o2.getCount() - o1.getCount());
+        return (int) (o2.getCount() - o1.getCount());
     }
 }

@@ -17,8 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/api/tournament")
@@ -39,40 +37,40 @@ public class TournamentController {
 
     @GetMapping("/{tournamentId}/matches")
     @PreAuthorize("hasAuthority('USER')")
-    public Iterable<Match> findAllMatches(@PathVariable Long tournamentId){
+    public Iterable<Match> findAllMatches(@PathVariable Long tournamentId) {
         return tournamentService.findAllTournamentMatches(tournamentId);
     }
 
     @GetMapping("/{tournamentId}/result")
     @PreAuthorize("hasAuthority('USER')")
-    public HashMap<Player, Long> countTournamentResult(@PathVariable Long tournamentId){
+    public HashMap<Player, Long> countTournamentResult(@PathVariable Long tournamentId) {
         return tournamentService.countTournamentResult(tournamentId);
     }
 
     @GetMapping("/results")
     @PreAuthorize("hasAuthority('USER')")
-    public ResponseEntity<?> getCommonResults(){
+    public ResponseEntity<?> getCommonResults() {
         List<PlayerMatchStatistic> results = tournamentService.countCommonResult();
         return new ResponseEntity<>(results, HttpStatus.OK);
     }
 
     @GetMapping("/round-results/{tournamentId}")
     @PreAuthorize("hasAuthority('USER')")
-    public ResponseEntity<?> getRoundResults(@PathVariable Long tournamentId){
+    public ResponseEntity<?> getRoundResults(@PathVariable Long tournamentId) {
         List<List<Match>> results = tournamentService.getAsRoundTournament(tournamentId);
         return new ResponseEntity<>(results, HttpStatus.OK);
     }
 
     @GetMapping("/players/{tournamentId}")
     @PreAuthorize("hasAuthority('USER')")
-    public ResponseEntity<?> getAllTournamentPlayers(@PathVariable Long tournamentId){
+    public ResponseEntity<?> getAllTournamentPlayers(@PathVariable Long tournamentId) {
         List<Player> results = tournamentService.findAllPlayersOfTournament(tournamentId);
         return new ResponseEntity<>(results, HttpStatus.OK);
     }
 
     @GetMapping("/{tournamentId}")
     @PreAuthorize("hasAuthority('USER')")
-    public ResponseEntity<?> getTournamentById(@PathVariable Long tournamentId){
+    public ResponseEntity<?> getTournamentById(@PathVariable Long tournamentId) {
 
         Tournament tournament = tournamentService.getById(tournamentId);
         if (tournament == null) {
@@ -83,10 +81,10 @@ public class TournamentController {
 
     @PostMapping("")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<?> createNewTournament(@Valid @RequestBody Tournament tournament, BindingResult result){
+    public ResponseEntity<?> createNewTournament(@Valid @RequestBody Tournament tournament, BindingResult result) {
 
         ResponseEntity<?> errorMap = mapValidationErrorService.mapValidationService(result);
-        if (errorMap != null) return  errorMap;
+        if (errorMap != null) return errorMap;
         //        Tournament tournament = tournamentService.saveOrUpdate(tournament);
         return new ResponseEntity<Tournament>(tournamentService.saveOrUpdate(tournament),
                 HttpStatus.CREATED);
@@ -94,8 +92,8 @@ public class TournamentController {
 
     @DeleteMapping("/{tournamentId}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<?> deleteTournament(@PathVariable Long tournamentId){
+    public ResponseEntity<?> deleteTournament(@PathVariable Long tournamentId) {
         tournamentService.deleteById(tournamentId);
-        return new ResponseEntity<String>("Tournament with ID '" + tournamentId+"' and all its matches were deleted.", HttpStatus.OK);
+        return new ResponseEntity<String>("Tournament with ID '" + tournamentId + "' and all its matches were deleted.", HttpStatus.OK);
     }
 }

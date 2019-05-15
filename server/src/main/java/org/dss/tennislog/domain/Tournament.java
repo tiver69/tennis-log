@@ -8,7 +8,7 @@ import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
 @Entity
-@Table(name="tournaments")
+@Table(name = "tournaments")
 @Data
 public class Tournament {
 
