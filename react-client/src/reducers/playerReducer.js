@@ -1,8 +1,9 @@
-import { GET_PLAYERS, GET_PLAYER } from "../actions/types";
+import { GET_PLAYERS, GET_PLAYER, GET_PLAYERS_POINTS} from "../actions/types";
 
 const initialState = {
 	player: {},
-	players: []
+	players: [],
+	points: []
 };
 
 export default function(state = initialState, action){
@@ -17,6 +18,12 @@ export default function(state = initialState, action){
 				...state,
 				player: action.payload
 			};
+		case GET_PLAYERS_POINTS:
+			return {
+				...state,
+				points: action.payload
+			}
+
 
 		default:
 			return state;

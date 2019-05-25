@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { GET_PLAYERS, GET_ERRORS, GET_PLAYER } from './types';
+import { GET_PLAYERS, GET_ERRORS, GET_PLAYER, GET_PLAYERS_POINTS } from './types';
 
 export const getPlayers = () => async dispatch => {
 	const res = await axios.get("/api/player/all");
@@ -46,4 +46,12 @@ export const getPlayer = (playerId, history) => async dispatch => {
 	catch (err) {
 		history.push("/playerboard");
 	}
+};
+
+export const getPoints = () => async dispatch => {
+	const res = await axios.get("/api/tournament/results");
+	dispatch({
+		type: GET_PLAYERS_POINTS,
+		payload: res.data
+	});
 };

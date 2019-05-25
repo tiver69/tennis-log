@@ -32,11 +32,11 @@ public class MatchController {
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> createNewMatch(@Valid @RequestBody Match match, BindingResult result,
                                             @PathVariable Long playerOneId, @PathVariable Long playerTwoId,
-                                            @PathVariable Long tournamentId){
+                                            @PathVariable Long tournamentId) {
         match = matchValidator.validate(playerOneId, playerTwoId, tournamentId, match, result);
 
         ResponseEntity<?> errorMap = mapValidationErrorService.mapValidationService(result);
-        if (errorMap != null) return  errorMap;
+        if (errorMap != null) return errorMap;
 
         Match newMatch = matchService.saveOrUpdate(match);
         return new ResponseEntity<Match>(newMatch,
@@ -45,7 +45,7 @@ public class MatchController {
 
     @GetMapping("/{matchId}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<?> getMatchById(@PathVariable Long matchId){
+    public ResponseEntity<?> getMatchById(@PathVariable Long matchId) {
 
         Match match = matchService.getById(matchId);
         if (match == null) {
@@ -56,9 +56,9 @@ public class MatchController {
 
     @DeleteMapping("/{matchId}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<?> deleteMatch(@PathVariable Long matchId){
+    public ResponseEntity<?> deleteMatch(@PathVariable Long matchId) {
         matchService.deleteById(matchId);
-        return new ResponseEntity<String>("Match with ID '" + matchId+"' was deleted.", HttpStatus.OK);
+        return new ResponseEntity<String>("Match with ID '" + matchId + "' was deleted.", HttpStatus.OK);
     }
 
 }

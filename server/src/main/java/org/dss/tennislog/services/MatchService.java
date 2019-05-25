@@ -21,7 +21,7 @@ public class MatchService {
     public Match getById(Long matchId) {
         Optional<Match> match = matchRepository.getById(matchId);
 
-        if(match.isPresent()) {
+        if (match.isPresent()) {
             return match.get();
         } else {
             throw new DataNotFoundException("Match with ID '" + matchId + "' doesn't exist");

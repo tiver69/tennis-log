@@ -61,7 +61,7 @@ public class JwtTokenProvider {
 
     public Long getPlayerIdFromJWT(String token) {
         Claims claims = Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
-        String id = (String)claims.get("id");
+        String id = (String) claims.get("id");
         return Long.parseLong(id);
     }
 }

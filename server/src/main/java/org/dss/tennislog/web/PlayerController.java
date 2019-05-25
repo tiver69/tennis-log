@@ -2,10 +2,9 @@ package org.dss.tennislog.web;
 
 import org.dss.tennislog.domain.Match;
 import org.dss.tennislog.domain.Player;
-import org.dss.tennislog.exceptions.DataNotFoundException;
-import org.dss.tennislog.payload.JWTLoginSuccessResponse;
-import org.dss.tennislog.payload.LoginRequest;
 import org.dss.tennislog.security.JwtTokenProvider;
+import org.dss.tennislog.security.payload.JWTLoginSuccessResponse;
+import org.dss.tennislog.security.payload.LoginRequest;
 import org.dss.tennislog.services.MapValidationErrorService;
 import org.dss.tennislog.services.PlayerService;
 import org.dss.tennislog.validator.PlayerValidator;
@@ -17,13 +16,12 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.parameters.P;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.Optional;
+import java.util.Map;
 
 import static org.dss.tennislog.security.SecurityConstants.TOKEN_PREFIX;
 
@@ -48,8 +46,8 @@ public class PlayerController {
     private AuthenticationManager authenticationManager;
 
     @PostMapping("/free/register")
-    public ResponseEntity<?> registerPlayer(@Valid @RequestBody Player player, BindingResult result){
-        playerValidator.validate(player,result);
+    public ResponseEntity<?> registerPlayer(@Valid @RequestBody Player player, BindingResult result) {
+        playerValidator.validate(player, result);
 
         ResponseEntity<?> errorMap = mapValidationErrorService.mapValidationService(result);
         if (errorMap != null) return errorMap;
@@ -60,9 +58,9 @@ public class PlayerController {
 
     @PostMapping("/free/login")
     public ResponseEntity<?> authenticatePlayer(@Valid @RequestBody LoginRequest loginRequest,
-                                                BindingResult result){
+                                                BindingResult result) {
         ResponseEntity<?> errorMap = mapValidationErrorService.mapValidationService(result);
-        if(errorMap != null) return errorMap;
+        if (errorMap != null) return errorMap;
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -73,12 +71,12 @@ public class PlayerController {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = TOKEN_PREFIX + tokenProvider.generateToken(authentication);
-        return ResponseEntity.ok(new JWTLoginSuccessResponse(true,jwt));
+        return ResponseEntity.ok(new JWTLoginSuccessResponse(true, jwt));
     }
 
     @GetMapping("/current")
     @PreAuthorize("hasAuthority('USER')")
-    public ResponseEntity<?> getCurrentPlayer(Principal principal){
+    public ResponseEntity<?> getCurrentPlayer(Principal principal) {
 
         Player player = playerService.getByUsername(principal.getName());
         return new ResponseEntity<Player>(player, HttpStatus.OK);
@@ -86,7 +84,7 @@ public class PlayerController {
 
     @PostMapping("/update")
     @PreAuthorize("hasAuthority('USER')")
-    public ResponseEntity<?> updateCurrentPlayer(@Valid @RequestBody Player player, BindingResult result){
+    public ResponseEntity<?> updateCurrentPlayer(@Valid @RequestBody Player player, BindingResult result) {
         playerValidator.validateDates(player, result);
 
         ResponseEntity<?> errorMap = mapValidationErrorService.mapValidationService(result);
@@ -98,8 +96,15 @@ public class PlayerController {
 
     @GetMapping("/matches")
     @PreAuthorize("hasAuthority('USER')")
-    public Iterable<Match> findAllPlayerMatches(Principal principal){
+    public Iterable<Match> findAllPlayerMatches(Principal principal) {
         return playerService.findAllPlayerMatches(principal.getName());
+    }
+
+    @GetMapping("/statistic")
+    @PreAuthorize("hasAuthority('USER')")
+    public ResponseEntity<?> getPlayerStatistic(Principal principal) {
+        Map<String, Map<String, Long>> statistic = playerService.getPlayerStatistic(principal.getName());
+        return new ResponseEntity<>(statistic, HttpStatus.OK);
     }
 
     @GetMapping("/all")
@@ -110,7 +115,7 @@ public class PlayerController {
 
     @GetMapping("/{playerId}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<?> getPlayerById(@PathVariable Long playerId){
+    public ResponseEntity<?> getPlayerById(@PathVariable Long playerId) {
 
         Player player = playerService.getById(playerId);
         return new ResponseEntity<Player>(player, HttpStatus.OK);
@@ -118,14 +123,14 @@ public class PlayerController {
 
     @PostMapping("/set-admin/{playerId}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<Player> setAdminToPlayer(@PathVariable Long playerId){
+    public ResponseEntity<Player> setAdminToPlayer(@PathVariable Long playerId) {
         Player player = playerService.setAdmin(playerId);
         return new ResponseEntity<Player>(player, HttpStatus.OK);
     }
 
     @PostMapping("/remove-admin/{playerId}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<Player> removeAdminFromPlayer(@PathVariable Long playerId){
+    public ResponseEntity<Player> removeAdminFromPlayer(@PathVariable Long playerId) {
         Player player = playerService.removeAdmin(playerId);
         return new ResponseEntity<Player>(player, HttpStatus.OK);
     }

@@ -7,5 +7,6 @@ import java.util.Optional;
 
 public interface TournamentRepository extends CrudRepository<Tournament, Long> {
     Optional<Tournament> getById(Long id);
+
     Iterable<Tournament> findAllByOrderByStartDate();
 }

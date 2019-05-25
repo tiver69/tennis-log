@@ -45,12 +45,12 @@ public class Player implements UserDetails {
     @Column(name = "last_name")
     private String lastName;
 
-    @Column(name="birth_date")
+    @Column(name = "birth_date")
     @NotNull(message = "Birthday is required")
     @JsonFormat(pattern = "yyyy-mm-dd")
     private Date birthday;
 
-    @Column(name="experience_year")
+    @Column(name = "experience_year")
     private Integer experience;
 
     @Column(name = "leading_hand")

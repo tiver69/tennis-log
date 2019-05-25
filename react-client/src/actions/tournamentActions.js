@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { GET_ERRORS, GET_TOURNAMENTS, GET_TOURNAMENT, DELETE_TOURNAMENT } from './types';
+import { GET_ERRORS, GET_TOURNAMENTS, GET_TOURNAMENT, DELETE_TOURNAMENT, GET_ROUND_TOURNAMENT, GET_TOURNAMENT_PLAYERS} from './types';
 
 export const createTournament = (tournament, history) => async dispatch => {
 	try {
@@ -25,7 +25,7 @@ export const getTournaments = () => async dispatch => {
 	});
 };
 
-export const getTournament = (tournamentId, history) => async dispatch => {
+export const getTournament = (tournamentId, history, redirect) => async dispatch => {
 	try{
 		const res = await axios.get(`/api/tournament/${tournamentId}`);
 		dispatch ({
@@ -33,7 +33,8 @@ export const getTournament = (tournamentId, history) => async dispatch => {
 			payload: res.data
 		});
 	} catch (err) {
-		history.push("/dashboard");
+		if (redirect)
+			history.push("/dashboard");
 	}
 };
 
@@ -46,6 +47,38 @@ export const deleteTournament = tournamentId => async dispatch => {
 		dispatch ({
 			type: DELETE_TOURNAMENT,
 			payload: tournamentId
+		});
+	}
+};
+
+export const getRoundTournament = tournamentId=> async dispatch => {
+	try {
+	const res = await axios.get(`/api/tournament/round-results/${tournamentId}`);
+	dispatch({
+		type: GET_ROUND_TOURNAMENT,
+		payload: res.data
+	});
+	}
+	catch (err) {
+		dispatch({
+			type: GET_ERRORS,
+			payload: err.response.data
+		});
+	}
+};
+
+export const getTournamentPlayers = tournamentId=> async dispatch => {
+	try {
+	const res = await axios.get(`/api/tournament/players/${tournamentId}`);
+	dispatch({
+		type: GET_TOURNAMENT_PLAYERS,
+		payload: res.data
+	});
+	}
+	catch (err) {
+		dispatch({
+			type: GET_ERRORS,
+			payload: err.response.data
 		});
 	}
 };

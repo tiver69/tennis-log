@@ -6,6 +6,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @Component
 public class PlayerValidator implements Validator {
@@ -34,8 +35,14 @@ public class PlayerValidator implements Validator {
         Player player = (Player) object;
         if (player.getBirthday() != null && player.getExperience() != null) {
             SimpleDateFormat dateFormat = new SimpleDateFormat("YYYY");
-            if (Integer.parseInt(dateFormat.format(player.getBirthday())) > player.getExperience())
-                errors.rejectValue("experience", "Big", "You can't start play before birthday");
+            if (Integer.parseInt(dateFormat.format(player.getBirthday())) > player.getExperience()) {
+                errors.rejectValue("birthday", "Big", "You can't start playing before birthday");
+                errors.rejectValue("experience", "Big", "You can't start playing before birthday");
+            }
+            if (dateFormat.format(new Date()).compareTo(dateFormat.format(player.getBirthday())) < 0)
+                errors.rejectValue("birthday", "Big", "Specify birthday from the past");
+            if (Integer.parseInt(dateFormat.format(new Date())) - player.getExperience() < 0)
+                errors.rejectValue("experience", "Big", "Specify year from the past");
         }
     }
 }

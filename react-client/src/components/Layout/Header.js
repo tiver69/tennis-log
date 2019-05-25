@@ -23,15 +23,11 @@ class Header extends Component {
 			                Tournaments
 			            </Link>
 			        </li>
-			        { 
-			      	isTokenValid &&
-			        player.roles.includes("ADMIN") &&
 			        <li className="nav-item">
 			            <Link className="nav-link" to="/playerboard">
 			                Players
 			            </Link>
 			        </li>
-			    	}
 			    </ul>
 
 		        <ul className="navbar-nav ml-auto">
